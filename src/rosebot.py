@@ -30,9 +30,9 @@ import math
 class RoseBot(object):
     def __init__(self):
         # Use these instance variables
-        self.drive_system = DriveSystem()
         self.arm_and_claw = ArmAndClaw()
-        self.sensor_system = SensorSystem
+        self.sensor_system = SensorSystem()
+        self.drive_system = DriveSystem(self.sensor_system)
 
 
 ###############################################################################
@@ -212,11 +212,13 @@ class ArmAndClaw(object):
         while self.touch_sensor.is_pressed() is False:
             self.motor.turn_on(100)
 
-        while self.motor.get_position() > 0:
+        startpos = self.motor.get_position()
+        while (self.motor.get_position() > (startpos-14.2*360)):
             self.motor.turn_on(-100)
 
         self.motor.turn_off()
         self.motor.reset_position()
+
 
     def move_arm_to_position(self, desired_arm_position):
         """
@@ -224,11 +226,28 @@ class ArmAndClaw(object):
         The robot must have previously calibrated its Arm.
         """
 
+        arm = ArmAndClaw()
+
+        if desired_arm_position < self.motor.get_position():
+            while self.motor.get_position() > desired_arm_position:
+                self.motor.turn_on(-100)
+
+        if desired_arm_position > self.motor.get_position():
+            while self.motor.get_position() < desired_arm_position:
+                self.motor.turn_on(100)
+
+        self.motor.turn_off()
+
     def lower_arm(self):
         """
         Lowers the Arm until it is all the way down, i.e., position 0.
         The robot must have previously calibrated its Arm.
         """
+
+        while self.motor.get_position() > 0:
+            self.motor.turn_on(-100)
+
+        self.motor.turn_off()
 
 ###############################################################################
 #    SensorSystem
