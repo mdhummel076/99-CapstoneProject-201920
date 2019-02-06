@@ -259,7 +259,7 @@ class SensorSystem(object):
     Use this object to get   ** any **   sensor reading.
     """
     def __init__(self):
-        self.touch_sensor = TouchSensor()
+        self.touch_sensor = TouchSensor(1)
         # self.color_sensor = color_sensor
         # self.ir_proximity_sensor = ir_proximity_sensor
         # self.ir_beacon_sensor = ir_beacon_sensor
