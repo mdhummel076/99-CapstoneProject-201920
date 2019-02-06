@@ -2,8 +2,8 @@
   Capstone Project.  Code to run on a LAPTOP (NOT the robot).
   Displays the Graphical User Interface (GUI) and communicates with the robot.
 
-  Authors:  Your professors (for the framework)
-    and PUT_YOUR_NAME_HERE.
+  Authors:  Dr. Boutell, Dr. Mutchler (for the framework)
+    and James Werne.
   Winter term, 2018-2019.
 """
 
