@@ -194,8 +194,10 @@ class ArmAndClaw(object):
         """ Raises the Arm until its touch sensor is pressed. """
 
         self.motor.turn_on(100)
-        while self.touch_sensor.is_pressed() is False:
+        while True:
             time.sleep(0.02)
+            if self.touch_sensor.is_pressed():
+                break
 
         self.motor.turn_off()
 
@@ -247,8 +249,10 @@ class ArmAndClaw(object):
         The robot must have previously calibrated its Arm.
         """
         self.motor.turn_on(-100)
-        while self.motor.get_position() > 0:
+        while True:
             time.sleep(0.02)
+            if self.motor.get_position() <= 10:
+                break
 
         self.motor.turn_off()
 
