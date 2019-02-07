@@ -11,9 +11,9 @@ import rosebot
 
 class Delegate(object):
 
-    def __init__(self):
+    def __init__(self, robot):
 
-        self.robot = rosebot.RoseBot
+        self.robot = robot
 
     def print(self,message):
         print(message)
