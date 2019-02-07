@@ -211,7 +211,7 @@ def handle_stop(mqtt_sender):
       :type  mqtt_sender:  com.MqttClient
     """
 
-    mqtt_sender.send_message('go',[0,0])
+    mqtt_sender.send_message('stop')
 
 
 ###############################################################################
