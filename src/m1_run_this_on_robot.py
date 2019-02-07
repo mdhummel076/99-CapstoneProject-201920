@@ -15,18 +15,18 @@ def main():
     """
     This code, which must run on the EV3 ROBOT:
       1. Makes the EV3 robot to various things.
-      2. Communicates via MQTT with the GUI code that runs on the LAPTOP.
+      2. Communicates via MQTT with the GUI code that runs on the LAPTOP.\
+
+      combination: 18-28-10
     """
 
-    #operate()
+    operate()
 
-    robot = rosebot.RoseBot()
-    robot.arm_and_claw.move_arm_to_position(4000)
 
 
 def operate():
 
-    robot = rosebot.RoseBot
+    robot = rosebot.RoseBot()
 
     client = com.MqttClient(shared_gui_delegate_on_robot.Delegate(robot))
     client.connect_to_pc()

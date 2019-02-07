@@ -166,6 +166,7 @@ def handle_forward(left_entry_box, right_entry_box, mqtt_sender):
     """
 
     mqtt_sender.send_message('go',[int(left_entry_box.get()),int(right_entry_box.get())])
+    print('foward')
 
 
 def handle_backward(left_entry_box, right_entry_box, mqtt_sender):
