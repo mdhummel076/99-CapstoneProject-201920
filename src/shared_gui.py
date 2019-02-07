@@ -165,6 +165,8 @@ def handle_forward(left_entry_box, right_entry_box, mqtt_sender):
       :type  mqtt_sender:      com.MqttClient
     """
 
+    mqtt_sender.send_message('go',[100,100])
+
 
 def handle_backward(left_entry_box, right_entry_box, mqtt_sender):
     """
@@ -175,6 +177,9 @@ def handle_backward(left_entry_box, right_entry_box, mqtt_sender):
       :type  mqtt_sender:      com.MqttClient
     """
 
+    mqtt_sender.send_message('go',[-100,-100])
+
+
 def handle_left(left_entry_box, right_entry_box, mqtt_sender):
     """
     Tells the robot to move using the speeds in the given entry boxes,
@@ -183,6 +188,9 @@ def handle_left(left_entry_box, right_entry_box, mqtt_sender):
       :type  right_entry_box:  ttk.Entry
       :type  mqtt_sender:      com.MqttClient
     """
+
+    mqtt_sender.send_message('go',[-100,100])
+
 
 
 def handle_right(left_entry_box, right_entry_box, mqtt_sender):
@@ -194,12 +202,16 @@ def handle_right(left_entry_box, right_entry_box, mqtt_sender):
       :type  mqtt_sender:      com.MqttClient
     """
 
+    mqtt_sender.send_message('go',[100,-100])
+
 
 def handle_stop(mqtt_sender):
     """
     Tells the robot to stop.
       :type  mqtt_sender:  com.MqttClient
     """
+
+    mqtt_sender.send_message('go',[0,0])
 
 
 ###############################################################################
@@ -254,6 +266,8 @@ def handle_quit(mqtt_sender):
       :type  mqtt_sender:  com.MqttClient
     """
 
+    exit()
+
 
 def handle_exit(mqtt_sender):
     """
@@ -261,3 +275,5 @@ def handle_exit(mqtt_sender):
     Then exit this program.
       :type mqtt_sender: com.MqttClient
     """
+
+    exit()
