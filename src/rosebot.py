@@ -78,9 +78,13 @@ class DriveSystem(object):
 
     def go(self, left_wheel_speed, right_wheel_speed):
         """ Makes the left and right wheel motors spin at the given speeds. """
+        self.left_motor.turn_on(left_wheel_speed)
+        self.right_motor.turn_off(right_wheel_speed)
 
     def stop(self):
         """ Stops the left and right wheel motors. """
+        self.left_motor.turn_off()
+        self.right_motor.turn_off()
 
     def go_straight_for_seconds(self, seconds, speed):
         """
@@ -88,12 +92,29 @@ class DriveSystem(object):
         at the given speed for the given number of seconds.
         """
 
+        self.left_motor.turn_on(speed)
+        self.right_motor.turn_on(speed)
+        time.sleep(seconds)
+        self.left_motor.turn_off()
+        self.left_motor.turn_off()
+
     def go_straight_for_inches_using_time(self, inches, speed):
         """
         Makes the robot go straight at the given speed
         for the given number of inches, using the approximate
         conversion factor of 10.0 inches per second at 100 (full) speed.
         """
+        nspeed = speed/10
+        reqtime = inches / nspeed
+        t = time.time()
+        self.left_motor.turn_on(speed)
+        self.right_motor.turn_on(speed)
+
+        while time.time() - t < reqtime:
+            time.sleep(0.01)
+
+        self.left_motor.turn_off()
+        self.right_motor.turn_off()
 
     def go_straight_for_inches_using_encoder(self, inches, speed):
         """
@@ -101,6 +122,18 @@ class DriveSystem(object):
         at the given speed for the given number of inches,
         using the encoder (degrees traveled sensor) built into the motors.
         """
+
+        self.left_motor.turn_on(speed)
+        self.right_motor.turn_on(speed)
+
+        startpos = self.left_motor.get_position()
+        deg = (inches / self.wheel_circumference) * 360
+        while self.left_motor.get_position() - startpos < deg:
+            time.sleep(0.01)
+
+        self.left_motor.turn_off()
+        self.right_motor.turn_off()
+
 
     # -------------------------------------------------------------------------
     # Methods for driving that use the color sensor.
