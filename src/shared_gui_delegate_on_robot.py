@@ -20,7 +20,7 @@ class Delegate(object):
 
     def go(self,lval,rval):
         chassis = self.robot.drive_system()
-        chassis.go(lval,rval)
+        chassis.go(int(lval),int(rval))
 
     def stop(self):
         chassis = self.robot.drive_system()
