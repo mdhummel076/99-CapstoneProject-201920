@@ -18,6 +18,14 @@ def main():
       2. Communicates via MQTT with the GUI code that runs on the LAPTOP.
     """
 
+    #operate()
+
+    robot = rosebot.RoseBot()
+    robot.arm_and_claw.move_arm_to_position(4000)
+
+
+def operate():
+
     robot = rosebot.RoseBot
 
     client = com.MqttClient(shared_gui_delegate_on_robot.Delegate(robot))
@@ -25,10 +33,8 @@ def main():
 
     while True:
         time.sleep(0.01)
-
-
-
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
 # -----------------------------------------------------------------------------
+
 main()
