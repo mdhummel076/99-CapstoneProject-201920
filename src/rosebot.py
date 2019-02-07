@@ -213,13 +213,17 @@ class ArmAndClaw(object):
         """
 
         self.motor.turn_on(100)
-        while self.touch_sensor.is_pressed() is False:
+        while True:
             time.sleep(0.02)
+            if self.touch_sensor.is_pressed():
+                break
 
         startpos = self.motor.get_position()
         self.motor.turn_on(-100)
-        while (self.motor.get_position() > (startpos-14.2*360)):
+        while True:
             time.sleep(0.02)
+            if (self.motor.get_position() < (startpos-14.2*360+10)):
+                break
 
         self.motor.turn_off()
         self.motor.reset_position()
@@ -233,13 +237,17 @@ class ArmAndClaw(object):
 
         if desired_arm_position < self.motor.get_position():
             self.motor.turn_on(-100)
-            while self.motor.get_position() > desired_arm_position:
+            while True:
                 time.sleep(0.02)
+                if self.motor.get_position() > desired_arm_position:
+                    break
 
         if desired_arm_position > self.motor.get_position():
             self.motor.turn_on(100)
-            while self.motor.get_position() < desired_arm_position:
+            while True:
                 time.sleep(0.02)
+                if self.motor.get_position() < desired_arm_position:
+                    break
 
         self.motor.turn_off()
 
