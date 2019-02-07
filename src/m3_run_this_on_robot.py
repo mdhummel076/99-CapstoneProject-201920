@@ -8,6 +8,7 @@
 import rosebot
 import mqtt_remote_method_calls as com
 import time
+import shared_gui_delegate_on_robot
 
 
 def main():
@@ -24,5 +25,7 @@ def main():
 def run_test_arm():
     robot = rosebot.RoseBot()
     robot.arm_and_claw.raise_arm()
-
+def real_deal():
+    robot = rosebot.RoseBot()
+    delegate = shared_gui_delegate_on_robot.Delegate(robot)
 main()
