@@ -11,29 +11,33 @@ import rosebot
 
 class Delegate(object):
 
+    def __init__(self):
+
+        self.robot = rosebot.RoseBot
+
     def print(self,message):
         print(message)
 
     def go(self,lval,rval):
-        chassis = rosebot.RoseBot.drive_system()
+        chassis = self.robot.drive_system()
         chassis.go(lval,rval)
 
     def stop(self):
-        chassis = rosebot.RoseBot.drive_system()
+        chassis = self.robot.drive_system()
         chassis.stop()
 
     def raise_arm(self):
-        arm = rosebot.RoseBot.arm_and_claw()
+        arm = self.robot.arm_and_claw()
         arm.raise_arm()
 
     def lower_arm(self):
-        arm = rosebot.RoseBot.arm_and_claw()
+        arm = self.robot.arm_and_claw()
         arm.lower_arm()
 
     def calibrate_arm(self):
-        arm = rosebot.RoseBot.arm_and_claw()
+        arm = self.robot.arm_and_claw()
         arm.calibrate_arm()
 
     def move_arm_to_position(self,position):
-        arm = rosebot.RoseBot.arm_and_claw()
+        arm = self.robot.arm_and_claw()
         arm.move_arm_to_position(position)
