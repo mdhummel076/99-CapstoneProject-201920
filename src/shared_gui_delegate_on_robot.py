@@ -41,4 +41,4 @@ class Delegate(object):
 
     def move_arm_to_position(self,position):
         arm = self.robot.arm_and_claw
-        arm.move_arm_to_position(position)
+        arm.move_arm_to_position(int(position))
