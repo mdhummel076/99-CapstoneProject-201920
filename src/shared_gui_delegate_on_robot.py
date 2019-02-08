@@ -54,3 +54,16 @@ class Delegate(object):
     def go_straight_for_inches_using_encoder(self, inches, speed):
         chassis = self.robot.drive_system
         chassis.go_straight_for_inches_using_encoder(int(inches),int(speed))
+
+    def beep(self, n):
+        for k in range(n):
+            beeper = self.robot.sound_system
+            beeper.beep()
+
+    def tone(self, frequency, duration):
+        sounds = self.robot.sound_system
+        sounds.play_tone(int(frequency), int(duration))
+
+    def speak(self, phrase):
+        sounds = self.robot.sound_system
+        sounds.speak(int(phrase))
