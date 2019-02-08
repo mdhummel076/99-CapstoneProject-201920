@@ -42,3 +42,15 @@ class Delegate(object):
     def move_arm_to_position(self,position):
         arm = self.robot.arm_and_claw
         arm.move_arm_to_position(int(position))
+
+    def go_straight_for_seconds(self, seconds, speed):
+        chassis = self.robot.drive_system
+        chassis.go_straight_for_seconds(int(seconds),int(speed))
+
+    def go_straight_for_inches_using_time(self, inches, speed):
+        chassis = self.robot.drive_system
+        chassis.go_straight_for_inches_using_time(int(inches),int(speed))
+
+    def go_straight_for_inches_using_encoder(self, inches, speed):
+        chassis = self.robot.drive_system
+        chassis.go_straight_for_inches_using_encoder(int(inches),int(speed))
