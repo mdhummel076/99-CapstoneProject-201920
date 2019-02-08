@@ -66,4 +66,4 @@ class Delegate(object):
 
     def speak(self, phrase):
         sounds = self.robot.sound_system.speech_maker
-        sounds.speak(int(phrase))
+        sounds.speak(phrase)
