@@ -159,7 +159,7 @@ def get_drivesystem_frame(window, mqtt_sender):
     drive_seconds_label = ttk.Label(frame, text="Desired travel time:")
     drive_speed_label1 = ttk.Label(frame, text="Desired speed:")
     drive_seconds_entry = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
-    drive_seconds_entry.insert(0, "100")
+    drive_seconds_entry.insert(0, "2")
     drive_speed_entry1 = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
     drive_speed_entry1.insert(0, "100")
 
@@ -167,7 +167,7 @@ def get_drivesystem_frame(window, mqtt_sender):
     drive_inches_label1 = ttk.Label(frame, text="Desired travel distance (inches):")
     drive_speed_label2 = ttk.Label(frame, text="Desired speed:")
     drive_inches_entry1 = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
-    drive_inches_entry1.insert(0, "100")
+    drive_inches_entry1.insert(0, "5")
     drive_speed_entry2 = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
     drive_speed_entry2.insert(0, "100")
 
@@ -175,7 +175,7 @@ def get_drivesystem_frame(window, mqtt_sender):
     drive_inches_label2 = ttk.Label(frame, text="Desired travel distance (inches):")
     drive_speed_label3 = ttk.Label(frame, text="Desired speed:")
     drive_inches_entry2 = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
-    drive_inches_entry2.insert(0, "100")
+    drive_inches_entry2.insert(0, "5")
     drive_speed_entry3 = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
     drive_speed_entry3.insert(0, "100")
 
