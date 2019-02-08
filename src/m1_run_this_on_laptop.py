@@ -46,7 +46,7 @@ def main():
     # Sub-frames for the shared GUI that the team developed:
     # -------------------------------------------------------------------------
 
-    teleopFrame, armFrame, controlFrame = get_shared_frames(mainFrame,client)
+    teleopFrame, armFrame, controlFrame, driveSystemFrame = get_shared_frames(mainFrame,client)
 
 
     # -------------------------------------------------------------------------
@@ -61,6 +61,7 @@ def main():
     teleopFrame.grid(row = 0, column = 0)
     armFrame.grid(row = 1, column = 0)
     controlFrame.grid(row = 3, column = 0)
+    driveSystemFrame.grid(row = 4,column = 0)
 
 
     # -------------------------------------------------------------------------
@@ -73,8 +74,9 @@ def get_shared_frames(main_frame, mqtt_sender):
     teleopFrame = shared_gui.get_teleoperation_frame(main_frame,mqtt_sender)
     armFrame = shared_gui.get_arm_frame(main_frame,mqtt_sender)
     controlFrame = shared_gui.get_control_frame(main_frame,mqtt_sender)
+    driveSystemFrame = shared_gui.get_drivesystem_frame(main_frame,mqtt_sender)
 
-    return teleopFrame, armFrame, controlFrame
+    return teleopFrame, armFrame, controlFrame, driveSystemFrame
 
 
 def grid_frames(teleop_frame, arm_frame, control_frame):
