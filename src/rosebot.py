@@ -248,17 +248,19 @@ class ArmAndClaw(object):
                (i.e., 14.2 motor revolutions),
           3. Resets the motor's position to 0.
         """
-
+        print('calibrating')
         self.motor.turn_on(100)
         while True:
             time.sleep(0.02)
+            print('first loop')
             if self.touch_sensor.is_pressed():
                 break
-
+        print('now going down')
         startpos = self.motor.get_position()
         self.motor.turn_on(-100)
         while True:
             time.sleep(0.02)
+            print('second loop')
             if (self.motor.get_position() < (startpos-14.2*360+10)):
                 break
 
