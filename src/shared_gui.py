@@ -279,6 +279,13 @@ def handle_go_straight_for_seconds(seconds_entry_box, speed_entry_box, mqtt_send
 
     mqtt_sender.send_message('go_straight_for_seconds', [int(seconds_entry_box.get()), int(speed_entry_box.get())])
 
+def handle_go_straight_for_inches_using_time(inches_entry_box, speed_entry_box, mqtt_sender):
+
+    mqtt_sender.send_message('go_straight_for_inches_using_time', [int(inches_entry_box.get()), int(speed_entry_box.get())])
+
+def handle_go_straight_for_inches_using_encoder(inches_entry_box, speed_entry_box, mqtt_sender):
+
+    mqtt_sender.send_message('go_straight_for_inches_using_time', [int(inches_entry_box.get()), int(speed_entry_box.get())])
 
 ###############################################################################
 # Handlers for Buttons in the ArmAndClaw frame.
