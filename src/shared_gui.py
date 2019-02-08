@@ -207,6 +207,38 @@ def get_drivesystem_frame(window, mqtt_sender):
 
     return frame
 
+def getSoundmakerFrame(window,mqtt_sender):
+
+    Frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+    Frame.grid()
+
+    beepButton = ttk.Button(Frame,text='Beep')
+    beepBox = ttk.Entry(Frame, width=8, justify=tkinter.RIGHT)
+    beepBox.insert(0,'1')
+    toneButton = ttk.Button(Frame,text='Tone')
+    toneBox = ttk.Entry(Frame, width=8, justify=tkinter.RIGHT)
+    toneBox.insert(0,'440')
+    durationBox = ttk.Entry(Frame, width=8, justify=tkinter.RIGHT)
+    durationBox.insert(0,'2000')
+    speakButton = ttk.Button(Frame,text='Speak')
+    speakBox = ttk.Entry(Frame, width=8, justify=tkinter.RIGHT)
+    speakBox.insert(0,'Hello')
+
+    beepButton.grid(row=0,column=0)
+    beepBox.grid(row=0,column=1)
+    toneButton.grid(row = 1,column=0)
+    toneBox.grid(row=1,column=1)
+    durationBox.grid(row=1,column=2)
+    speakButton.grid(row=2,column=0)
+    speakBox.grid(row=2,column=1)
+
+    beepButton['command']=lambda: handle_beep(mqtt_sender,beepBox)
+    toneButton['command']=lambda : handle_tone(mqtt_sender,toneBox,durationBox)
+    speakButton['command']=lambda: handle_speak(mqtt_sender,speakBox)
+
+    return Frame
+
+
 ###############################################################################
 ###############################################################################
 # The following specifies, for each Button,
@@ -348,5 +380,19 @@ def handle_exit(mqtt_sender):
     Then exit this program.
       :type mqtt_sender: com.MqttClient
     """
-
     exit()
+
+#handlers for sounds
+
+def handle_beep(mqtt_sender,entryBox):
+
+    mqtt_sender.send_message('beep',[entryBox.get()])
+
+def handle_tone(mqtt_sender,entryBox, entryBox2):
+
+    mqtt_sender.send_message('tone',[entryBox.get(),entryBox2.get()])
+
+def handle_speak(mqtt_sender,entryBox):
+
+    mqtt_sender.send_message('speak',[entryBox.get()])
+
