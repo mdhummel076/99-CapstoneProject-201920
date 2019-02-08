@@ -146,6 +146,67 @@ def get_control_frame(window, mqtt_sender):
 
     return frame
 
+
+def get_drivesystem_frame(window, mqtt_sender):
+
+    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+    frame.grid()
+
+    frame_label = ttk.Label(frame, text="DriveSystem")
+
+    # Construct widgets for frame
+    drive_using_seconds_button = ttk.Button(frame, text="Go Straight For Seconds")
+    drive_seconds_label = ttk.Label(frame, text="Desired travel time:")
+    drive_speed_label1 = ttk.Label(frame, text="Desired speed:")
+    drive_seconds_entry = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+    drive_seconds_entry.insert(0, "100")
+    drive_speed_entry1 = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+    drive_speed_entry1.insert(0, "100")
+
+    drive_inches_using_time_button = ttk.Button(frame, text="Go Straight For Inches Using Time")
+    drive_inches_label1 = ttk.Label(frame, text="Desired travel distance (inches):")
+    drive_speed_label2 = ttk.Label(frame, text="Desired speed:")
+    drive_inches_entry1 = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+    drive_inches_entry1.insert(0, "100")
+    drive_speed_entry2 = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+    drive_speed_entry2.insert(0, "100")
+
+    drive_encoder_button = ttk.Button(frame, text="Go Straight For Inches Using Encoder")
+    drive_inches_label2 = ttk.Label(frame, text="Desired travel distance (inches):")
+    drive_speed_label3 = ttk.Label(frame, text="Desired speed:")
+    drive_inches_entry2 = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+    drive_inches_entry2.insert(0, "100")
+    drive_speed_entry3 = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+    drive_speed_entry3.insert(0, "100")
+
+    frame_label.grid(row=0, column=0)
+    drive_using_seconds_button.grid(row=1, column=0)
+    drive_seconds_label.grid(row=2, column=0)
+    drive_speed_label1.grid(row=3, column=0)
+    drive_seconds_entry.grid(row=2, column=1)
+    drive_speed_entry1.grid(row=3, column=1)
+
+    drive_inches_using_time_button.grid(row=4, column=0)
+    drive_inches_label1.grid(row=5, column=0)
+    drive_speed_label2.grid(row=6, column=0)
+    drive_inches_entry1.grid(row=5, column=1)
+    drive_speed_entry2.grid(row=6, column=1)
+
+    drive_encoder_button.grid(row=7, column=0)
+    drive_inches_label2.grid(row=8, column=0)
+    drive_speed_label3.grid(row=9, column=0)
+    drive_inches_entry2.grid(row=8, column=1)
+    drive_speed_entry3.grid(row=9, column=1)
+
+    drive_using_seconds_button["command"] = lambda: handle_go_straight_for_seconds(
+        drive_seconds_entry, drive_speed_entry1, mqtt_sender)
+    drive_inches_using_time_button["command"] = lambda: handle_go_straight_for_inches_using_time(
+        drive_inches_entry1, drive_speed_entry2, mqtt_sender)
+    drive_encoder_button["command"] = lambda: handle_go_straight_for_inches_using_encoder(
+        drive_inches_entry2, drive_speed_entry3, mqtt_sender)
+
+    return frame
+
 ###############################################################################
 ###############################################################################
 # The following specifies, for each Button,
@@ -213,6 +274,10 @@ def handle_stop(mqtt_sender):
     """
 
     mqtt_sender.send_message('stop')
+
+def handle_go_straight_for_seconds(seconds_entry_box, speed_entry_box, mqtt_sender):
+
+    mqtt_sender.send_message('go_straight_for_seconds', [int(seconds_entry_box.get()), int(speed_entry_box.get())])
 
 
 ###############################################################################
