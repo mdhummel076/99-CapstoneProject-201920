@@ -96,7 +96,7 @@ class DriveSystem(object):
         self.right_motor.turn_on(speed)
         time.sleep(seconds)
         self.left_motor.turn_off()
-        self.left_motor.turn_off()
+        self.right_motor.turn_off()
 
     def go_straight_for_inches_using_time(self, inches, speed):
         """
