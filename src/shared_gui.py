@@ -257,9 +257,8 @@ def handle_forward(left_entry_box, right_entry_box, mqtt_sender):
       :type  right_entry_box:  ttk.Entry
       :type  mqtt_sender:      com.MqttClient
     """
-
+    print('Drive forward')
     mqtt_sender.send_message('go',[int(left_entry_box.get()),int(right_entry_box.get())])
-    print('foward')
 
 
 def handle_backward(left_entry_box, right_entry_box, mqtt_sender):
@@ -270,7 +269,7 @@ def handle_backward(left_entry_box, right_entry_box, mqtt_sender):
       :type  right_entry_box:  ttk.Entry
       :type  mqtt_sender:      com.MqttClient
     """
-
+    print('Drive backward')
     mqtt_sender.send_message('go',[-1*int(left_entry_box.get()),-1*int(right_entry_box.get())])
 
 
@@ -282,7 +281,7 @@ def handle_left(left_entry_box, right_entry_box, mqtt_sender):
       :type  right_entry_box:  ttk.Entry
       :type  mqtt_sender:      com.MqttClient
     """
-
+    print('Move left')
     mqtt_sender.send_message('go',[-1*int(left_entry_box.get()),int(right_entry_box.get())])
 
 
@@ -295,7 +294,7 @@ def handle_right(left_entry_box, right_entry_box, mqtt_sender):
       :type  right_entry_box:  ttk.Entry
       :type  mqtt_sender:      com.MqttClient
     """
-
+    print('Move right')
     mqtt_sender.send_message('go',[int(left_entry_box.get()),-1*int(right_entry_box.get())])
 
 
@@ -304,19 +303,19 @@ def handle_stop(mqtt_sender):
     Tells the robot to stop.
       :type  mqtt_sender:  com.MqttClient
     """
-
+    print('Stop')
     mqtt_sender.send_message('stop')
 
 def handle_go_straight_for_seconds(seconds_entry_box, speed_entry_box, mqtt_sender):
-
+    print('Go straight for ', seconds_entry_box.get(), 'seconds')
     mqtt_sender.send_message('go_straight_for_seconds', [int(seconds_entry_box.get()), int(speed_entry_box.get())])
 
 def handle_go_straight_for_inches_using_time(inches_entry_box, speed_entry_box, mqtt_sender):
-
+    print('Go straight for ', inches_entry_box.get(), 'inches')
     mqtt_sender.send_message('go_straight_for_inches_using_time', [int(inches_entry_box.get()), int(speed_entry_box.get())])
 
 def handle_go_straight_for_inches_using_encoder(inches_entry_box, speed_entry_box, mqtt_sender):
-
+    print('Go straight for ', inches_entry_box, 'inches (using encoder)')
     mqtt_sender.send_message('go_straight_for_inches_using_encoder', [int(inches_entry_box.get()), int(speed_entry_box.get())])
 
 ###############################################################################
@@ -327,7 +326,7 @@ def handle_raise_arm(mqtt_sender):
     Tells the robot to raise its Arm until its touch sensor is pressed
       :type  mqtt_sender:  com.MqttClient
     """
-
+    print('Raise Arm')
     mqtt_sender.send_message('raise_arm')
 
 
@@ -336,7 +335,7 @@ def handle_lower_arm(mqtt_sender):
     Tells the robot to lower its Arm until it is all the way down.
       :type  mqtt_sender:  com.MqttClient
     """
-
+    print('Lower Arm')
     mqtt_sender.send_message('lower_arm')
 
 
@@ -347,7 +346,7 @@ def handle_calibrate_arm(mqtt_sender):
     all the way down, and then to mark taht position as position 0.
       :type  mqtt_sender:  com.MqttClient
     """
-
+    print('Calibrate Arm')
     mqtt_sender.send_message('calibrate_arm')
 
 
@@ -358,7 +357,7 @@ def handle_move_arm_to_position(arm_position_entry, mqtt_sender):
       :type  arm_position_entry  ttk.Entry
       :type  mqtt_sender:        com.MqttClient
     """
-
+    print('Move Arm to Position', arm_position_entry.get())
     mqtt_sender.send_message('move_arm_to_position',[arm_position_entry.get()])
 
 
@@ -384,15 +383,15 @@ def handle_exit(mqtt_sender):
 
 #handlers for sounds
 
-def handle_beep(mqtt_sender,entryBox):
-
+def handle_beep(mqtt_sender, entryBox):
+    print('I will beep ', entryBox.get(), 'times')
     mqtt_sender.send_message('beep',[entryBox.get()])
 
-def handle_tone(mqtt_sender,entryBox, entryBox2):
-
+def handle_tone(mqtt_sender, entryBox, entryBox2):
+    print('I will play a tone at frequency ', entryBox.get(), 'for duration ', entryBox.get())
     mqtt_sender.send_message('tone',[entryBox.get(),entryBox2.get()])
 
-def handle_speak(mqtt_sender,entryBox):
-
+def handle_speak(mqtt_sender, entryBox):
+    print('I will speak phrase ', entryBox.get())
     mqtt_sender.send_message('speak',[entryBox.get()])
 
