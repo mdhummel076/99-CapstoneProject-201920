@@ -97,17 +97,23 @@ def get_my_frames(window,client):
     dataButton = ttk.Button(frame, text="Print Data")
     cwButton = ttk.Button(frame, text="Look Clockwise")
     ccwButton = ttk.Button(frame, text="Look Counter-Clockwise")
+    speedBox = ttk.Entry(frame,width = 8)
+    speedBox.insert(0,'100')
+    areaBox = ttk.Entry(frame,width=8)
+    areaBox.insert(0,'100')
 
     # Grid the widgets:
     frame_label.grid(row=0, column=1)
     dataButton.grid(row=1, column=0)
     cwButton.grid(row=1,column=1)
     ccwButton.grid(row=1,column=2)
+    speedBox.grid(row=2,column=1)
+    areaBox.grid(row=2,column=2)
 
     # Set the button callbacks:
     dataButton['command'] = lambda: printData(client)
-    cwButton['command'] = lambda: lookCW(client)
-    ccwButton['command'] = lambda: lookCCW(client)
+    cwButton['command'] = lambda: lookCW(client,speedBox,areaBox)
+    ccwButton['command'] = lambda: lookCCW(client,speedBox,areaBox)
 
     return frame
 
@@ -115,13 +121,13 @@ def printData(client):
 
     client.send_message('printData')
 
-def lookCW(client):
+def lookCW(client,box1,box2):
 
-    client.send_message('CW')
+    client.send_message('CW',[box1.get(),box2.get()])
 
-def lookCCW(client):
+def lookCCW(client,box1,box2):
 
-    client.send_message('CCW')
+    client.send_message('CCW',[box1.get(),box2.get()])
 
 
 # -----------------------------------------------------------------------------
