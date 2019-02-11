@@ -14,6 +14,7 @@ class Delegate(object):
     def __init__(self, robot):
 
         self.robot = robot
+        self.enabled = True
 
     def print(self,message):
         print(message)
@@ -67,3 +68,6 @@ class Delegate(object):
     def speak(self, phrase):
         sounds = self.robot.sound_system.speech_maker
         sounds.speak(phrase)
+
+    def quit(self):
+        self.enabled = False

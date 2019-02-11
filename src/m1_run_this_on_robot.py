@@ -27,11 +27,13 @@ def main():
 def operate():
 
     robot = rosebot.RoseBot()
-
-    client = com.MqttClient(shared_gui_delegate_on_robot.Delegate(robot))
+    Delegate = shared_gui_delegate_on_robot.Delegate(robot)
+    client = com.MqttClient(Delegate)
     client.connect_to_pc()
 
     while True:
+        if not Delegate.enabled:
+            break
         time.sleep(0.01)
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
