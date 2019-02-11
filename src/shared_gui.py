@@ -379,6 +379,7 @@ def handle_exit(mqtt_sender):
     Then exit this program.
       :type mqtt_sender: com.MqttClient
     """
+    mqtt_sender.send_message('quit')
     exit()
 
 #handlers for sounds
