@@ -28,4 +28,7 @@ def run_test_arm():
 def real_deal():
     robot = rosebot.RoseBot()
     delegate = shared_gui_delegate_on_robot.Delegate(robot)
+    receiver = com.MqttClient(delegate)
+    receiver.connect_to_pc()
+
 main()
