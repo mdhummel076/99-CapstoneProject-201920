@@ -145,11 +145,32 @@ class DriveSystem(object):
         by the color_sensor is less than the given intensity.
         """
 
+        self.color_sensor = sensor_system.color_sensor  # goes in __init__ for Drivesystem
+        print(self.color_sensor.reflected_light_intensity)
+        self.left_motor.turn_on(speed)
+        self.right_motor.turn_on(speed)
+
+        while self.color_sensor.reflected_light_intensity >= intensity:
+            time.sleep(0.01)
+
+        self.left_motor.turn_off()
+        self.right_motor.turn_off()
+
     def go_straight_until_intensity_is_greater_than(self, intensity, speed):
         """
         Goes straight at the given speed until the intensity returned
         by the color_sensor is greater than the given intensity.
         """
+
+        print(self.color_sensor.reflected_light_intensity)
+        self.left_motor.turn_on(speed)
+        self.right_motor.turn_on(speed)
+
+        while self.color_sensor.reflected_light_intensity <= intensity:
+            time.sleep(0.01)
+
+        self.left_motor.turn_off()
+        self.right_motor.turn_off()
 
     def go_straight_until_color_is(self, color, speed):
         """
@@ -165,6 +186,16 @@ class DriveSystem(object):
         the color sensor's color.
         """
 
+        print(self.color_sensor.color)
+        self.left_motor.turn_on(speed)
+        self.right_motor.turn_on(speed)
+
+        while self.color_sensor.color != color:
+            time.sleep(0.01)
+
+        self.left_motor.turn_off()
+        self.right_motor.turn_off()
+
     def go_straight_until_color_is_not(self, color, speed):
         """
         Goes straight at the given speed until the color returned
@@ -174,16 +205,15 @@ class DriveSystem(object):
         listed in the ColorSensor class.
         """
 
-    def go_until_distance_is_within(self, delta, inches, speed):
-        """
-        Goes forward or backward, repeated as necessary, until the robot is
-        within the given delta of the given inches from the nearest object
-        that it senses.  Assumes that it senses an object when it starts.
+        print(self.color_sensor.color)
+        self.left_motor.turn_on(speed)
+        self.right_motor.turn_on(speed)
 
-        For example, if delta is 0.3 and inches is 7.1, then
-        the robot should move until it is between 6.8 and 7.4 inches
-        from the object.
-        """
+        while self.color_sensor.color == color:
+            time.sleep(0.01)
+
+        self.left_motor.turn_off()
+        self.right_motor.turn_off()
 
     # -------------------------------------------------------------------------
     # Methods for driving that use the infrared proximity sensor.
