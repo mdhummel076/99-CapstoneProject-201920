@@ -52,7 +52,8 @@ def main():
     # -------------------------------------------------------------------------
     # Frames that are particular to my individual contributions to the project.
     # -------------------------------------------------------------------------
-    # TODO: Implement and call get_my_frames(...)
+
+    cameraFrame = get_my_frames(mainFrame,client)
 
     # -------------------------------------------------------------------------
     # Grid the frames.
@@ -63,6 +64,7 @@ def main():
     controlFrame.grid(row = 3, column = 0)
     driveSystemFrame.grid(row = 4,column = 0)
     soundmakerFrame.grid(row = 5, column = 0)
+    cameraFrame.grid(row=0,column=1)
 
 
     # -------------------------------------------------------------------------
@@ -83,6 +85,43 @@ def get_shared_frames(main_frame, mqtt_sender):
 
 def grid_frames(teleop_frame, arm_frame, control_frame):
     pass
+
+def get_my_frames(window,client):
+    # Construct the frame to return:
+    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+    frame.grid()
+
+    # Construct the widgets on the frame:
+    frame_label = ttk.Label(frame, text="Camera")
+
+    dataButton = ttk.Button(frame, text="Print Data")
+    cwButton = ttk.Button(frame, text="Look Clockwise")
+    ccwButton = ttk.Button(frame, text="Look Counter-Clockwise")
+
+    # Grid the widgets:
+    frame_label.grid(row=0, column=1)
+    dataButton.grid(row=1, column=0)
+    cwButton.grid(row=1,column=1)
+    ccwButton.grid(row=1,column=2)
+
+    # Set the button callbacks:
+    dataButton['command'] = lambda: printData(client)
+    cwButton['command'] = lambda: lookCW(client)
+    ccwButton['command'] = lambda: lookCCW(client)
+
+    return frame
+
+def printData(client):
+
+    client.send_message('printData')
+
+def lookCW(client):
+
+    client.send_message('CW')
+
+def lookCCW(client):
+
+    client.send_message('CCW')
 
 
 # -----------------------------------------------------------------------------

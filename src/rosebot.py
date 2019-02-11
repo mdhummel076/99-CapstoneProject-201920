@@ -240,6 +240,8 @@ class DriveSystem(object):
         (if any).
         """
 
+        print(SensorSystem.camera.get_biggest_blob())
+
     def spin_clockwise_until_sees_object(self, speed, area):
         """
         Spins clockwise at the given speed until the camera sees an object
@@ -366,7 +368,7 @@ class SensorSystem(object):
         self.touch_sensor = TouchSensor(1)
         self.color_sensor = ColorSensor(3)
         self.ir_proximity_sensor = InfraredProximitySensor(4)
-        # self.camera = Camera()
+        self.camera = Camera()
         # self.ir_beacon_sensor = InfraredBeaconSensor(4)
         # self.beacon_system =
         # self.display_system =

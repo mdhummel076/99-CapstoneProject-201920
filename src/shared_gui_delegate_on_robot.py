@@ -71,3 +71,16 @@ class Delegate(object):
 
     def quit(self):
         self.enabled = False
+
+    def printData(self):
+
+        self.robot.drive_system.display_camera_data()
+
+    def CW(self,speed,area):
+
+        self.robot.drive_system.spin_clockwise_until_sees_object(speed,area)
+
+    def CCW(self,speed,area):
+
+        self.robot.drive_system.spin_counterclockwise_until_sees_object(speed,area)
+    
