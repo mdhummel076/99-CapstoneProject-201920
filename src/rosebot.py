@@ -128,7 +128,7 @@ class DriveSystem(object):
 
         startpos = self.left_motor.get_position()
         deg = (inches / self.wheel_circumference) * 360
-        while self.left_motor.get_position() - startpos < deg:
+        while abs(self.left_motor.get_position() - startpos) < deg:
             time.sleep(0.01)
 
         self.left_motor.turn_off()

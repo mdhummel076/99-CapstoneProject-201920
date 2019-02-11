@@ -380,7 +380,7 @@ def handle_exit(mqtt_sender):
       :type mqtt_sender: com.MqttClient
     """
     mqtt_sender.send_message('quit')
-    
+
     exit()
 
 
