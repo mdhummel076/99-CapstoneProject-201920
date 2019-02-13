@@ -105,12 +105,46 @@ def sprint_2_frames(window, mqtt_sender):
     frame_label = ttk.Label(frame, text="Sprint 2: Feature 9 & 10")
     frame_label.grid(row=0, column=0)
 
-    robot_point_to_object_button = ttk.Button(frame, text="Make Robot Point Straight to Object")
-    robot_point_to_object_button.grid(row=4, column=0)
+    robot_proximity_tone_button = ttk.Button(frame, text="Make Tones Frequency Increase with Proximity")
+    robot_proximity_tone_button.grid(row=4, column=0)
+    robot_frequency_label = ttk.Label(frame, text="Start Frequency:")
+    robot_frequency_entry_box = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+    robot_inc_frequency_label = ttk.Label(frame, text="Frequency Rate of Increase")
+    robot_inc_frequency_entry_box = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
 
+    robot_frequency_label.grid(row=5, column=0)
+    robot_frequency_entry_box.grid(row=5, column=1)
+    robot_inc_frequency_label.grid(row=6, column=0)
+    robot_inc_frequency_entry_box.grid(row=6, column=1)
+
+    robot_point_to_object_button = ttk.Button(frame, text="Make Robot Point Straight to Object")
+    robot_point_to_object_button.grid(row=7, column=0)
+
+    robot_proximity_tone_button['command']=lambda: handle_robot_proximity_tone(
+            robot_frequency_entry_box, robot_inc_frequency_entry_box, mqtt_sender)
     robot_point_to_object_button['command']=lambda: handle_robot_point_to_object(mqtt_sender)
 
     return frame
+
+
+def handle_robot_proximity_tone(frequency_entry, inc_frequency_entry, mqtt_sender):
+
+    print('Start at', frequency_entry.get(), 'Hz, then increase by', inc_frequency_entry.get(), "Hz per inch")
+    robot = rosebot.Rosebot()
+    mqtt_sender.send_message('calibrate_arm')
+    x0 = robot.sensor_system.infraredproximitysensor.get_distance_in_inches()
+    mqtt_sender.send_message('tone', [(frequency_entry.get()), 500])
+
+    if robot.sensor_robot.sensor_system.infraredproximitysensor.get_distance_in_inches() > 2:
+        mqtt_sender.send_message('raise_arm')
+        mqtt_sender.send_message('go', [75, 75])
+
+    while robot.sensor_robot.sensor_system.infraredproximitysensor.get_distance_in_inches() > 2:
+        x = robot.sensor_robot.sensor_system.infraredproximitysensor.get_distance_in_inches()
+        mqtt_sender.send_message('tone', [(x-x0)*(inc_frequency_entry.get())+(frequency_entry.get()), 500])
+
+    mqtt_sender.send_message('stop')
+    mqtt_sender.send_message('lower_arm')
 
 def handle_robot_point_to_object(mqtt_sender):
 
