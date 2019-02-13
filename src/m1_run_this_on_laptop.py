@@ -46,14 +46,13 @@ def main():
     # Sub-frames for the shared GUI that the team developed:
     # -------------------------------------------------------------------------
 
-    teleopFrame, armFrame, controlFrame, driveSystemFrame, soundmakerFrame = get_shared_frames(mainFrame,client)
+    teleopFrame, armFrame, controlFrame, driveSystemFrame, soundmakerFrame, colorFrame, cameraFrame = get_shared_frames(mainFrame,client)
 
 
     # -------------------------------------------------------------------------
     # Frames that are particular to my individual contributions to the project.
     # -------------------------------------------------------------------------
 
-    cameraFrame = get_my_frames(mainFrame,client)
 
     # -------------------------------------------------------------------------
     # Grid the frames.
@@ -64,7 +63,8 @@ def main():
     controlFrame.grid(row = 3, column = 0)
     driveSystemFrame.grid(row = 4,column = 0)
     soundmakerFrame.grid(row = 5, column = 0)
-    cameraFrame.grid(row=0,column=1)
+    colorFrame.grid(row=0,column=1)
+    cameraFrame.grid(row=1,column=1)
 
 
     # -------------------------------------------------------------------------
@@ -79,55 +79,17 @@ def get_shared_frames(main_frame, mqtt_sender):
     controlFrame = shared_gui.get_control_frame(main_frame,mqtt_sender)
     driveSystemFrame = shared_gui.get_drivesystem_frame(main_frame,mqtt_sender)
     soundmakerFrame = shared_gui.getSoundmakerFrame(main_frame,mqtt_sender)
+    colorFrame = shared_gui.get_ColorSensor_Frame(main_frame,mqtt_sender)
+    cameraFrame = shared_gui.get_camera_frame(main_frame,mqtt_sender)
 
-    return teleopFrame, armFrame, controlFrame, driveSystemFrame, soundmakerFrame
+    return teleopFrame, armFrame, controlFrame, driveSystemFrame, soundmakerFrame, colorFrame, cameraFrame
 
 
 def grid_frames(teleop_frame, arm_frame, control_frame):
     pass
 
 def get_my_frames(window,client):
-    # Construct the frame to return:
-    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
-    frame.grid()
-
-    # Construct the widgets on the frame:
-    frame_label = ttk.Label(frame, text="Camera")
-
-    dataButton = ttk.Button(frame, text="Print Data")
-    cwButton = ttk.Button(frame, text="Look Clockwise")
-    ccwButton = ttk.Button(frame, text="Look Counter-Clockwise")
-    speedBox = ttk.Entry(frame,width = 8)
-    speedBox.insert(0,'100')
-    areaBox = ttk.Entry(frame,width=8)
-    areaBox.insert(0,'100')
-
-    # Grid the widgets:
-    frame_label.grid(row=0, column=1)
-    dataButton.grid(row=1, column=0)
-    cwButton.grid(row=1,column=1)
-    ccwButton.grid(row=1,column=2)
-    speedBox.grid(row=2,column=1)
-    areaBox.grid(row=2,column=2)
-
-    # Set the button callbacks:
-    dataButton['command'] = lambda: printData(client)
-    cwButton['command'] = lambda: lookCW(client,speedBox,areaBox)
-    ccwButton['command'] = lambda: lookCCW(client,speedBox,areaBox)
-
-    return frame
-
-def printData(client):
-
-    client.send_message('printData')
-
-def lookCW(client,box1,box2):
-
-    client.send_message('CW',[box1.get(),box2.get()])
-
-def lookCCW(client,box1,box2):
-
-    client.send_message('CCW',[box1.get(),box2.get()])
+    pass
 
 
 # -----------------------------------------------------------------------------

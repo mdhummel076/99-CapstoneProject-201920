@@ -284,6 +284,37 @@ def get_ColorSensor_Frame(window, mqtt_sender):
 
     return frame
 
+def get_camera_frame(window,client):
+    # Construct the frame to return:
+    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+    frame.grid()
+
+    # Construct the widgets on the frame:
+    frame_label = ttk.Label(frame, text="Camera")
+
+    dataButton = ttk.Button(frame, text="Print Data")
+    cwButton = ttk.Button(frame, text="Look Clockwise")
+    ccwButton = ttk.Button(frame, text="Look Counter-Clockwise")
+    speedBox = ttk.Entry(frame, width=8)
+    speedBox.insert(0, '100')
+    areaBox = ttk.Entry(frame, width=8)
+    areaBox.insert(0, '100')
+
+    # Grid the widgets:
+    frame_label.grid(row=0, column=1)
+    dataButton.grid(row=1, column=0)
+    cwButton.grid(row=1, column=1)
+    ccwButton.grid(row=1, column=2)
+    speedBox.grid(row=2, column=1)
+    areaBox.grid(row=2, column=2)
+
+    # Set the button callbacks:
+    dataButton['command'] = lambda: printData(client)
+    cwButton['command'] = lambda: lookCW(client, speedBox, areaBox)
+    ccwButton['command'] = lambda: lookCCW(client, speedBox, areaBox)
+
+    return frame
+
 
 
 ###############################################################################
@@ -464,3 +495,15 @@ def handle_color_is(color_entry, speed_entry, mqtt_sender):
 def handle_color_is_not(color_entry, speed_entry, mqtt_sender):
     print('Go straight at speed of', speed_entry.get(), 'until color is not', color_entry.get())
     mqtt_sender.send_message('go_straight_until_color_is_not', [color_entry.get(), speed_entry.get()])
+
+def printData(client):
+
+    client.send_message('printData')
+
+def lookCW(client,box1,box2):
+
+    client.send_message('CW',[box1.get(),box2.get()])
+
+def lookCCW(client,box1,box2):
+
+    client.send_message('CCW',[box1.get(),box2.get()])
