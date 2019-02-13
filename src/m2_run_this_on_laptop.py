@@ -105,27 +105,39 @@ def sprint_2_frames(window, mqtt_sender):
     frame_label = ttk.Label(frame, text="Sprint 2: Feature 9 & 10")
     frame_label.grid(row=0, column=0)
 
-    robot_point_to_object_button = ttk.Button(frame, text="Make Robot Point Straight to Object")
-    robot_point_to_object_button.grid(row=4, column=0)
+    robot_proximity_tone_button = ttk.Button(frame, text="Make Tones Frequency Increase with Proximity")
+    robot_proximity_tone_button.grid(row=4, column=0)
+    robot_frequency_label = ttk.Label(frame, text="Start Frequency:")
+    robot_frequency_entry_box = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+    robot_inc_frequency_label = ttk.Label(frame, text="Frequency Rate of Increase")
+    robot_inc_frequency_entry_box = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
 
+    robot_frequency_label.grid(row=5, column=0)
+    robot_frequency_entry_box.grid(row=5, column=1)
+    robot_frequency_entry_box.insert(0, '440')
+    robot_inc_frequency_label.grid(row=6, column=0)
+    robot_inc_frequency_entry_box.grid(row=6, column=1)
+    robot_inc_frequency_entry_box.insert(0, 20)
+
+    robot_point_to_object_button = ttk.Button(frame, text="Make Robot Point Straight to Object")
+    robot_point_to_object_button.grid(row=7, column=0)
+
+    robot_proximity_tone_button['command']=lambda: handle_robot_proximity_tone(
+            robot_frequency_entry_box, robot_inc_frequency_entry_box, mqtt_sender)
     robot_point_to_object_button['command']=lambda: handle_robot_point_to_object(mqtt_sender)
 
     return frame
 
+
+def handle_robot_proximity_tone(frequency_entry, inc_frequency_entry, mqtt_sender):
+
+    print('Start at', frequency_entry.get(), 'Hz, then increase by', inc_frequency_entry.get(), "Hz per inch")
+    mqtt_sender.send_message('robot_proximity_tone', [int(frequency_entry.get()), int(inc_frequency_entry.get())])
+
 def handle_robot_point_to_object(mqtt_sender):
 
     print('Make Robot Point to Object')
-    robot = rosebot.RoseBot()
-    x = robot.sensor_system.camera.get_biggest_blob().x
-    while x > 125:
-        mqtt_sender.send_message('CCW', [30, 200])
-        x = robot.sensor_system.camera.get_biggest_blob().x
-        time.sleep(0.01)
-
-    while x < 115:
-        mqtt_sender.send_message('CW', [30, 200])
-        x = robot.sensor_system.camera.get_biggest_blob().x
-        time.sleep(0.01)
+    mqtt_sender.send_message('robot_point_to_object')
 
 
 
