@@ -8,6 +8,7 @@
 """
 
 import rosebot
+import time
 
 class Delegate(object):
 
@@ -96,3 +97,15 @@ class Delegate(object):
 
     def go_straight_until_color_is_not(self, color, speed):
         self.robot.drive_system.go_straight_until_color_is_not(int(color), int(speed))
+
+    def m1BeepDrive(self,initRate,rate):
+        startDistance = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+        beepCo = (1/int(initRate))/startDistance
+        self.robot.drive_system.go(50,50)
+        while True:
+            distance = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+            if distance < 2:
+                break
+            self.beep(1)
+            time.sleep(beepCo*(distance)+(distance-startDistance)*(1/int(rate)))
+        self.stop()

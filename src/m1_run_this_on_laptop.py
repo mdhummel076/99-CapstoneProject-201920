@@ -53,6 +53,7 @@ def main():
     # Frames that are particular to my individual contributions to the project.
     # -------------------------------------------------------------------------
 
+    beepdriveFrame = get_my_frames(mainFrame,client)
 
     # -------------------------------------------------------------------------
     # Grid the frames.
@@ -65,6 +66,7 @@ def main():
     soundmakerFrame.grid(row = 5, column = 0)
     colorFrame.grid(row=0,column=1)
     cameraFrame.grid(row=1,column=1)
+    beepdriveFrame.grid(row=2,column=1)
 
 
     # -------------------------------------------------------------------------
@@ -89,10 +91,38 @@ def grid_frames(teleop_frame, arm_frame, control_frame):
     pass
 
 def get_my_frames(window,client):
-    pass
+    # Construct the frame to return:
+    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+    frame.grid()
 
+    # Construct the widgets on the frame:
+    frame_label = ttk.Label(frame, text="Beep Drive")
+
+    driveButton = ttk.Button(frame, text="Drive")
+    initBox = ttk.Entry(frame,width=8)
+    rateBox = ttk.Entry(frame,width=8)
+    initBox.insert(0,'1')
+    rateBox.insert(0,'1')
+
+    # Grid the widgets:
+    frame_label.grid(row=0, column=1)
+    driveButton.grid(row=2,column=0)
+    initBox.grid(row=2,column=1)
+    rateBox.grid(row=2,column=2)
+
+    # Set the button callbacks:
+    driveButton['command'] = lambda: m1BeepDrive(client,initBox,rateBox)
+
+    return frame
+
+
+def m1BeepDrive(client,box1,box2):
+
+    client.send_message('m1BeepDrive',[box1.get(),box2.get()])
 
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
 # -----------------------------------------------------------------------------
 main()
+
+
