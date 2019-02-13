@@ -11,6 +11,33 @@ import time
 import shared_gui_delegate_on_robot
 
 
+class Delegate(shared_gui_delegate_on_robot.Delegate):
+
+    def m1BeepDrive(self,initRate,rate):
+        startDistance = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+        beepCo = (1/int(initRate))/startDistance
+        self.robot.drive_system.go(50,50)
+        while True:
+            distance = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+            if distance < 2:
+                break
+            self.beep(1)
+            time.sleep(max((1/int(initRate))-(startDistance-distance)*(1/int(rate)),0))
+        self.stop()
+
+    def centerOnTarget(self):
+        while True:
+            error = self.robot.sensor_system.camera.get_biggest_blob().center.x-120
+            if ((error <= 10) & (error >= -10)) | (error == -120):
+                break
+            if error > 10:
+                self.go(-30, 30)
+            if error < -10:
+                self.go(30, -30)
+        self.stop()
+
+
+
 def main():
     """
     This code, which must run on the EV3 ROBOT:
@@ -38,5 +65,4 @@ def operate():
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
 # -----------------------------------------------------------------------------
-
 main()
