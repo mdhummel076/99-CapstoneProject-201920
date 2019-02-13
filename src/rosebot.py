@@ -280,9 +280,9 @@ class DriveSystem(object):
         """
 
         while True:
-            self.go(50,-50)
+            self.go(speed,-speed)
             time.sleep(0.02)
-            if SensorSystem().camera.get_biggest_blob().width > 0:
+            if SensorSystem().camera.get_biggest_blob().get_area() > area:
                 break
 
         self.stop()
@@ -295,9 +295,9 @@ class DriveSystem(object):
         """
 
         while True:
-            self.go(-50, 50)
+            self.go(-speed, speed)
             time.sleep(0.02)
-            if SensorSystem().camera.get_biggest_blob().width > 0:
+            if SensorSystem().camera.get_biggest_blob().get_area() > area:
                 break
 
         self.stop()
