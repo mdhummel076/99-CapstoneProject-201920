@@ -46,7 +46,8 @@ def main():
     # -------------------------------------------------------------------------
     # Sub-frames for the shared GUI that the team developed:
     # -------------------------------------------------------------------------
-    teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame = get_shared_frames(main_frame, mqtt_sender)
+    teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, \
+        color_sensor_frame = get_shared_frames(main_frame, mqtt_sender)
 
 
     # -------------------------------------------------------------------------
@@ -58,7 +59,7 @@ def main():
     # Grid the frames.
     # -------------------------------------------------------------------------
 
-    grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame)
+    grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, color_sensor_frame)
 
 
     # -------------------------------------------------------------------------
@@ -75,16 +76,18 @@ def get_shared_frames(main_frame, mqtt_sender):
     control_frame = shared_gui.get_control_frame(main_frame, mqtt_sender)
     drivesystem_frame = shared_gui.get_drivesystem_frame(main_frame, mqtt_sender)
     soundmaker_frame = shared_gui.getSoundmakerFrame(main_frame,mqtt_sender)
+    color_sensor_frame = shared_gui.get_ColorSensor_Frame(main_frame, mqtt_sender)
 
-    return teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame
+    return teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, color_sensor_frame
 
 
-def grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame):
+def grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, color_sensor_frame):
     teleop_frame.grid(row=0, column=0)
     arm_frame.grid(row=1, column=0)
     control_frame.grid(row=2, column=0)
     drivesystem_frame.grid(row=0, column=1)
     soundmaker_frame.grid(row=1, column=1)
+    color_sensor_frame.grid(row=2, column=1)
 
 
 # -----------------------------------------------------------------------------

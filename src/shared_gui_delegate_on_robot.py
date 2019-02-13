@@ -84,3 +84,15 @@ class Delegate(object):
 
         self.robot.drive_system.spin_counterclockwise_until_sees_object(int(speed),int(area))
 
+    def go_straight_until_intensity_is_less_than(self, intensity, speed):
+
+        self.robot.drive_system.go_straight_until_intensity_is_less_than(int(intensity), int(speed))
+
+    def go_straight_until_intensity_is_greater_than(self, intensity, speed):
+        self.robot.drive_system.go_straight_until_intensity_is_greater_than(int(intensity), int(speed))
+
+    def go_straight_until_color_is(self, color, speed):
+        self.robot.drive_system.go_straight_until_color_is(int(color), int(speed))
+
+    def go_straight_until_color_is_not(self, color, speed):
+        self.robot.drive_system.go_straight_until_color_is_not(int(color), int(speed))

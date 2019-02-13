@@ -238,6 +238,53 @@ def getSoundmakerFrame(window,mqtt_sender):
 
     return Frame
 
+def get_ColorSensor_Frame(window, mqtt_sender):
+
+    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+    frame.grid()
+
+    frame_label = ttk.Label(frame, text="Color Sensor Methods")
+    speed_label = ttk.Label(frame, text="Desired Speed:")
+    speed_entry = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+    intensity_label = ttk.Label(frame, text="Desired Intensity:")
+    intensity_entry = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+
+
+    go_straight_intensity_less_than_button = ttk.Button(frame, text="Go Straight Until Intensity Is Less Than")
+
+    go_straight_intensity_greater_than_button = ttk.Button(frame, text="Go Straight Until Intensity Is Greater Than")
+
+    color_label = ttk.Label(frame, text="Enter Color:")
+    color_entry = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+
+    go_straight_until_color_is_button = ttk.Button(frame, text="Go Straight Until Color Is")
+    go_straight_until_color_is_not_button = ttk.Button(frame, text="Go Straight Until Color Is Not")
+
+    frame_label.grid(row=0, column=0)
+    speed_label.grid(row=1, column=0)
+    speed_entry.grid(row=1, column=1)
+    intensity_label.grid(row=2, column=0)
+    intensity_entry.grid(row=2, column=1)
+    color_label.grid(row=3, column=0)
+    color_entry.grid(row=3, column=1)
+
+    go_straight_intensity_less_than_button.grid(row=4, column=0)
+    go_straight_intensity_greater_than_button.grid(row=5, column=0)
+    go_straight_until_color_is_button.grid(row=4, column=1)
+    go_straight_until_color_is_not_button.grid(row=5, column=1)
+
+    go_straight_intensity_less_than_button['command']=lambda: handle_intensity_less_than(
+        speed_entry, intensity_entry, mqtt_sender)
+    go_straight_intensity_greater_than_button['command']=lambda: handle_intensity_greater_than(
+        speed_entry, intensity_entry, mqtt_sender)
+    go_straight_until_color_is_button['command']=lambda: handle_color_is(
+        color_entry, speed_entry, mqtt_sender)
+    go_straight_until_color_is_not_button['command']=lambda: handle_color_is_not(
+        color_entry, speed_entry, mqtt_sender)
+
+    return frame
+
+
 
 ###############################################################################
 ###############################################################################
@@ -400,3 +447,20 @@ def handle_speak(mqtt_sender, entryBox):
     print('I will speak phrase ', entryBox.get())
     mqtt_sender.send_message('speak',[entryBox.get()])
 
+# Handlers for Color Methods
+
+def handle_intensity_less_than(speed_entry, intensity_entry, mqtt_sender):
+    print('Go Straight at a speed of', speed_entry.get(), 'until intensity is less than', intensity_entry.get())
+    mqtt_sender.send_message('go_straight_until_intensity_is_less_than', [intensity_entry.get(), speed_entry.get()])
+
+def handle_intensity_greater_than(speed_entry, intensity_entry, mqtt_sender):
+    print('Go Straight at a speed of', speed_entry.get(), 'until intensity is greater than', intensity_entry.get())
+    mqtt_sender.send_message('go_straight_until_intensity_is_greater_than', [intensity_entry.get(), speed_entry.get()])
+
+def handle_color_is(color_entry, speed_entry, mqtt_sender):
+    print('Go straight at speed of', speed_entry.get(), 'until color is', color_entry.get())
+    mqtt_sender.send_message('go_straight_until_color_is', [color_entry.get(), speed_entry.get()])
+
+def handle_color_is_not(color_entry, speed_entry, mqtt_sender):
+    print('Go straight at speed of', speed_entry.get(), 'until color is not', color_entry.get())
+    mqtt_sender.send_message('go_straight_until_color_is_not', [color_entry.get(), speed_entry.get()])
