@@ -8,7 +8,6 @@
 """
 
 import rosebot
-import time
 
 class Delegate(object):
 
@@ -109,3 +108,13 @@ class Delegate(object):
             self.beep(1)
             time.sleep(beepCo*(distance)+(distance-startDistance)*(1/int(rate)))
         self.stop()
+
+
+    def go_forward_until_distance_is_less_than(self, inches, speed):
+        self.robot.drive_system.go_forward_until_distance_is_less_than(int(inches),int(speed))
+
+    def go_backward_until_distance_is_greater_than(self, inches, speed):
+        self.robot.drive_system.go_backward_until_distance_is_greater_than(int(inches),int(speed))
+
+    def go_until_distance_is_within(self, delta_inches, speed):
+        self.robot.drive_system.go_until_distance_is_within(int(delta_inches),int(speed))

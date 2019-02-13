@@ -258,6 +258,7 @@ class DriveSystem(object):
         sensor = InfraredProximitySensor(4)
         while True:
             print(speed)
+            sensor.get_distance_in_inches()
             if sensor.get_distance_in_inches() < delta_inches:
                 self.left_motor.turn_on(-speed)
                 self.right_motor.turn_on(-speed)
