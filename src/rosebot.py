@@ -223,6 +223,17 @@ class DriveSystem(object):
         Goes forward at the given speed until the robot is less than
         the given number of inches from the nearest object that it senses.
         """
+        sensor = InfraredProximitySensor(4)
+
+        while True:
+            self.left_motor.turn_on(speed)
+            self.right_motor.turn_on(speed)
+            time.sleep(.01)
+            sensor.get_distance_in_inches()
+            if sensor.get_distance_in_inches() < inches:
+                self.left_motor.turn_off()
+                self.right_motor.turn_off()
+                break
 
     def go_backward_until_distance_is_greater_than(self, inches, speed):
         """
@@ -230,12 +241,39 @@ class DriveSystem(object):
         the given number of inches from the nearest object that it senses.
         Assumes that it senses an object when it starts.
         """
-
+        sensor = InfraredProximitySensor(4)
+        while True:
+            self.left_motor.turn_on(-speed)
+            self.right_motor.turn_on(-speed)
+            time.sleep(.01)
+            if sensor.get_distance_in_inches()>inches:
+                self.left_motor.turn_off()
+                self.right_motor.turn_off()
+                break
     def go_until_distance_is_within(self, delta_inches, speed):
         """
         Goes forward or backward, repeated as necessary, until the robot is
         within the given delta-inches from the nearest object that it senses.
         """
+        sensor = InfraredProximitySensor(4)
+        while True:
+            print(speed)
+            if sensor.get_distance_in_inches() < delta_inches:
+                self.left_motor.turn_on(-speed)
+                self.right_motor.turn_on(-speed)
+                time.sleep(.01)
+                sensor.get_distance_in_inches()
+            if sensor.get_distance_in_inches() > delta_inches:
+                self.left_motor.turn_on(speed)
+                self.right_motor.turn_on(speed)
+                time.sleep(.01)
+                sensor.get_distance_in_inches()
+            if sensor.get_distance_in_inches() == delta_inches:
+                self.right_motor.turn_off()
+                self.left_motor.turn_off()
+                time.sleep(.01)
+                sensor.get_distance_in_inches()
+
 
     # -------------------------------------------------------------------------
     # Methods for driving that use the infrared beacon sensor.
@@ -246,7 +284,10 @@ class DriveSystem(object):
         Spins clockwise at the given speed until the heading to the Beacon
         is nonnegative.  Requires that the user turn on the Beacon.
         """
-
+    #     self.left_motor.turn_on(speed)
+    #     while True:
+    #         if InfraredBeaconSensor().get_heading_to_beacon() >0:
+    #             self.left_motor.turn_off()
     def spin_counterclockwise_until_beacon_heading_is_nonpositive(self, speed):
         """
         Spins counter-clockwise at the given speed until the heading to the Beacon
