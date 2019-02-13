@@ -270,7 +270,7 @@ class DriveSystem(object):
         (if any).
         """
 
-        print(SensorSystem.camera.get_biggest_blob())
+        print(SensorSystem().camera.get_biggest_blob())
 
     def spin_clockwise_until_sees_object(self, speed, area):
         """
