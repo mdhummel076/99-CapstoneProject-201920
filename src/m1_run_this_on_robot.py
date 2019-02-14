@@ -27,12 +27,12 @@ def main():
 def operate():
 
     robot = rosebot.RoseBot()
-    Delegate = shared_gui_delegate_on_robot.Delegate(robot)
-    client = com.MqttClient(Delegate)
+    delegate = Delegate(robot)
+    client = com.MqttClient(delegate)
     client.connect_to_pc()
 
     while True:
-        if not Delegate.enabled:
+        if not delegate.enabled:
             break
         time.sleep(0.01)
 
@@ -53,13 +53,13 @@ class Delegate(shared_gui_delegate_on_robot.Delegate):
 
     def centerOnTarget(self):
         while True:
-            error = self.robot.sensor_system.camera.get_biggest_blob().center.x-120
-            if ((error <= 10) & (error >= -10)) | (error == -120):
+            error = self.robot.sensor_system.camera.get_biggest_blob().center.x-140
+            if ((error <= 10) & (error >= -10)) | (error == -140):
                 break
             if error > 10:
-                self.go(-30, 30)
-            if error < -10:
                 self.go(30, -30)
+            if error < -10:
+                self.go(-30, 30)
         self.stop()
 
 # -----------------------------------------------------------------------------
