@@ -102,6 +102,7 @@ def get_beepFrame(window,client):
 
     driveButton = ttk.Button(frame, text="Drive")
     targetButton = ttk.Button(frame, text='Target')
+    grabButton = ttk.Button(frame,text='Grab it')
     initBox = ttk.Entry(frame,width=8)
     rateBox = ttk.Entry(frame,width=8)
     initBox.insert(0,'1')
@@ -113,10 +114,12 @@ def get_beepFrame(window,client):
     initBox.grid(row=2,column=1)
     rateBox.grid(row=2,column=2)
     targetButton.grid(row=3,column=0)
+    grabButton.grid(row=4,column=0)
 
     # Set the button callbacks:
     driveButton['command'] = lambda: handleBeepDrive(client,initBox,rateBox)
     targetButton['command'] = lambda: handleTarget(client)
+    grabButton['command'] = lambda: handleGrabIt(client)
 
     return frame
 
@@ -164,6 +167,10 @@ def handleBeepDrive(client,box1,box2):
 def handleTarget(client):
 
     client.send_message('centerOnTarget')
+
+def handleGrabIt(client):
+
+    client.send_message('grabIt')
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
 # -----------------------------------------------------------------------------

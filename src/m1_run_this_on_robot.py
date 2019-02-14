@@ -62,6 +62,10 @@ class Delegate(shared_gui_delegate_on_robot.Delegate):
                 self.go(-30, 30)
         self.stop()
 
+    def grabIt(self):
+        self.centerOnTarget()
+        self.m1BeepDrive(1,1)
+
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
 # -----------------------------------------------------------------------------
