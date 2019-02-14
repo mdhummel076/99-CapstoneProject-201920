@@ -342,6 +342,8 @@ def get_IR_Sensor_Frame(window,mqtt_sender):
     Greater['command'] = lambda: handle_go_backward_until_distance_is_greater_than(entry_inches,entry_speed,mqtt_sender)
     Lesser['command'] = lambda: handle_go_forward_until_distance_is_less_than(entry_inches,entry_speed,mqtt_sender)
 
+    return frame
+
 
 ###############################################################################
 ###############################################################################

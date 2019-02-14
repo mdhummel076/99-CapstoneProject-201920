@@ -49,7 +49,7 @@ def main():
     # Sub-frames for the shared GUI that the team developed:
     # -------------------------------------------------------------------------
     teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, \
-        color_sensor_frame, cameraFrame = get_shared_frames(main_frame, mqtt_sender)
+        IR_Frame, color_sensor_frame, cameraFrame = get_shared_frames(main_frame, mqtt_sender)
     sprint_2_frame = sprint_2_frames(main_frame, mqtt_sender)
 
 
@@ -62,7 +62,7 @@ def main():
     # Grid the frames.
     # -------------------------------------------------------------------------
 
-    grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, color_sensor_frame, cameraFrame,
+    grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, IR_Frame, color_sensor_frame, cameraFrame,
                 sprint_2_frame)
 
 
@@ -80,19 +80,21 @@ def get_shared_frames(main_frame, mqtt_sender):
     control_frame = shared_gui.get_control_frame(main_frame, mqtt_sender)
     drivesystem_frame = shared_gui.get_drivesystem_frame(main_frame, mqtt_sender)
     soundmaker_frame = shared_gui.getSoundmakerFrame(main_frame,mqtt_sender)
+    IR_Frame = shared_gui.get_IR_Sensor_Frame(main_frame,mqtt_sender)
     color_sensor_frame = shared_gui.get_ColorSensor_Frame(main_frame, mqtt_sender)
     cameraFrame = shared_gui.get_camera_frame(main_frame,mqtt_sender)
 
-    return teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, color_sensor_frame, cameraFrame
+    return teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, IR_Frame, color_sensor_frame, cameraFrame
 
 
-def grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, color_sensor_frame,
+def grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, IR_Frame, color_sensor_frame,
                 cameraFrame, sprint_2_frame):
     teleop_frame.grid(row=0, column=0)
     arm_frame.grid(row=1, column=0)
     control_frame.grid(row=2, column=0)
     drivesystem_frame.grid(row=0, column=1)
     soundmaker_frame.grid(row=1, column=1)
+    IR_Frame.grid(row=4, column=1)
     color_sensor_frame.grid(row=2, column=1)
     cameraFrame.grid(row=3, column=0)
     sprint_2_frame.grid(row=3, column=1)
