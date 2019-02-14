@@ -131,6 +131,37 @@ def sprint_2_frames(window, mqtt_sender):
     return frame
 
 
+def sprint_3_frames(window, mqtt_sender):
+    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+    frame.grid()
+
+    frame_label = ttk.Label(frame, text="Sprint 2: Feature 9 & 10")
+    frame_label.grid(row=0, column=0)
+
+    robot_proximity_led_button = ttk.Button(frame, text="Make LED blink cycle Increase with Proximity")
+    robot_proximity_led_button.grid(row=4, column=0)
+    robot_frequency_label = ttk.Label(frame, text="Start Cycle Rate:")
+    robot_frequency_entry_box = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+    robot_inc_frequency_label = ttk.Label(frame, text="Cycle Rate of Increase")
+    robot_inc_frequency_entry_box = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+
+    robot_frequency_label.grid(row=5, column=0)
+    robot_frequency_entry_box.grid(row=5, column=1)
+    robot_frequency_entry_box.insert(0, '440')
+    robot_inc_frequency_label.grid(row=6, column=0)
+    robot_inc_frequency_entry_box.grid(row=6, column=1)
+    robot_inc_frequency_entry_box.insert(0, 20)
+
+    robot_pick_object_blinking_button = ttk.Button(frame, text="Make Robot Go To Object & Blink While Driving")
+    robot_pick_object_blinking_button.grid(row=7, column=0)
+
+    robot_proximity_led_button['command']=lambda: handle_robot_proximity_led(
+            robot_frequency_entry_box, robot_inc_frequency_entry_box, mqtt_sender)
+    robot_pick_object_blinking_button['command']=lambda: handle_pick_object_blinking(mqtt_sender)
+
+    return frame
+
+
 def handle_robot_proximity_tone(frequency_entry, inc_frequency_entry, mqtt_sender):
 
     print('Start at', frequency_entry.get(), 'Hz, then increase by', inc_frequency_entry.get(), "Hz per inch")
@@ -140,6 +171,16 @@ def handle_robot_point_to_object(mqtt_sender):
 
     print('Make Robot Point to Object')
     mqtt_sender.send_message('robot_point_to_object')
+
+def handle_robot_proximity_led(frequency_entry, inc_frequency_entry, mqtt_sender):
+
+    print('Start at', frequency_entry.get(), 'cycles per sec, then increase by', inc_frequency_entry.get(), "cycles per inch")
+    mqtt_sender.send_message('robot_proximity_led', [int(frequency_entry.get()), int(inc_frequency_entry.get())])
+
+def handle_pick_object_blinking(mqtt_sender):
+
+    print('Go to object & blink while driving')
+    mqtt_sender.send_message('pick_object_blinking')
 
 
 
