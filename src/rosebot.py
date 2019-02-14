@@ -145,13 +145,14 @@ class DriveSystem(object):
         by the color_sensor is less than the given intensity.
         """
 
-        self.color_sensor = sensor_system.color_sensor  # goes in __init__ for Drivesystem
-        print(self.color_sensor.reflected_light_intensity)
+        print(self.sensor_system.color_sensor.get_reflected_light_intensity())
         self.left_motor.turn_on(speed)
         self.right_motor.turn_on(speed)
+        x = self.sensor_system.color_sensor.get_reflected_light_intensity()
 
-        while self.color_sensor.reflected_light_intensity >= intensity:
+        while x >= intensity:
             time.sleep(0.01)
+            x = self.sensor_system.color_sensor.get_reflected_light_intensity()
 
         self.left_motor.turn_off()
         self.right_motor.turn_off()
@@ -162,12 +163,14 @@ class DriveSystem(object):
         by the color_sensor is greater than the given intensity.
         """
 
-        print(self.color_sensor.reflected_light_intensity)
+        print(self.sensor_system.color_sensor.get_reflected_light_intensity())
         self.left_motor.turn_on(speed)
         self.right_motor.turn_on(speed)
+        x = self.sensor_system.color_sensor.get_reflected_light_intensity()
 
-        while self.color_sensor.reflected_light_intensity <= intensity:
+        while x <= intensity:
             time.sleep(0.01)
+            x = self.sensor_system.color_sensor.get_reflected_light_intensity()
 
         self.left_motor.turn_off()
         self.right_motor.turn_off()
@@ -186,12 +189,14 @@ class DriveSystem(object):
         the color sensor's color.
         """
 
-        print(self.color_sensor.color)
+        print(self.sensor_system.color_sensor.get_color())
         self.left_motor.turn_on(speed)
         self.right_motor.turn_on(speed)
+        x = self.sensor_system.color_sensor.get_color()
 
-        while self.color_sensor.color != color:
+        while x != color:
             time.sleep(0.01)
+            x = self.sensor_system.color_sensor.get_color()
 
         self.left_motor.turn_off()
         self.right_motor.turn_off()
@@ -205,12 +210,14 @@ class DriveSystem(object):
         listed in the ColorSensor class.
         """
 
-        print(self.color_sensor.color)
+        print(self.sensor_system.color_sensor.get_color())
         self.left_motor.turn_on(speed)
         self.right_motor.turn_on(speed)
+        x = self.sensor_system.color_sensor.get_color()
 
-        while self.color_sensor.color == color:
+        while x == color:
             time.sleep(0.01)
+            x = self.sensor_system.color_sensor.get_color()
 
         self.left_motor.turn_off()
         self.right_motor.turn_off()

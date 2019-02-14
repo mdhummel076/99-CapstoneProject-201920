@@ -118,11 +118,11 @@ class Delegate(object):
 
         x = self.robot.sensor_system.camera.get_biggest_blob().center.x
         while x > 125:
-            self.robot.drive_system.spin_clockwise_until_sees_object(10, 200)
+            self.robot.drive_system.spin_clockwise_until_sees_object(22, 200)
             x = self.robot.sensor_system.camera.get_biggest_blob().center.x
             time.sleep(0.01)
 
         while x < 115:
-            self.robot.drive_system.spin_counterclockwise_until_sees_object(10, 200)
+            self.robot.drive_system.spin_counterclockwise_until_sees_object(22, 200)
             x = self.robot.sensor_system.camera.get_biggest_blob().center.x
             time.sleep(0.01)
