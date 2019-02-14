@@ -101,30 +101,28 @@ class Delegate(object):
     def robot_proximity_tone(self, frequency, inc_frequency):
 
         print('Start at', int(frequency), 'Hz, then increase by', int(inc_frequency), 'Hz per inch')
-        self.robot.arm_and_claw.calibrate_arm()
-        x0 = self.robot.sensor_system.infraredproximitysensor.get_distance_in_inches()
+        x0 = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
         self.robot.sound_system.tone_maker.play_tone(int(frequency), 500)
 
-        if self.robot.sensor_system.infraredproximitysensor.get_distance_in_inches() > 2:
-            self.robot.arm_and_claw.raise_arm()
+        if self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches() > 2:
             self.robot.drive_system.go(75, 75)
 
-        while self.robot.sensor_system.infraredproximitysensor.get_distance_in_inches() > 2:
-            x = self.robot.sensor_system.infraredproximitysensor.get_distance_in_inches()
-            self.robot.sound_system.tone_maker.play_tone((x - x0)*int(inc_frequency) + int(frequency), 500)
+        while self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches() > 2:
+            x = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+            self.robot.sound_system.tone_maker.play_tone((x0 - x)*int(inc_frequency) + int(frequency), 500)
 
         self.robot.drive_system.stop()
-        self.robot.drive_system.lower_arm()
+        self.robot.arm_and_claw.calibrate_arm()
 
     def robot_point_to_object(self):
 
-        x = self.robot.sensor_system.camera.get_biggest_blob().x
+        x = self.robot.sensor_system.camera.get_biggest_blob().center.x
         while x > 125:
-            self.robot.drive_system.spin_counterclockwise_until_sees_object(35, 200)
-            x = self.robot.sensor_system.camera.get_biggest_blob().x
+            self.robot.drive_system.spin_clockwise_until_sees_object(10, 200)
+            x = self.robot.sensor_system.camera.get_biggest_blob().center.x
             time.sleep(0.01)
 
         while x < 115:
-            self.robot.drive_system.spin_clockwise_until_sees_object(35, 200)
-            x = self.robot.sensor_system.camera.get_biggest_blob().x
+            self.robot.drive_system.spin_counterclockwise_until_sees_object(10, 200)
+            x = self.robot.sensor_system.camera.get_biggest_blob().center.x
             time.sleep(0.01)
