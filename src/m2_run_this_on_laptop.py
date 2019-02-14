@@ -149,10 +149,10 @@ def sprint_3_frames(window, mqtt_sender):
 
     robot_frequency_label.grid(row=5, column=0)
     robot_frequency_entry_box.grid(row=5, column=1)
-    robot_frequency_entry_box.insert(0, '440')
+    robot_frequency_entry_box.insert(0, '2')
     robot_inc_frequency_label.grid(row=6, column=0)
     robot_inc_frequency_entry_box.grid(row=6, column=1)
-    robot_inc_frequency_entry_box.insert(0, 20)
+    robot_inc_frequency_entry_box.insert(0, '2')
 
     robot_camera_proximity_led_button = ttk.Button(frame, text="Make Robot Go To Object & Blink While Driving")
     robot_camera_proximity_led_button.grid(row=7, column=0)
