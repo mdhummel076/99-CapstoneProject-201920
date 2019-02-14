@@ -43,7 +43,11 @@ def main():
     # -------------------------------------------------------------------------
     # Sub-frames for the shared GUI that the team developed:
     # -------------------------------------------------------------------------
-    teleop, arm_frame, control_frame = get_shared_frames(main_frame, client)
+    teleop, arm_frame, control_frame, SoundmakerFrame, drive_frame, ColorSensor_Frame, IR_Frame, \
+        camera_frame = get_shared_frames(main_frame, client)
+    sprint_2_frame = sprint_2_frames(main_frame, client)
+    grid_frames(teleop, arm_frame, control_frame, SoundmakerFrame, drive_frame, ColorSensor_Frame, IR_Frame, camera_frame,
+                sprint_2_frame)
 
 
     # -------------------------------------------------------------------------
@@ -75,7 +79,7 @@ def get_shared_frames(main_frame, mqtt_sender):
     return teleop, arm_frame, control_frame,SoundmakerFrame,drive_frame,ColorSensor_Frame,IR_Frame,camera_frame
 
 
-def grid_frames(teleop_frame, arm_frame, control_frame,SoundmakerFrame,drive_frame,ColorSensor_Frame,IR_Frame,camera_frame):
+def grid_frames(teleop_frame, arm_frame, control_frame,SoundmakerFrame,drive_frame,ColorSensor_Frame,IR_Frame,camera_frame, sprint_3_frame):
     teleop_frame.grid(row = 0, column =0)
     arm_frame.grid(row=1, column=0)
     control_frame.grid(row=2, column=0)
@@ -83,11 +87,49 @@ def grid_frames(teleop_frame, arm_frame, control_frame,SoundmakerFrame,drive_fra
     drive_frame.grid(row = 0, column = 2)
     ColorSensor_Frame.grid(row=1,column=1)
     IR_Frame.grid(row=1,column=2)
-    camera_frame(row=2,column=1)
+    camera_frame.grid(row=2,column=1)
+    sprint_3_frame.grid(row=2, column=2)
 
 
+def sprint_2_frames(window, mqtt_sender):
+    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+    frame.grid()
 
+    frame_label = ttk.Label(frame, text="Sprint 2: Feature 9 & 10")
+    frame_label.grid(row=0, column=0)
 
+    robot_proximity_led_button = ttk.Button(frame, text="Make LED blink cycle Increase with Proximity")
+    robot_proximity_led_button.grid(row=4, column=0)
+    robot_frequency_label = ttk.Label(frame, text="Start Cycle Rate:")
+    robot_frequency_entry_box = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+    robot_inc_frequency_label = ttk.Label(frame, text="Cycle Rate of Increase")
+    robot_inc_frequency_entry_box = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
+
+    robot_frequency_label.grid(row=5, column=0)
+    robot_frequency_entry_box.grid(row=5, column=1)
+    robot_frequency_entry_box.insert(0, '2')
+    robot_inc_frequency_label.grid(row=6, column=0)
+    robot_inc_frequency_entry_box.grid(row=6, column=1)
+    robot_inc_frequency_entry_box.insert(0, '2')
+
+    robot_camera_proximity_led_button = ttk.Button(frame, text="Make Robot Go To Object & Blink While Driving")
+    robot_camera_proximity_led_button.grid(row=7, column=0)
+
+    robot_proximity_led_button['command']=lambda: handle_robot_proximity_led(
+            robot_frequency_entry_box, robot_inc_frequency_entry_box, mqtt_sender)
+    robot_camera_proximity_led_button['command']=lambda: handle_camera_proximity_led(mqtt_sender)
+
+    return frame
+
+def handle_robot_proximity_led(frequency_entry, inc_frequency_entry, mqtt_sender):
+
+    print('Start at', frequency_entry.get(), 'cycles per sec, then increase by', inc_frequency_entry.get(), "cycles per inch")
+    mqtt_sender.send_message('robot_proximity_led', [int(frequency_entry.get()), int(inc_frequency_entry.get())])
+
+def handle_camera_proximity_led(mqtt_sender):
+
+    print('Go to object & blink while driving')
+    mqtt_sender.send_message('camera_proximity_led')
 
 
 # -----------------------------------------------------------------------------

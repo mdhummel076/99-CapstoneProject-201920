@@ -107,7 +107,7 @@ class Delegate(object):
     def go_until_distance_is_within(self, delta_inches, speed):
         self.robot.drive_system.go_until_distance_is_within(int(delta_inches),int(speed))
 
-    def handle_robot_proximity_led(self, frequency, inc_frequency):
+    def robot_proximity_led(self, frequency, inc_frequency):
         x = 1
         self.robot.drive_system.left_motor.turn_on(50)
         self.robot.drive_system.right_motor.turn_on(50)
@@ -138,7 +138,12 @@ class Delegate(object):
             y = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
         self.robot.drive_system.stop()
         self.robot.arm_and_claw.calibrate_arm()
+
     def camera_proximity_led(self):
         x = self.robot.sensor_system.camera.get_biggest_blob().center.x
-        if x < 125 & x>115:
-            self.robot.handle_robot_proximity_led(2,5)
+        print('Outside if')
+        if (x < 125):
+            print('Second if')
+            if (x > 115):
+                print('inside if')
+                self.robot_proximity_led(2,5)
