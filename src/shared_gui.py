@@ -314,7 +314,33 @@ def get_camera_frame(window,client):
     ccwButton['command'] = lambda: lookCCW(client, speedBox, areaBox)
 
     return frame
+def get_IR_Sensor_Frame(window,mqtt_sender):
+    frame = ttk.Frame(window,padding =10, borderwidth=5, relief='ridge')
+    frame.grid()
+    label = ttk.Label(frame, text='Infrared Sensor Methods')
+    label.grid(row=0,column=1)
+    speed = ttk.Label(frame, text="Please input speed here" )
+    speed.grid(row=1,column=0)
+    entry_speed=ttk.Entry(frame,width=8)
+    entry_speed.grid(row=2,column=0)
+    inches = ttk.Label(frame, text="Please input inches here")
+    inches.grid(row=1,column=1)
+    entry_inches=ttk.Entry(frame,width=8)
+    entry_inches.grid(row=2,column=1)
+    delta_inches= ttk.Label(frame,text="Please input delta inches here")
+    delta_inches.grid(row=1,column=2)
+    entry_delta_inches = ttk.Entry(frame,width=8)
+    entry_delta_inches.grid(row=2,column=2)
+    Lesser = ttk.Button(frame, text='Go forward until distance is less than')
+    Lesser.grid(row=3,column=0)
+    Greater = ttk.Button(frame, text = "Go backwards until distance is greater than")
+    Greater.grid(row=3,column=1)
+    Delta = ttk.Button(frame, text = "Go until distance is within")
+    Delta.grid(row=3,column=2)
 
+    Delta['command'] = lambda: handle_go_until_distance_is_within(entry_delta_inches,entry_speed,mqtt_sender)
+    Greater['command'] = lambda: handle_go_backward_until_distance_is_greater_than(entry_inches,entry_speed,mqtt_sender)
+    Lesser['command'] = lambda: handle_go_forward_until_distance_is_less_than(entry_inches,entry_speed,mqtt_sender)
 
 
 ###############################################################################
@@ -507,3 +533,15 @@ def lookCW(client,box1,box2):
 def lookCCW(client,box1,box2):
 
     client.send_message('CCW',[box1.get(),box2.get()])
+
+def handle_go_forward_until_distance_is_less_than(entry_inches,entry_speed,mqtt_sender):
+    print('Go at speed',entry_speed,'for',entry_inches)
+    mqtt_sender.send_message('go_forward_until_distance_is_less_than',[entry_speed.get(), entry_inches.get()])
+
+def handle_go_backward_until_distance_is_greater_than(entry_inches,entry_speed,mqtt_sender):
+    print('Go backwards at speed',entry_speed,'for',entry_inches)
+    mqtt_sender.send_message('go_backward_until_distance_is_greater_than',[entry_speed.get(), entry_inches.get()])
+
+def handle_go_until_distance_is_within(entry_delta_inches,entry_speed,mqtt_sender):
+    print("Go at speed", entry_speed, "within a distance of", entry_delta_inches)
+    mqtt_sender.send_message('go_until_distance_is_within', [entry_delta_inches.get(),entry_speed.get()])
