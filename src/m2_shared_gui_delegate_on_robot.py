@@ -126,3 +126,12 @@ class Delegate(object):
             self.robot.drive_system.spin_counterclockwise_until_sees_object(22, 200)
             x = self.robot.sensor_system.camera.get_biggest_blob().center.x
             time.sleep(0.01)
+
+    def go_forward_until_distance_is_less_than(self, inches, speed):
+        self.robot.drive_system.go_forward_until_distance_is_less_than(int(inches),int(speed))
+
+    def go_backward_until_distance_is_greater_than(self, inches, speed):
+        self.robot.drive_system.go_backward_until_distance_is_greater_than(int(inches),int(speed))
+
+    def go_until_distance_is_within(self, delta_inches, speed):
+        self.robot.drive_system.go_until_distance_is_within(int(delta_inches),int(speed))

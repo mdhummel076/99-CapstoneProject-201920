@@ -537,13 +537,13 @@ def lookCCW(client,box1,box2):
     client.send_message('CCW',[box1.get(),box2.get()])
 
 def handle_go_forward_until_distance_is_less_than(entry_inches,entry_speed,mqtt_sender):
-    print('Go at speed',entry_speed,'for',entry_inches)
-    mqtt_sender.send_message('go_forward_until_distance_is_less_than',[entry_speed.get(), entry_inches.get()])
+    print('Go at speed',entry_speed.get(),'for',entry_inches.get())
+    mqtt_sender.send_message('go_forward_until_distance_is_less_than',[entry_inches.get(), entry_speed.get()])
 
 def handle_go_backward_until_distance_is_greater_than(entry_inches,entry_speed,mqtt_sender):
-    print('Go backwards at speed',entry_speed,'for',entry_inches)
-    mqtt_sender.send_message('go_backward_until_distance_is_greater_than',[entry_speed.get(), entry_inches.get()])
+    print('Go backwards at speed',entry_speed.get(),'for',entry_inches.get())
+    mqtt_sender.send_message('go_backward_until_distance_is_greater_than',[entry_inches.get(), entry_speed.get()])
 
 def handle_go_until_distance_is_within(entry_delta_inches,entry_speed,mqtt_sender):
-    print("Go at speed", entry_speed, "within a distance of", entry_delta_inches)
-    mqtt_sender.send_message('go_until_distance_is_within', [entry_delta_inches.get(),entry_speed.get()])
+    print("Go at speed", entry_speed.get(), "within a distance of", entry_delta_inches.get())
+    mqtt_sender.send_message('go_until_distance_is_within', [entry_delta_inches.get(), entry_speed.get()])
