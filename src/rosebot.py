@@ -249,12 +249,13 @@ class DriveSystem(object):
         Assumes that it senses an object when it starts.
         """
         sensor = InfraredProximitySensor(4)
+        sensor.get_distance_in_inches()
         self.left_motor.turn_on(-speed)
         self.right_motor.turn_on(-speed)
         while True:
-
+            sensor.get_distance_in_inches()
             time.sleep(.01)
-            if sensor.get_distance_in_inches()>inches:
+            if sensor.get_distance_in_inches() > inches:
                 self.left_motor.turn_off()
                 self.right_motor.turn_off()
                 break
@@ -267,12 +268,12 @@ class DriveSystem(object):
         while True:
             print(speed)
             sensor.get_distance_in_inches()
-            if sensor.get_distance_in_inches() < delta_inches + 1:
+            if sensor.get_distance_in_inches() < delta_inches - 1:
                 self.left_motor.turn_on(-speed)
                 self.right_motor.turn_on(-speed)
                 time.sleep(.01)
                 sensor.get_distance_in_inches()
-            if sensor.get_distance_in_inches() > delta_inches - 1:
+            elif sensor.get_distance_in_inches() > delta_inches + 1:
                 self.left_motor.turn_on(speed)
                 self.right_motor.turn_on(speed)
                 time.sleep(.01)
