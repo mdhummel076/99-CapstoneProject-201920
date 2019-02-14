@@ -68,16 +68,22 @@ def get_shared_frames(main_frame, mqtt_sender):
     control_frame = shared_gui.get_control_frame(main_frame,mqtt_sender)
     SoundmakerFrame = shared_gui.getSoundmakerFrame(main_frame,mqtt_sender)
     drive_frame = shared_gui.get_drivesystem_frame(main_frame,mqtt_sender)
+    ColorSensor_Frame=shared_gui.get_ColorSensor_Frame(main_frame,mqtt_sender)
+    IR_Frame = shared_gui.get_IR_Sensor_Frame(main_frame,mqtt_sender)
+    camera_frame= shared_gui.get_camera_frame(main_frame,mqtt_sender)
 
-    return teleop, arm_frame, control_frame,SoundmakerFrame,drive_frame
+    return teleop, arm_frame, control_frame,SoundmakerFrame,drive_frame,ColorSensor_Frame,IR_Frame,camera_frame
 
 
-def grid_frames(teleop_frame, arm_frame, control_frame,SoundmakerFrame,drive_frame):
+def grid_frames(teleop_frame, arm_frame, control_frame,SoundmakerFrame,drive_frame,ColorSensor_Frame,IR_Frame,camera_frame):
     teleop_frame.grid(row = 0, column =0)
     arm_frame.grid(row=1, column=0)
     control_frame.grid(row=2, column=0)
     SoundmakerFrame.grid(row=0,column=1)
     drive_frame.grid(row = 0, column = 2)
+    ColorSensor_Frame.grid(row=1,column=1)
+    IR_Frame.grid(row=1,column=2)
+    camera_frame(row=2,column=1)
 
 
 
