@@ -51,6 +51,7 @@ def main():
     teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, \
         IR_Frame, color_sensor_frame, cameraFrame = get_shared_frames(main_frame, mqtt_sender)
     sprint_2_frame = sprint_2_frames(main_frame, mqtt_sender)
+    sprint_3_frame = sprint_3_frames(main_frame, mqtt_sender)
 
 
     # -------------------------------------------------------------------------
@@ -63,7 +64,7 @@ def main():
     # -------------------------------------------------------------------------
 
     grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, IR_Frame, color_sensor_frame, cameraFrame,
-                sprint_2_frame)
+                sprint_2_frame, sprint_3_frame)
 
 
     # -------------------------------------------------------------------------
@@ -88,7 +89,7 @@ def get_shared_frames(main_frame, mqtt_sender):
 
 
 def grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, IR_Frame, color_sensor_frame,
-                cameraFrame, sprint_2_frame):
+                cameraFrame, sprint_2_frame, sprint_3_frame):
     teleop_frame.grid(row=0, column=0)
     arm_frame.grid(row=1, column=0)
     control_frame.grid(row=2, column=0)
@@ -98,6 +99,7 @@ def grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, sound
     color_sensor_frame.grid(row=2, column=1)
     cameraFrame.grid(row=3, column=0)
     sprint_2_frame.grid(row=3, column=1)
+    sprint_3_frame.grid(row=4, column=0)
 
 
 def sprint_2_frames(window, mqtt_sender):
@@ -152,12 +154,12 @@ def sprint_3_frames(window, mqtt_sender):
     robot_inc_frequency_entry_box.grid(row=6, column=1)
     robot_inc_frequency_entry_box.insert(0, 20)
 
-    robot_pick_object_blinking_button = ttk.Button(frame, text="Make Robot Go To Object & Blink While Driving")
-    robot_pick_object_blinking_button.grid(row=7, column=0)
+    robot_camera_proximity_led_button = ttk.Button(frame, text="Make Robot Go To Object & Blink While Driving")
+    robot_camera_proximity_led_button.grid(row=7, column=0)
 
     robot_proximity_led_button['command']=lambda: handle_robot_proximity_led(
             robot_frequency_entry_box, robot_inc_frequency_entry_box, mqtt_sender)
-    robot_pick_object_blinking_button['command']=lambda: handle_pick_object_blinking(mqtt_sender)
+    robot_camera_proximity_led_button['command']=lambda: handle_camera_proximity_led(mqtt_sender)
 
     return frame
 
@@ -177,10 +179,10 @@ def handle_robot_proximity_led(frequency_entry, inc_frequency_entry, mqtt_sender
     print('Start at', frequency_entry.get(), 'cycles per sec, then increase by', inc_frequency_entry.get(), "cycles per inch")
     mqtt_sender.send_message('robot_proximity_led', [int(frequency_entry.get()), int(inc_frequency_entry.get())])
 
-def handle_pick_object_blinking(mqtt_sender):
+def handle_camera_proximity_led(mqtt_sender):
 
     print('Go to object & blink while driving')
-    mqtt_sender.send_message('pick_object_blinking')
+    mqtt_sender.send_message('camera_proximity_led')
 
 
 
