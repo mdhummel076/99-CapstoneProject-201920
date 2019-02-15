@@ -8,6 +8,7 @@
 """
 
 import rosebot
+import m2_gui
 import time
 
 class Delegate(object):
@@ -176,3 +177,69 @@ class Delegate(object):
             if (x > 115):
                 print('inside if')
                 self.robot_proximity_led(2,5)
+
+
+
+
+    def perform(self, window, mqtt_sender):
+
+        levels = m2_gui.handle_check_anxiety()
+
+        while (levels < 3) & (hostility is False):
+            introduction()
+            levels = m2_gui.handle_check_anxiety()
+            hostility = check_touch_sensor()
+            if hostility is True:
+                exit_stage()
+                return
+
+            verse()
+            levels = m2_gui.handle_check_anxiety()
+            hostility = check_touch_sensor()
+            if hostility is True:
+                exit_stage()
+                return
+
+            chorus()
+            break
+
+        if hostility is True:
+            exit_stage()
+            return
+
+        if levels < 3:
+            m2_gui.encore_text(window)
+            time.sleep(5)
+            encore()
+
+        return
+
+
+    def enter_stage(self, color):
+        self.robot.drive_system.go_straight_until_color_is(int(color), 50)
+        t = time.time()
+        self.robot.drive_system.left_motor.turn_on(-50)
+        self.robot.drive_system.left_motor.turn_on(50)
+        while time.time() - t < 1:
+            time.time()
+        self.robot.drive_system.left_motor.turn_off()
+        self.robot.drive_system.right_motor.turn_off()
+
+        return
+
+    def exit_stage(self):
+        self.robot.drive_system.left_motor.turn_on(-50)
+        self.robot.drive_system.right_motor.turn_on(50)
+        t = time.time()
+        while time.time() - t < 1:
+            time.time()
+        self.robot.drive_system.left_motor.turn_off()
+        self.robot.drive_system.right_motor.turn_off()
+
+        dark = 5
+        self.robot.drive_system.go_straight_until_intensity_is_less_than(dark)
+
+        return
+
+
+

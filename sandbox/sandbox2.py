@@ -1,86 +1,87 @@
 # Put whatever you want in this module and do whatever you want with it.
 # It exists here as a place where you can "try out" things without harm.
 
+import mqtt_remote_method_calls as com
+import tkinter
+from tkinter import ttk
 
 import ev3dev.ev3 as ev3
 import time
 import math
 
-def go_straight_until_intensity_is_less_than(self, intensity, speed):
-    """
-    Goes straight at the given speed until the intensity returned
-    by the color_sensor is less than the given intensity.
-    """
+def main():
 
-    self.color_sensor = sensor_system.color_sensor # goes in __init__ for Drivesystem
-    print(self.color_sensor.reflected_light_intensity)
-    self.left_motor.turn_on(speed)
-    self.right_motor.turn_on(speed)
+    mqtt_sender = com.MqttClient()
+    mqtt_sender.connect_to_ev3()
 
-    while self.color_sensor.reflected_light_intensity >= intensity:
-        time.sleep(0.01)
+    root = tkinter.Tk()
+    root.title("Capstone Project - James")
 
-    self.left_motor.turn_off()
-    self.right_motor.turn_off()
+    main_frame = ttk.Frame(root, padding=10, borderwidth=5, relief="groove")
+    main_frame.grid()
+
+    decision = [0]
 
 
-def go_straight_until_intensity_is_greater_than(self, intensity, speed):
-    """
-    Goes straight at the given speed until the intensity returned
-    by the color_sensor is greater than the given intensity.
-    """
-
-    print(self.color_sensor.reflected_light_intensity)
-    self.left_motor.turn_on(speed)
-    self.right_motor.turn_on(speed)
-
-    while self.color_sensor.reflected_light_intensity <= intensity:
-        time.sleep(0.01)
-
-    self.left_motor.turn_off()
-    self.right_motor.turn_off()
 
 
-def go_straight_until_color_is(self, color, speed):
-    """
-    Goes straight at the given speed until the color returned
-    by the color_sensor is equal to the given color.
 
-    Colors can be integers from 0 to 7 or any of the strings
-    listed in the ColorSensor class.
+    first_button = ttk.Button(main_frame, text="Generate new button")
+    first_button.grid(row=0,column=0)
+    x = 3
+    if x > 2:
+        label = ttk.Label(main_frame, text='Encore!')
+        quote1 = ttk.Label(main_frame, text='Congratulations!')
+        quote2 = ttk.Label(main_frame, text='The crowd loves you,')
+        quote3 = ttk.Label(main_frame, text="and you're feeling good.")
+        quote4 = ttk.Label(main_frame, text="Time for an encore!")
 
-    If the color is an integer (int), then use the  get_color   method
-    to access the color sensor's color.  If the color is a string (str),
-    then use the   get_color_as_name   method to access
-    the color sensor's color.
-    """
+        label.grid(row=5, column=0)
+        quote1.grid(row=6, column=0)
+        quote2.grid(row=7, column=0)
+        quote3.grid(row=8, column=0)
+        quote4.grid(row=9, column=0)
+        time.sleep(5)
 
-    print(self.color_sensor.color)
-    self.left_motor.turn_on(speed)
-    self.right_motor.turn_on(speed)
-
-    while self.color_sensor.color != color:
-        time.sleep(0.01)
-
-    self.left_motor.turn_off()
-    self.right_motor.turn_off()
+    root.mainloop()
 
 
-def go_straight_until_color_is_not(self, color, speed):
-    """
-    Goes straight at the given speed until the color returned
-    by the color_sensor is NOT equal to the given color.
 
-    Colors can be integers from 0 to 7 or any of the strings
-    listed in the ColorSensor class.
-    """
+def encore_prompt(root, main_frame, mqtt_sender, decision):
 
-    print(self.color_sensor.color)
-    self.left_motor.turn_on(speed)
-    self.right_motor.turn_on(speed)
+    # Construct widgets
+    encore_label = ttk.Label(main_frame, text="Encore?")
+    yes_button = ttk.Button(main_frame, text='Yes')
+    no_button = ttk.Button(main_frame, text='No')
 
-    while self.color_sensor.color == color:
-        time.sleep(0.01)
+    # Grid widgets
+    encore_label.grid(row=5, column=0)
+    yes_button.grid(row=6, column=0)
+    no_button.grid(row=6, column=1)
 
-    self.left_motor.turn_off()
-    self.right_motor.turn_off()
+    time.sleep(2)
+    yes_button['command'] = lambda: true(decision)
+    no_button['command'] = lambda: false(decision)
+    time.sleep(2)
+    yes_button['command'] = lambda: true(decision)
+    no_button['command'] = lambda: false(decision)
+    time.sleep(2)
+
+    if decision[0] == 'True':
+        encore()
+        yes_button.destroy()
+        no_button.destroy()
+        return True
+    elif decision[0] == 'False':
+        print('False -- read!')
+        return False
+    root.mainloop()
+
+def true(decision):
+    decision[0] = 'True'
+
+def false(decision):
+    decision[0] = 'False'
+
+
+main()

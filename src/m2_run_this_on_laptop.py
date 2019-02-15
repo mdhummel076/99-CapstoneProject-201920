@@ -10,7 +10,7 @@
 import mqtt_remote_method_calls as com
 import tkinter
 from tkinter import ttk
-import shared_gui
+import m2_gui
 import rosebot
 import time
 
@@ -46,12 +46,16 @@ def main():
 
 
     # -------------------------------------------------------------------------
-    # Sub-frames for the shared GUI that the team developed:
+    # Sub-frames for the m2_GUI
     # -------------------------------------------------------------------------
-    teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, \
-        IR_Frame, color_sensor_frame, cameraFrame = get_shared_frames(main_frame, mqtt_sender)
-    sprint_2_frame = sprint_2_frames(main_frame, mqtt_sender)
-    sprint_3_frame = sprint_3_frames(main_frame, mqtt_sender)
+    perform_frame, teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame = get_shared_frames(main_frame, mqtt_sender)
+
+
+    #sprint_2_frame = sprint_2_frames(main_frame, mqtt_sender)
+    #sprint_2_1_frame = sprint_3_frames(main_frame, mqtt_sender)
+    #grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, IR_Frame, color_sensor_frame,
+    # cameraFrame, sprint_2_frame, sprint_2_1_frame)
+
 
 
     # -------------------------------------------------------------------------
@@ -63,9 +67,9 @@ def main():
     # Grid the frames.
     # -------------------------------------------------------------------------
 
-    grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, IR_Frame, color_sensor_frame, cameraFrame,
-                sprint_2_frame, sprint_3_frame)
 
+
+    real_grid_frames(perform_frame, teleop_frame)
 
     # -------------------------------------------------------------------------
     # The event loop:
@@ -76,20 +80,18 @@ def main():
 
 
 def get_shared_frames(main_frame, mqtt_sender):
-    teleop_frame = shared_gui.get_teleoperation_frame(main_frame, mqtt_sender)
-    arm_frame = shared_gui.get_arm_frame(main_frame, mqtt_sender)
-    control_frame = shared_gui.get_control_frame(main_frame, mqtt_sender)
-    drivesystem_frame = shared_gui.get_drivesystem_frame(main_frame, mqtt_sender)
-    soundmaker_frame = shared_gui.getSoundmakerFrame(main_frame,mqtt_sender)
-    IR_Frame = shared_gui.get_IR_Sensor_Frame(main_frame,mqtt_sender)
-    color_sensor_frame = shared_gui.get_ColorSensor_Frame(main_frame, mqtt_sender)
-    cameraFrame = shared_gui.get_camera_frame(main_frame,mqtt_sender)
+    perform_frame = m2_gui.get_perform_frame(main_frame, mqtt_sender)
+    teleop_frame = m2_gui.get_teleoperation_frame(main_frame, mqtt_sender)
+    arm_frame = m2_gui.get_arm_frame(main_frame, mqtt_sender)
+    control_frame = m2_gui.get_control_frame(main_frame, mqtt_sender)
+    drivesystem_frame = m2_gui.get_drivesystem_frame(main_frame, mqtt_sender)
+    soundmaker_frame = m2_gui.get_soundmaker_frame(main_frame,mqtt_sender)
 
-    return teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, IR_Frame, color_sensor_frame, cameraFrame
+    return perform_frame, teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame
 
 
 def grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, IR_Frame, color_sensor_frame,
-                cameraFrame, sprint_2_frame, sprint_3_frame):
+                cameraFrame, sprint_2_frame, sprint_2_1_frame):
     teleop_frame.grid(row=0, column=0)
     arm_frame.grid(row=1, column=0)
     control_frame.grid(row=2, column=0)
@@ -99,12 +101,16 @@ def grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, sound
     color_sensor_frame.grid(row=2, column=1)
     cameraFrame.grid(row=3, column=0)
     sprint_2_frame.grid(row=3, column=1)
-    sprint_3_frame.grid(row=4, column=0)
+    sprint_2_1_frame.grid(row=4, column=0)
 
+
+
+def real_grid_frames(perform_frame, teleop_frame):
+    perform_frame.grid(row=0, column=0)
+    teleop_frame.grid(row=1, column=0)
 
 def sprint_2_frames(window, mqtt_sender):
     frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
-    frame.grid()
 
     frame_label = ttk.Label(frame, text="Sprint 2: Feature 9 & 10")
     frame_label.grid(row=0, column=0)
@@ -135,7 +141,6 @@ def sprint_2_frames(window, mqtt_sender):
 
 def sprint_3_frames(window, mqtt_sender):
     frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
-    frame.grid()
 
     frame_label = ttk.Label(frame, text="Sprint 2: Feature 9 & 10")
     frame_label.grid(row=0, column=0)
@@ -162,6 +167,24 @@ def sprint_3_frames(window, mqtt_sender):
     robot_camera_proximity_led_button['command']=lambda: handle_camera_proximity_led(mqtt_sender)
 
     return frame
+
+
+
+
+
+def printData(client):
+
+    client.send_message('printData')
+
+def lookCW(client,box1,box2):
+
+    client.send_message('CW',[box1.get(),box2.get()])
+
+def lookCCW(client,box1,box2):
+
+    client.send_message('CCW',[box1.get(),box2.get()])
+
+
 
 
 def handle_robot_proximity_tone(frequency_entry, inc_frequency_entry, mqtt_sender):
