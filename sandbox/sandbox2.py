@@ -35,13 +35,24 @@ def main():
         quote2 = ttk.Label(main_frame, text='The crowd loves you,')
         quote3 = ttk.Label(main_frame, text="and you're feeling good.")
         quote4 = ttk.Label(main_frame, text="Time for an encore!")
+        anxiety_bar = ttk.Progressbar(orient='horizontal', length=100, mode='determinate')
+        anxiety_bar.grid()
+        anxiety_bar["value"] = 50
+        s = ttk.Style()
+        s.theme_use('clam')
+        s.configure("red.Horizontal.TProgressbar", foreground='red', background='red')
+        anxiety_bar2 = ttk.Progressbar(main_frame, style="red.Horizontal.TProgressbar", orient="horizontal", length=100,
+                                       mode="determinate", maximum=4, value=1)
+        anxiety_bar2.grid()
+
 
         label.grid(row=5, column=0)
         quote1.grid(row=6, column=0)
         quote2.grid(row=7, column=0)
         quote3.grid(row=8, column=0)
         quote4.grid(row=9, column=0)
-        time.sleep(5)
+        anxiety_bar["value"] = 50
+        anxiety_bar.update()
 
     root.mainloop()
 
@@ -59,13 +70,11 @@ def encore_prompt(root, main_frame, mqtt_sender, decision):
     yes_button.grid(row=6, column=0)
     no_button.grid(row=6, column=1)
 
-    time.sleep(2)
+
     yes_button['command'] = lambda: true(decision)
     no_button['command'] = lambda: false(decision)
-    time.sleep(2)
     yes_button['command'] = lambda: true(decision)
     no_button['command'] = lambda: false(decision)
-    time.sleep(2)
 
     if decision[0] == 'True':
         encore()

@@ -19,7 +19,6 @@ from tkinter import ttk
 import time
 
 
-
 def get_perform_frame(window, mqtt_sender):
     """
     Constructs and returns a frame on the given window, where the frame
@@ -49,14 +48,10 @@ def get_perform_frame(window, mqtt_sender):
     # Define Handlers
 
     perform_button['command'] = lambda: handle_perform_button(window, mqtt_sender)
-    enter_stage_button['command'] = lambda: handle_enter_stage_button(window, mqtt_sender)
-    exit_stage_button['command'] = lambda: handle_exit_stage_button(window, mqtt_sender)
-
-
-
+    enter_stage_button['command'] = lambda: handle_enter_stage_button(mqtt_sender)
+    exit_stage_button['command'] = lambda: handle_exit_stage_button(mqtt_sender)
 
     return frame
-
 
 
 def handle_perform_button(window, mqtt_sender):
@@ -64,23 +59,43 @@ def handle_perform_button(window, mqtt_sender):
     mqtt_sender.send_message('perform', [window, mqtt_sender])
 
 
-def handle_enter_stage_button(window, mqtt_sender):
+def handle_enter_stage_button(mqtt_sender):
     print('Enter Stage - go to the spotlight')
     yellow = 4
     mqtt_sender.send_message('enter_stage', [yellow])
 
-def handle_exit_stage_button(window, mqtt_sender):
+
+def handle_exit_stage_button(mqtt_sender):
     print('Exit Stage - back to the shadows')
     mqtt_sender.send_message('exit_stage')
 
-def handle_check_anxiety():
-    print('Checking anxiety levels')
-    mqtt_sender.send_message('check_anxiety')
+
+def handle_apology(mqtt_sender):
+    print('Apologize to the audience')
+    mqtt_sender.send_message('apology')
 
 
+def handle_introduction(mqtt_sender):
+    print('Introductions')
+    mqtt_sender.send_message('introduction')
 
 
-def encore_text(self, frame):
+def handle_verse(mqtt_sender):
+    print('Verse')
+    mqtt_sender.send_message('verse')
+
+
+def handle_chorus(mqtt_sender):
+    print('Chorus')
+    mqtt_sender.send_message('chorus')
+
+
+def handle_encore(mqtt_sender):
+    print('Encore')
+    mqtt_sender.send_message('encore')
+
+
+def encore_text(frame):
     label = ttk.Label(frame, text='Encore:')
     quote1 = ttk.Label(frame, text='Congratulations!')
     quote2 = ttk.Label(frame, text='The crowd loves you,')
