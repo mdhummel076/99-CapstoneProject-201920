@@ -14,9 +14,25 @@
   Winter term, 2018-2019.
 """
 
+import mqtt_remote_method_calls as com
 import tkinter
 from tkinter import ttk
 import time
+import m2_shared_gui_delegate_on_robot
+import rosebot
+
+
+dis = [0]
+hostility = [False]
+
+
+class MyDelegate(object):
+
+    def change_anxiety(self, distance):
+        dis[0] = int(distance)
+
+    def change_hostility(self):
+        hostility[0] = True
 
 
 def get_perform_frame(window, mqtt_sender):
@@ -31,6 +47,9 @@ def get_perform_frame(window, mqtt_sender):
 
     # Construct frame to return:
     frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
+
+
+    anxiety_level = [1]
 
     # Construct widgets
     frame_label = ttk.Label(frame, text="Performance Options")
@@ -47,16 +66,117 @@ def get_perform_frame(window, mqtt_sender):
 
     # Define Handlers
 
-    perform_button['command'] = lambda: handle_perform_button(window, mqtt_sender)
+    perform_button['command'] = lambda: perform(window, mqtt_sender)
     enter_stage_button['command'] = lambda: handle_enter_stage_button(mqtt_sender)
     exit_stage_button['command'] = lambda: handle_exit_stage_button(mqtt_sender)
 
     return frame
 
 
-def handle_perform_button(window, mqtt_sender):
+def perform(window, mqtt_sender):
+
+    pc_delegate = MyDelegate()
+    mqtt_client = com.MqttClient(pc_delegate)
+    mqtt_client.connect_to_ev3()
+
+
     print('Perform Song')
-    mqtt_sender.send_message('perform', [window, mqtt_sender])
+    handle_get_distance_in_inches(window, mqtt_sender)
+    time.sleep(2)
+    anxiety_levels = levels(window, dis)
+
+    handle_introduction(mqtt_sender)
+    time.sleep(5)
+    if (hostility[0] == True) or (anxiety_levels > 1):
+        handle_apology(mqtt_sender)
+        handle_exit_stage_button(mqtt_sender)
+        return
+
+    handle_verse(mqtt_sender)
+    time.sleep(5)
+    #anxiety_levels = handle_check_anxiety(window)
+    #hostility = check_touch_sensor()
+    """if (hostility is True) or (anxiety_levels > 1):
+        handle_apology(mqtt_sender)
+        handle_exit_stage_button(mqtt_sender)
+        return """
+
+    handle_chorus(mqtt_sender)
+    time.sleep(5)
+
+    """if hostility is True:
+        handle_apology(mqtt_sender)
+        handle_exit_stage_button(mqtt_sender)
+        return"""
+
+    """if anxiety_levels < 2:
+        encore_text(window)
+        time.sleep(5)
+        handle_encore(mqtt_sender)"""
+
+    encore_text(window)
+    time.sleep(5)
+    handle_encore(mqtt_sender).wait()
+
+    return
+
+
+
+def levels(window, distance):
+
+    # Used syntax for tkinter progress bar found in this forum:
+    # https://stackoverflow.com/questions/13510882/how-to-change-ttk-progressbar-color-in-python
+
+    if int(distance[0]) >= 12:
+        s = ttk.Style()
+        s.theme_use()
+        anxiety_bar = ttk.Progressbar(window, orient='horizontal', length=100, mode='determinate')
+        anxiety_bar.grid()
+        anxiety_level = 0
+        anxiety_bar['value'] = 0
+
+        return anxiety_level
+
+    if int(distance[0]) < 12 & int(distance[0]) > 7:
+        s = ttk.Style()
+        s.theme_use()
+        anxiety_bar = ttk.Progressbar(window, orient='horizontal', length=100, mode='determinate')
+        anxiety_bar.grid()
+        anxiety_level = 1
+        anxiety_bar['value'] = 50
+
+        return anxiety_level
+
+    if int(distance[0]) <= 7:
+        s = ttk.Style()
+        s.theme_use('clam')
+        s.configure("red.Horizontal.TProgressbar", foreground='red', background='red')
+        anxiety_bar = ttk.Progressbar(window, style="red.Horizontal.TProgressbar", orient="horizontal", length=100,
+                                      mode="determinate")
+        anxiety_level = 2
+        anxiety_bar['value'] = 100
+
+        return anxiety_level
+
+
+def handle_check_anxiety(window, mqtt_sender, dis):
+    print('Handle check anxiety')
+    mqtt_sender.send_message('check_anxiety', [dis, window])
+
+
+def return_anxiety(dis):
+    anxiety = levels(window, distance)
+
+
+def check_touch_sensor():
+
+    robot = rosebot.RoseBot()
+    if robot.sensor_system.touch_sensor.is_pressed():
+        return True
+    return False
+
+
+
 
 
 def handle_enter_stage_button(mqtt_sender):
@@ -107,6 +227,11 @@ def encore_text(frame):
     quote2.grid(row=7, column=0)
     quote3.grid(row=8, column=0)
     quote4.grid(row=9, column=0)
+
+
+def handle_get_distance_in_inches(window, mqtt_sender):
+    print('Get distance in inches')
+    mqtt_sender.send_message('get_distance_in_inches')
 
 
 def get_teleoperation_frame(window, mqtt_sender):

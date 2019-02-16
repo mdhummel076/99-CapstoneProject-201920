@@ -565,9 +565,12 @@ class Motor(object):
 class TouchSensor(object):
     def __init__(self, port):  # port must be 1, 2, 3 or 4
         self._touch_sensor = ev3.TouchSensor('in' + str(port))
+        self.touch_counter = 0
 
     def is_pressed(self):
         """ Returns True if this TouchSensor is pressed, else returns False """
+        if self._touch_sensor.is_pressed:
+            self.touch_counter = 1
         return self._touch_sensor.is_pressed
 
 
@@ -637,6 +640,7 @@ class InfraredProximitySensor(object):
 
     def __init__(self, port):  # port must be 1, 2, 3 or 4
         self._ir_sensor = ev3.InfraredSensor('in' + str(port))
+        self.distance_counter = 0
 
     def get_distance(self):
         """
@@ -662,6 +666,7 @@ class InfraredProximitySensor(object):
         cm_per_inch = 2.54
         distance = 48 / cm_per_inch * self.get_distance() / 100
         print(distance)
+        self.distance_counter = 1
         return distance
 
 

@@ -8,10 +8,9 @@
 """
 
 import rosebot
-import m2_gui
 import time
-import tkinter
-from tkinter import ttk
+
+
 
 class Delegate(object):
 
@@ -180,41 +179,6 @@ class Delegate(object):
                 print('inside if')
                 self.robot_proximity_led(2,5)
 
-
-    def perform(self, window, mqtt_sender):
-
-        anxiety_levels = check_anxiety(window)
-
-        m2_gui.handle_introduction(mqtt_sender)
-        anxiety_levels = check_anxiety(window)
-        hostility = check_touch_sensor()
-        if (hostility is True) or (anxiety_levels > 1):
-            m2_gui.handle_apology(mqtt_sender)
-            m2_gui.handle_exit_stage_button(mqtt_sender)
-            return
-
-        m2_gui.handle_verse(mqtt_sender)
-        anxiety_levels = check_anxiety(window)
-        hostility = check_touch_sensor()
-        if (hostility is True) or (anxiety_levels > 1):
-            m2_gui.handle_apology(mqtt_sender)
-            m2_gui.handle_exit_stage_button(mqtt_sender)
-            return
-
-        m2_gui.handle_chorus(mqtt_sender)
-
-        if hostility is True:
-            m2_gui.handle_apology(mqtt_sender)
-            m2_gui.handle_exit_stage_button(mqtt_sender)
-            return
-
-        if anxiety_levels < 2:
-            m2_gui.encore_text(window)
-            time.sleep(5)
-            m2_gui.handle_encore()
-
-        return
-
     def enter_stage(self, color):
         """ Handles the enter stage function
         Makes robot drive onto poster, then drive
@@ -226,9 +190,9 @@ class Delegate(object):
         """
         self.robot.drive_system.go_straight_until_color_is(int(color), 50)
         t = time.time()
-        self.robot.drive_system.left_motor.turn_on(-50)
-        self.robot.drive_system.left_motor.turn_on(50)
-        while time.time() - t < 1:
+        self.robot.drive_system.left_motor.turn_on(-35)
+        self.robot.drive_system.left_motor.turn_on(35)
+        while time.time() - t < 2.5:
             time.time()
         self.robot.drive_system.left_motor.turn_off()
         self.robot.drive_system.right_motor.turn_off()
@@ -242,146 +206,105 @@ class Delegate(object):
         poster)
         :return:
         """
-        self.robot.drive_system.left_motor.turn_on(-50)
-        self.robot.drive_system.right_motor.turn_on(50)
+        self.robot.drive_system.left_motor.turn_on(-35)
+        self.robot.drive_system.right_motor.turn_on(35)
         t = time.time()
-        while time.time() - t < 1:
+        while time.time() - t < 2.5:
             time.time()
         self.robot.drive_system.left_motor.turn_off()
         self.robot.drive_system.right_motor.turn_off()
 
         dark = 5
-        self.robot.drive_system.go_straight_until_intensity_is_less_than(dark)
+        self.robot.drive_system.go_straight_until_intensity_is_less_than(dark, 50)
+        self.robot.drive_system.go(50, 50)
+        time.sleep(2)
+        self.robot.drive_system.stop()
 
         return
 
     def apology(self):
         phrase = "Uhh, I think I left my stove running"
-        self.robot.sound_system.speech_maker.speak(phrase)
+        self.robot.sound_system.speech_maker.speak(phrase).wait()
         time.sleep(1)
         phrase1 = "My house has probably burned down by now"
-        self.robot.sound_system.speech_maker.speak(phrase1)
+        self.robot.sound_system.speech_maker.speak(phrase1).wait()
         time.sleep(1)
         phrase2 = "I best move along, uhh bye"
-        self.robot.sound_system.speech_maker.speak(phrase2)
+        self.robot.sound_system.speech_maker.speak(phrase2).wait()
         time.sleep(1)
 
     def introduction(self):
 
         phrase = 'Hi everyone, hope you all are doing well.'
-        self.robot.sound_system.speech_maker.speak(phrase)
+        self.robot.sound_system.speech_maker.speak(phrase).wait()
         time.sleep(1)
         phrase2 = "I'd like to perform a song for you now. Hope you enjoy."
-        self.robot.sound_system.speech_maker.speak(phrase2)
+        self.robot.sound_system.speech_maker.speak(phrase2).wait()
         time.sleep(1)
 
     def verse(self):
 
         phrase1 = 'Some things in life are bad.'
-        self.robot.sound_system.speech_maker.speak(phrase1)
+        self.robot.sound_system.speech_maker.speak(phrase1).wait()
         time.sleep(0.5)
         phrase2 = 'They can really make you mad.'
-        self.robot.sound_system.speech_maker.speak(phrase2)
+        self.robot.sound_system.speech_maker.speak(phrase2).wait()
         time.sleep(0.5)
         phrase3 = 'Other things just make you swear and curse.'
-        self.robot.sound_system.speech_maker.speak(phrase3)
+        self.robot.sound_system.speech_maker.speak(phrase3).wait()
         time.sleep(0.5)
         phrase4 = "When you're chewing life's gristle."
-        self.robot.sound_system.speech_maker.speak(phrase4)
+        self.robot.sound_system.speech_maker.speak(phrase4).wait()
         time.sleep(0.5)
         phrase5 = "Don't grumble, give a whistle."
-        self.robot.sound_system.speech_maker.speak(phrase5)
+        self.robot.sound_system.speech_maker.speak(phrase5).wait()
         time.sleep(0.5)
         phrase6 = "And this'll help things turn out for the best"
-        self.robot.sound_system.speech_maker.speak(phrase6)
+        self.robot.sound_system.speech_maker.speak(phrase6).wait()
         time.sleep(0.5)
 
     def chorus(self):
         phrase1 = "Aaaaaaand."
-        self.robot.sound_system.speech_maker.speak(phrase1)
+        self.robot.sound_system.speech_maker.speak(phrase1).wait()
         time.sleep(0.5)
         phrase2 = 'Always, look on, the bright, side, of life'
-        self.robot.sound_system.speech_maker.speak(phrase2)
+        self.robot.sound_system.speech_maker.speak(phrase2).wait()
         time.sleep(0.5)
 
         whistle1 = [(784, 185, 2.5), (660, 185, 377.5), (494, 185, 2.5), (440, 185, 190), (494, 185, 2.5),
                     (523, 185, 190), (660, 185, 2.5), (587, 185, 190)]
-        self.robot.sound_system.tone_maker.play_tone_sequence(whistle1)
+        self.robot.sound_system.tone_maker.play_tone_sequence(whistle1).wait()
 
         phrase3 = 'Always, look on, the light, side, of life'
-        self.robot.sound_system.speech_maker.speak(phrase3)
-        self.robot.sound_system.tone_maker.play_tone_sequence(whistle1)
+        self.robot.sound_system.speech_maker.speak(phrase3).wait()
+        self.robot.sound_system.tone_maker.play_tone_sequence(whistle1).wait()
         time.sleep(5)
         phrase4 = "Thank you for listening to me perform. Good night!"
-        self.robot.sound_system.speech_maker.speak(phrase4)
+        self.robot.sound_system.speech_maker.speak(phrase4).wait()
 
     def encore(self):
         phrase1 = "I have one more song for you all."
-        self.robot.sound_system.speech_maker.speak(phrase1)
+        self.robot.sound_system.speech_maker.speak(phrase1).wait()
         time.sleep(3)
 
         notes = [(294, 120, 5), (294, 120, 5), (587, 120, 130), (440, 120, 255), (415, 120, 5), (392, 120, 5),
                  (349, 245, 5), (294, 120, 5), (349, 120, 5), (392, 120, 5)]
 
         for k in range(4):
-            self.robot.sound_system.tone_maker.play_tone_sequence(notes)
+            self.robot.sound_system.tone_maker.play_tone_sequence(notes).wait()
+
+    def check_anxiety(self, mqtt_sender, dis, window):
+        dis[0] = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+        mqtt_sender.send_message('return anxiety', [dis, window])
+
+    def get_distance_in_inches(self):
+        self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
 
 
 
 
 
 
-def levels(window, distance):
 
-    # Used syntax for tkinter progress bar found in this forum:
-    # https://stackoverflow.com/questions/13510882/how-to-change-ttk-progressbar-color-in-python
-
-    if distance >= 12:
-        s = ttk.Style()
-        s.theme_use()
-        anxiety_bar = ttk.Progressbar(window, orient='horizontal', length=100, mode='determinate')
-        anxiety_bar.grid()
-        anxiety_level = 0
-        anxiety_bar['value'] = 0
-
-        return anxiety_level
-
-    if distance < 12 & distance > 7:
-        s = ttk.Style()
-        s.theme_use()
-        anxiety_bar = ttk.Progressbar(window, orient='horizontal', length=100, mode='determinate')
-        anxiety_bar.grid()
-        anxiety_level = 1
-        anxiety_bar['value'] = 50
-
-        return anxiety_level
-
-    if distance <= 7:
-        s = ttk.Style()
-        s.theme_use('clam')
-        s.configure("red.Horizontal.TProgressbar", foreground='red', background='red')
-        anxiety_bar = ttk.Progressbar(window, style="red.Horizontal.TProgressbar", orient="horizontal", length=100,
-                                      mode="determinate")
-        anxiety_level = 2
-        anxiety_bar['value'] = 100
-
-        return anxiety_level
-
-
-def check_anxiety(window):
-
-    robot = rosebot.RoseBot()
-    distance = robot.sensor_system.get_distance_in_inches()
-    anxiety = levels(window, distance)
-
-    return anxiety
-
-
-def check_touch_sensor():
-
-    robot = rosebot.RoseBot()
-    if robot.sensor_system.touch_sensor.is_pressed():
-        return True
-    return False
 
 
