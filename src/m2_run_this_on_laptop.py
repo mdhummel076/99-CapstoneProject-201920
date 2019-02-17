@@ -15,6 +15,21 @@ import rosebot
 import time
 
 
+class MyDelegate(object):
+
+    def __init__(self):
+        self.enabled = True
+
+    def handle_change_anxiety(self, distance):
+        m2_gui.change_anxiety(int(distance))
+
+    def handle_change_hostility(self):
+        m2_gui.change_hostility()
+
+    def print_on_pc(self, message):
+        print(str(message))
+
+
 def main():
     """
     This code, which must run on a LAPTOP:
@@ -27,6 +42,10 @@ def main():
 
     mqtt_sender = com.MqttClient()
     mqtt_sender.connect_to_ev3()
+
+    pc_delegate = MyDelegate()
+    mqtt_receiver = com.MqttClient(pc_delegate)
+    mqtt_receiver.connect_to_ev3()
 
 
     # -------------------------------------------------------------------------
@@ -51,9 +70,9 @@ def main():
     perform_frame, teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame = get_shared_frames(main_frame, mqtt_sender)
 
 
-    #sprint_2_frame = sprint_2_frames(main_frame, mqtt_sender)
-    #sprint_2_1_frame = sprint_3_frames(main_frame, mqtt_sender)
-    #grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, IR_Frame, color_sensor_frame,
+    # sprint_2_frame = sprint_2_frames(main_frame, mqtt_sender)
+    # sprint_2_1_frame = sprint_3_frames(main_frame, mqtt_sender)
+    # grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame, IR_Frame, color_sensor_frame,
     # cameraFrame, sprint_2_frame, sprint_2_1_frame)
 
 

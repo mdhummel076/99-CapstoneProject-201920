@@ -27,14 +27,6 @@ anxiety_level = [1]
 hostility = ['False']
 
 
-class MyDelegate(object):
-
-    def change_anxiety(self, distance):
-        dis[0] = int(distance)
-
-    def change_hostility(self):
-        hostility[0] = 'True'
-
 
 def get_perform_frame(window, mqtt_sender):
     """
@@ -47,9 +39,6 @@ def get_perform_frame(window, mqtt_sender):
     """
 
     # Construct pc delegate for ev3 to communicate with computer
-    pc_delegate = MyDelegate()
-    mqtt_client = com.MqttClient(pc_delegate)
-    mqtt_client.connect_to_ev3()
 
     # Construct frame to return:
     frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
@@ -63,6 +52,8 @@ def get_perform_frame(window, mqtt_sender):
     enter_stage_button = ttk.Button(frame, text='Enter Stage')
     exit_stage_button = ttk.Button(frame, text='Exit Stage')
     check_anxiety_button = ttk.Button(frame, text='Check Anxiety')
+    check_hostility_button = ttk.Button(frame, text='Check Hostility')
+
     introduction_button = ttk.Button(frame, text='Introductions')
     verse_button = ttk.Button(frame, text='Verse')
     chorus_button = ttk.Button(frame, text='Chorus')
@@ -73,7 +64,7 @@ def get_perform_frame(window, mqtt_sender):
     s.theme_use()
     anxiety_bar = ttk.Progressbar(frame, orient='horizontal', length=100, mode='determinate')
     anxiety_bar.grid(row=10, column=0)
-    anxiety_bar['value'] = 0
+    anxiety_bar['value'] = 50
 
     # Grid widgets
     frame_label.grid(row=0, column=0, padx=5, pady=5)
@@ -82,6 +73,8 @@ def get_perform_frame(window, mqtt_sender):
     enter_stage_button.grid(row=1, column=0)
     exit_stage_button.grid(row=2, column=0)
     check_anxiety_button.grid(row=3, column=0)
+    check_hostility_button.grid(row=4, column=0)
+
     introduction_button.grid(row=5, column=0)
     verse_button.grid(row=6, column=0)
     chorus_button.grid(row=7, column=0)
@@ -91,6 +84,7 @@ def get_perform_frame(window, mqtt_sender):
     enter_stage_button['command'] = lambda: handle_enter_stage_button(mqtt_sender)
     exit_stage_button['command'] = lambda: handle_exit_stage_button(mqtt_sender)
     check_anxiety_button['command'] = lambda: levels(mqtt_sender, window, dis, frame, anxiety_bar)
+    check_hostility_button['command'] = lambda: handle_check_hostility(mqtt_sender)
 
     # Performance lambda functions
     introduction_button['command'] = lambda: handle_introduction(mqtt_sender)
@@ -100,7 +94,7 @@ def get_perform_frame(window, mqtt_sender):
     return frame
 
 
-def perform(window, mqtt_sender):
+""" def perform(window, mqtt_sender):
 
     pc_delegate = MyDelegate()
     mqtt_client = com.MqttClient(pc_delegate)
@@ -146,7 +140,23 @@ def perform(window, mqtt_sender):
         time.sleep(5)
         handle_encore(mqtt_sender)
 
-    return
+    return """
+
+
+def change_anxiety(distance):
+    dis[0] = int(distance)
+
+
+def change_hostility():
+    hostility[0] = 'True'
+
+
+def handle_check_hostility(mqtt_sender):
+    mqtt_sender.send_message('get_touch_press')
+    time.sleep(2)
+    print(hostility[0])
+    if hostility[0] == 'True':
+        print('Hostility is True')
 
 
 def levels(mqtt_sender, window, dis, frame, anxiety_bar):
@@ -157,10 +167,11 @@ def levels(mqtt_sender, window, dis, frame, anxiety_bar):
     time.sleep(2)
 
     print(dis[0])
+    time.sleep(2)
     if dis[0] >= 12:
         s = ttk.Style()
         s.theme_use()
-        anxiety_level = 0
+        anxiety_level[0] = 0
         anxiety_bar['value'] = 0
         window.update()
 
@@ -171,7 +182,7 @@ def levels(mqtt_sender, window, dis, frame, anxiety_bar):
         if dis[0] > 7:
             s = ttk.Style()
             s.theme_use()
-            anxiety_level = 1
+            anxiety_level[0] = 1
             anxiety_bar['value'] = 50
             window.update()
 
@@ -184,27 +195,19 @@ def levels(mqtt_sender, window, dis, frame, anxiety_bar):
         s.configure("red.Horizontal.TProgressbar", foreground='red', background='red')
         anxiety_bar = ttk.Progressbar(frame, style="red.Horizontal.TProgressbar", orient="horizontal", length=100,
                                       mode="determinate")
-        anxiety_level = 2
+        anxiety_level[0] = 2
         anxiety_bar['value'] = 100
         anxiety_bar.grid(row=10, column=0)
         window.update()
         time.sleep(2)
 
-        handle_apology(mqtt_sender)
+        # handle_apology(mqtt_sender)
+        print('Apologize to audience')
         time.sleep(2)
-        handle_exit_stage_button(mqtt_sender)
+        # handle_exit_stage_button(mqtt_sender)
+        print('Exit Stage')
 
         return anxiety_level
-
-
-def handle_check_anxiety(window, mqtt_sender, dis):
-    print('Handle check anxiety')
-    mqtt_sender.send_message('check_anxiety', [dis, window])
-
-
-def return_anxiety(dis):
-    anxiety = levels(window, distance)
-
 
 
 
@@ -218,6 +221,7 @@ def handle_enter_stage_button(mqtt_sender):
 def handle_exit_stage_button(mqtt_sender):
     print('Exit Stage - back to the shadows')
     mqtt_sender.send_message('exit_stage')
+    hostility[0] = 'False'
 
 
 def handle_apology(mqtt_sender):
@@ -239,7 +243,7 @@ def handle_chorus(mqtt_sender, window):
     print('Chorus')
     mqtt_sender.send_message('chorus')
     time.sleep(2)
-    if anxiety_level[0] < 2:
+    if anxiety_level[0] == 0:
         encore_text(window)
         time.sleep(5)
         handle_encore(mqtt_sender)

@@ -32,16 +32,18 @@ def real_thing():
     mqtt_client = com.MqttClient(robot)
     mqtt_client.connect_to_pc()
 
-    if robot.sensor_system.ir_proximity_sensor.distance_counter == 1:
-        dis = robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
-        mqtt_client.send_message('change_anxiety', [dis])
-        time.sleep(1)
-        robot.sensor_system.ir_proximity_sensor.distance_counter = 0
-
-    if robot.sensor_system.touch_sensor.touch_counter == 1:
-        mqtt_client.send_message('change_hostility')
-
     while True:
+        if robot.sensor_system.ir_proximity_sensor.distance_counter == 1:
+            dis = robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+            mqtt_client.send_message('handle_change_anxiety', [dis])
+            time.sleep(2)
+            robot.sensor_system.ir_proximity_sensor.distance_counter = 0
+
+        if robot.sensor_system.touch_sensor.touch_counter == 1:
+            mqtt_client.send_message('handle_change_hostility')
+            time.sleep(2)
+            robot.sensor_system.touch_sensor.touch_counter = 0
+
         if not delegate.enabled:
             time.sleep(0.01)
 

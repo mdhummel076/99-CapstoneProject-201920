@@ -293,18 +293,15 @@ class Delegate(object):
         for k in range(4):
             self.robot.sound_system.tone_maker.play_tone_sequence(notes).wait()
 
-    def check_anxiety(self, mqtt_sender, dis, window):
+    """ def check_anxiety(self, mqtt_sender, dis, window):
         dis[0] = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
-        mqtt_sender.send_message('return anxiety', [dis, window])
+        mqtt_sender.send_message('return anxiety', [dis, window]) """
 
     def get_distance_in_inches(self):
         self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
 
-
-
-
-
-
+    def get_touch_press(self):
+        self.robot.sensor_system.touch_sensor.is_pressed()
 
 
 
