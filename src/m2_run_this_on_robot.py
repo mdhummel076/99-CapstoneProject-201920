@@ -35,6 +35,7 @@ def real_thing():
     if robot.sensor_system.ir_proximity_sensor.distance_counter == 1:
         dis = robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
         mqtt_client.send_message('change_anxiety', [dis])
+        time.sleep(1)
         robot.sensor_system.ir_proximity_sensor.distance_counter = 0
 
     if robot.sensor_system.touch_sensor.touch_counter == 1:

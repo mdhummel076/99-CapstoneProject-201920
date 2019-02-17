@@ -22,8 +22,9 @@ import m2_shared_gui_delegate_on_robot
 import rosebot
 
 
-dis = [0]
-hostility = [False]
+dis = [8]
+anxiety_level = [1]
+hostility = ['False']
 
 
 class MyDelegate(object):
@@ -32,7 +33,7 @@ class MyDelegate(object):
         dis[0] = int(distance)
 
     def change_hostility(self):
-        hostility[0] = True
+        hostility[0] = 'True'
 
 
 def get_perform_frame(window, mqtt_sender):
@@ -45,30 +46,56 @@ def get_perform_frame(window, mqtt_sender):
     :return: frame
     """
 
+    # Construct pc delegate for ev3 to communicate with computer
+    pc_delegate = MyDelegate()
+    mqtt_client = com.MqttClient(pc_delegate)
+    mqtt_client.connect_to_ev3()
+
     # Construct frame to return:
     frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
 
 
-    anxiety_level = [1]
-
     # Construct widgets
     frame_label = ttk.Label(frame, text="Performance Options")
+    song_label = ttk.Label(frame, text="Setlist:")
+    anxiety_label = ttk.Label(frame, text="Anxiety Level:")
 
-    perform_button = ttk.Button(frame, text='Perform Song')
     enter_stage_button = ttk.Button(frame, text='Enter Stage')
     exit_stage_button = ttk.Button(frame, text='Exit Stage')
+    check_anxiety_button = ttk.Button(frame, text='Check Anxiety')
+    introduction_button = ttk.Button(frame, text='Introductions')
+    verse_button = ttk.Button(frame, text='Verse')
+    chorus_button = ttk.Button(frame, text='Chorus')
+
+    # Construct Progress Bar (anxiety measurement)
+
+    s = ttk.Style()
+    s.theme_use()
+    anxiety_bar = ttk.Progressbar(frame, orient='horizontal', length=100, mode='determinate')
+    anxiety_bar.grid(row=10, column=0)
+    anxiety_bar['value'] = 0
 
     # Grid widgets
-    frame_label.grid(row=0, column=0)
-    perform_button.grid(row=2, column=0)
-    enter_stage_button.grid(row=3, column=0)
-    exit_stage_button.grid(row=4, column=0)
+    frame_label.grid(row=0, column=0, padx=5, pady=5)
+    song_label.grid(row=4, column=0, padx=5, pady=5)
+    anxiety_label.grid(row=9, column=0, padx=5, pady=5)
+    enter_stage_button.grid(row=1, column=0)
+    exit_stage_button.grid(row=2, column=0)
+    check_anxiety_button.grid(row=3, column=0)
+    introduction_button.grid(row=5, column=0)
+    verse_button.grid(row=6, column=0)
+    chorus_button.grid(row=7, column=0)
 
     # Define Handlers
 
-    perform_button['command'] = lambda: perform(window, mqtt_sender)
     enter_stage_button['command'] = lambda: handle_enter_stage_button(mqtt_sender)
     exit_stage_button['command'] = lambda: handle_exit_stage_button(mqtt_sender)
+    check_anxiety_button['command'] = lambda: levels(mqtt_sender, window, dis, frame, anxiety_bar)
+
+    # Performance lambda functions
+    introduction_button['command'] = lambda: handle_introduction(mqtt_sender)
+    verse_button['command'] = lambda: handle_verse(mqtt_sender)
+    chorus_button['command'] = lambda: handle_chorus(mqtt_sender, window)
 
     return frame
 
@@ -87,74 +114,85 @@ def perform(window, mqtt_sender):
 
     handle_introduction(mqtt_sender)
     time.sleep(5)
-    if (hostility[0] == True) or (anxiety_levels > 1):
+    if (hostility[0] == 'True') or (anxiety_levels > 1):
         handle_apology(mqtt_sender)
         handle_exit_stage_button(mqtt_sender)
         return
 
     handle_verse(mqtt_sender)
-    time.sleep(5)
-    #anxiety_levels = handle_check_anxiety(window)
-    #hostility = check_touch_sensor()
-    """if (hostility is True) or (anxiety_levels > 1):
+    time.sleep(2)
+
+    handle_get_distance_in_inches(window, mqtt_sender)
+    time.sleep(2)
+    anxiety_levels = levels(window, dis)
+    if (hostility[0] == 'True') or (anxiety_levels > 1):
         handle_apology(mqtt_sender)
         handle_exit_stage_button(mqtt_sender)
-        return """
+        return
 
     handle_chorus(mqtt_sender)
-    time.sleep(5)
+    time.sleep(2)
 
-    """if hostility is True:
+    handle_get_distance_in_inches(window, mqtt_sender)
+    time.sleep(2)
+    anxiety_levels = levels(window, dis)
+    if (hostility[0] == 'True') or (anxiety_levels > 1):
         handle_apology(mqtt_sender)
         handle_exit_stage_button(mqtt_sender)
-        return"""
+        return
 
-    """if anxiety_levels < 2:
+    if anxiety_levels < 2:
         encore_text(window)
         time.sleep(5)
-        handle_encore(mqtt_sender)"""
-
-    encore_text(window)
-    time.sleep(5)
-    handle_encore(mqtt_sender).wait()
+        handle_encore(mqtt_sender)
 
     return
 
 
-
-def levels(window, distance):
+def levels(mqtt_sender, window, dis, frame, anxiety_bar):
 
     # Used syntax for tkinter progress bar found in this forum:
     # https://stackoverflow.com/questions/13510882/how-to-change-ttk-progressbar-color-in-python
+    handle_get_distance_in_inches(window, mqtt_sender)
+    time.sleep(2)
 
-    if int(distance[0]) >= 12:
+    print(dis[0])
+    if dis[0] >= 12:
         s = ttk.Style()
         s.theme_use()
-        anxiety_bar = ttk.Progressbar(window, orient='horizontal', length=100, mode='determinate')
-        anxiety_bar.grid()
         anxiety_level = 0
         anxiety_bar['value'] = 0
+        window.update()
 
         return anxiety_level
+    print(dis[0])
 
-    if int(distance[0]) < 12 & int(distance[0]) > 7:
-        s = ttk.Style()
-        s.theme_use()
-        anxiety_bar = ttk.Progressbar(window, orient='horizontal', length=100, mode='determinate')
-        anxiety_bar.grid()
-        anxiety_level = 1
-        anxiety_bar['value'] = 50
+    if dis[0] < 12:
+        if dis[0] > 7:
+            s = ttk.Style()
+            s.theme_use()
+            anxiety_level = 1
+            anxiety_bar['value'] = 50
+            window.update()
 
-        return anxiety_level
+            return anxiety_level
+    print(dis[0])
 
-    if int(distance[0]) <= 7:
+    if dis[0] <= 7:
         s = ttk.Style()
         s.theme_use('clam')
         s.configure("red.Horizontal.TProgressbar", foreground='red', background='red')
-        anxiety_bar = ttk.Progressbar(window, style="red.Horizontal.TProgressbar", orient="horizontal", length=100,
+        anxiety_bar = ttk.Progressbar(frame, style="red.Horizontal.TProgressbar", orient="horizontal", length=100,
                                       mode="determinate")
         anxiety_level = 2
         anxiety_bar['value'] = 100
+        anxiety_bar.grid(row=10, column=0)
+        window.update()
+        time.sleep(2)
+
+        handle_apology(mqtt_sender)
+        time.sleep(2)
+        handle_exit_stage_button(mqtt_sender)
 
         return anxiety_level
 
@@ -166,14 +204,6 @@ def handle_check_anxiety(window, mqtt_sender, dis):
 
 def return_anxiety(dis):
     anxiety = levels(window, distance)
-
-
-def check_touch_sensor():
-
-    robot = rosebot.RoseBot()
-    if robot.sensor_system.touch_sensor.is_pressed():
-        return True
-    return False
 
 
 
@@ -205,9 +235,14 @@ def handle_verse(mqtt_sender):
     mqtt_sender.send_message('verse')
 
 
-def handle_chorus(mqtt_sender):
+def handle_chorus(mqtt_sender, window):
     print('Chorus')
     mqtt_sender.send_message('chorus')
+    time.sleep(2)
+    if anxiety_level[0] < 2:
+        encore_text(window)
+        time.sleep(5)
+        handle_encore(mqtt_sender)
 
 
 def handle_encore(mqtt_sender):
