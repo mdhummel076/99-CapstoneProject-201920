@@ -16,6 +16,10 @@ import time
 
 
 class MyDelegate(object):
+    """ Constructs PC delegate object. Has
+    handlers for changing anxiety, changing
+    hostility levels, and for printing on the
+    console (for troubleshooting purposes)"""
 
     def __init__(self):
         self.enabled = True
@@ -39,10 +43,11 @@ def main():
     # -------------------------------------------------------------------------
     # Construct and connect the MQTT Client:
     # -------------------------------------------------------------------------
-
+    # Creates mqtt sender to call methods on robot
     mqtt_sender = com.MqttClient()
     mqtt_sender.connect_to_ev3()
 
+    # Created pc delegate, then used it as object to receive messages from robot
     pc_delegate = MyDelegate()
     mqtt_receiver = com.MqttClient(pc_delegate)
     mqtt_receiver.connect_to_ev3()
@@ -51,7 +56,7 @@ def main():
     # -------------------------------------------------------------------------
     # The root TK object for the GUI:
     # -------------------------------------------------------------------------
-
+    # Created tkinter window
     root = tkinter.Tk()
     root.title("Capstone Project - James")
 
@@ -59,7 +64,7 @@ def main():
     # -------------------------------------------------------------------------
     # The main frame, upon which the other frames are placed.
     # -------------------------------------------------------------------------
-
+    # Established primary frame & gridded it
     main_frame = ttk.Frame(root, padding=10, borderwidth=5, relief="groove")
     main_frame.grid()
 
@@ -67,8 +72,8 @@ def main():
     # -------------------------------------------------------------------------
     # Sub-frames for the m2_GUI
     # -------------------------------------------------------------------------
+    # Called other frames using get_shared_frames method
     perform_frame, teleop_frame, arm_frame, control_frame, drivesystem_frame, soundmaker_frame = get_shared_frames(main_frame, mqtt_sender)
-
 
     # sprint_2_frame = sprint_2_frames(main_frame, mqtt_sender)
     # sprint_2_1_frame = sprint_3_frames(main_frame, mqtt_sender)
@@ -86,8 +91,7 @@ def main():
     # Grid the frames.
     # -------------------------------------------------------------------------
 
-
-
+    # Grids frames for Sprint 3
     real_grid_frames(perform_frame, teleop_frame)
 
     # -------------------------------------------------------------------------
@@ -123,10 +127,40 @@ def grid_frames(teleop_frame, arm_frame, control_frame, drivesystem_frame, sound
     sprint_2_1_frame.grid(row=4, column=0)
 
 
-
 def real_grid_frames(perform_frame, teleop_frame):
+    # Grids frames for Sprint 3
+
     perform_frame.grid(row=0, column=0)
     teleop_frame.grid(row=1, column=0)
+
+
+
+
+
+
+#-------- Sprint 1-2 Code: ---------#
+
+
+def handle_robot_proximity_tone(frequency_entry, inc_frequency_entry, mqtt_sender):
+    print('Start at', frequency_entry.get(), 'Hz, then increase by', inc_frequency_entry.get(), "Hz per inch")
+    mqtt_sender.send_message('robot_proximity_tone', [int(frequency_entry.get()), int(inc_frequency_entry.get())])
+
+
+def handle_robot_point_to_object(mqtt_sender):
+    print('Make Robot Point to Object')
+    mqtt_sender.send_message('robot_point_to_object')
+
+
+def handle_robot_proximity_led(frequency_entry, inc_frequency_entry, mqtt_sender):
+    print('Start at', frequency_entry.get(), 'cycles per sec, then increase by', inc_frequency_entry.get(), "cycles per inch")
+    mqtt_sender.send_message('robot_proximity_led', [int(frequency_entry.get()), int(inc_frequency_entry.get())])
+
+
+def handle_camera_proximity_led(mqtt_sender):
+
+    print('Go to object & blink while driving')
+    mqtt_sender.send_message('camera_proximity_led')
+
 
 def sprint_2_frames(window, mqtt_sender):
     frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
@@ -188,46 +222,19 @@ def sprint_3_frames(window, mqtt_sender):
     return frame
 
 
-
-
-
 def printData(client):
 
     client.send_message('printData')
+
 
 def lookCW(client,box1,box2):
 
     client.send_message('CW',[box1.get(),box2.get()])
 
+
 def lookCCW(client,box1,box2):
 
     client.send_message('CCW',[box1.get(),box2.get()])
-
-
-
-
-def handle_robot_proximity_tone(frequency_entry, inc_frequency_entry, mqtt_sender):
-
-    print('Start at', frequency_entry.get(), 'Hz, then increase by', inc_frequency_entry.get(), "Hz per inch")
-    mqtt_sender.send_message('robot_proximity_tone', [int(frequency_entry.get()), int(inc_frequency_entry.get())])
-
-def handle_robot_point_to_object(mqtt_sender):
-
-    print('Make Robot Point to Object')
-    mqtt_sender.send_message('robot_point_to_object')
-
-def handle_robot_proximity_led(frequency_entry, inc_frequency_entry, mqtt_sender):
-
-    print('Start at', frequency_entry.get(), 'cycles per sec, then increase by', inc_frequency_entry.get(), "cycles per inch")
-    mqtt_sender.send_message('robot_proximity_led', [int(frequency_entry.get()), int(inc_frequency_entry.get())])
-
-def handle_camera_proximity_led(mqtt_sender):
-
-    print('Go to object & blink while driving')
-    mqtt_sender.send_message('camera_proximity_led')
-
-
-
 
 
 # -----------------------------------------------------------------------------

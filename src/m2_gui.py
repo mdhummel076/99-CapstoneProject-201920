@@ -22,19 +22,22 @@ import m2_shared_gui_delegate_on_robot
 import rosebot
 
 
+# Global variables used to update *hostility* & *anxiety*
+# readings from robot
 dis = [8]
 anxiety_level = [1]
 hostility = ['False']
 
 
-
 def get_perform_frame(window, mqtt_sender):
     """
     Constructs and returns a frame on the given window, where the frame
-    has a Button object that tells the robot to navigate the stage and
-    perform the song, then leave the stage.
-    :param window:
-    :param mqtt_sender:
+    has several Button objects that tell the robot to navigate the stage,
+    to perform the song (introduction, verse, & chorus), to check anxiety
+    levels and crowd hostility levels, and to leave the stage.
+    Additionally contains a progress bar that monitors anxiety levels.
+    :param window: Tkinter frame
+    :param mqtt_sender: MQTTClient object
     :return: frame
     """
 
@@ -42,7 +45,6 @@ def get_perform_frame(window, mqtt_sender):
 
     # Construct frame to return:
     frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
-
 
     # Construct widgets
     frame_label = ttk.Label(frame, text="Performance Options")
@@ -83,7 +85,7 @@ def get_perform_frame(window, mqtt_sender):
 
     enter_stage_button['command'] = lambda: handle_enter_stage_button(mqtt_sender)
     exit_stage_button['command'] = lambda: handle_exit_stage_button(mqtt_sender)
-    check_anxiety_button['command'] = lambda: levels(mqtt_sender, window, dis, frame, anxiety_bar)
+    check_anxiety_button['command'] = lambda: levels(mqtt_sender, window, frame, anxiety_bar)
     check_hostility_button['command'] = lambda: handle_check_hostility(mqtt_sender)
 
     # Performance lambda functions
@@ -94,80 +96,52 @@ def get_perform_frame(window, mqtt_sender):
     return frame
 
 
-""" def perform(window, mqtt_sender):
-
-    pc_delegate = MyDelegate()
-    mqtt_client = com.MqttClient(pc_delegate)
-    mqtt_client.connect_to_ev3()
-
-
-    print('Perform Song')
-    handle_get_distance_in_inches(window, mqtt_sender)
-    time.sleep(2)
-    anxiety_levels = levels(window, dis)
-
-    handle_introduction(mqtt_sender)
-    time.sleep(5)
-    if (hostility[0] == 'True') or (anxiety_levels > 1):
-        handle_apology(mqtt_sender)
-        handle_exit_stage_button(mqtt_sender)
-        return
-
-    handle_verse(mqtt_sender)
-    time.sleep(2)
-
-    handle_get_distance_in_inches(window, mqtt_sender)
-    time.sleep(2)
-    anxiety_levels = levels(window, dis)
-    if (hostility[0] == 'True') or (anxiety_levels > 1):
-        handle_apology(mqtt_sender)
-        handle_exit_stage_button(mqtt_sender)
-        return
-
-    handle_chorus(mqtt_sender)
-    time.sleep(2)
-
-    handle_get_distance_in_inches(window, mqtt_sender)
-    time.sleep(2)
-    anxiety_levels = levels(window, dis)
-    if (hostility[0] == 'True') or (anxiety_levels > 1):
-        handle_apology(mqtt_sender)
-        handle_exit_stage_button(mqtt_sender)
-        return
-
-    if anxiety_levels < 2:
-        encore_text(window)
-        time.sleep(5)
-        handle_encore(mqtt_sender)
-
-    return """
-
-
 def change_anxiety(distance):
+    """ Method called in m2_run_this_on_laptop (handle_change_anxiety).
+    Updates global variable dis with the proximity sensor value returned
+    from 'get_distance_in_inches' method """
     dis[0] = int(distance)
 
 
 def change_hostility():
+    """ Method called in m2_run_this_on_laptop (handle_change_hostility).
+    Updates global variable hostility with touch sensor value returned
+    from 'is_pressed' method """
     hostility[0] = 'True'
 
 
 def handle_check_hostility(mqtt_sender):
+    """ Handler for checking hostility levels.
+    Sends message to robot delegate & runs 'get_touch_press'
+    method, which then runs the 'is_pressed' method and updates
+    value of 'hostility' variable in m2_gui """
+
     mqtt_sender.send_message('get_touch_press')
     time.sleep(2)
     print(hostility[0])
+    # If touch sensor pressed, robot leaves stage
     if hostility[0] == 'True':
-        print('Hostility is True')
+        handle_apology(mqtt_sender)
+        print('Apologize to audience')
+        time.sleep(2)
+        handle_exit_stage_button(mqtt_sender)
+        print('Exit Stage')
 
 
-def levels(mqtt_sender, window, dis, frame, anxiety_bar):
+def levels(mqtt_sender, window, frame, anxiety_bar):
+    """ Communicates with delegate on robot & calls 'get_distance_in_inches'
+    method, which then prompts robot to update distance variable in m2_gui.
+    Updates progress bar based on distance value returned """
 
     # Used syntax for tkinter progress bar found in this forum:
     # https://stackoverflow.com/questions/13510882/how-to-change-ttk-progressbar-color-in-python
-    handle_get_distance_in_inches(window, mqtt_sender)
+    handle_get_distance_in_inches(mqtt_sender)
     time.sleep(2)
 
     print(dis[0])
     time.sleep(2)
+    # If object is over twelve inches away, anxiety = 0 and anxiety bar empty
+    # Updates global variable 'anxiety_level'
     if dis[0] >= 12:
         s = ttk.Style()
         s.theme_use()
@@ -178,6 +152,8 @@ def levels(mqtt_sender, window, dis, frame, anxiety_bar):
         return anxiety_level
     print(dis[0])
 
+    # If object is between 7-12 inches away, anxiety = 1 and anxiety bar half-full
+    # Updates global variable 'anxiety_level'
     if dis[0] < 12:
         if dis[0] > 7:
             s = ttk.Style()
@@ -189,6 +165,9 @@ def levels(mqtt_sender, window, dis, frame, anxiety_bar):
             return anxiety_level
     print(dis[0])
 
+    # If object is less than 7 inches away, anxiety = 0 and anxiety bar full & turns red
+    # Updates global variable 'anxiety_level'
+    # Robot apologizes & leaves stage
     if dis[0] <= 7:
         s = ttk.Style()
         s.theme_use('clam')
@@ -201,48 +180,61 @@ def levels(mqtt_sender, window, dis, frame, anxiety_bar):
         window.update()
         time.sleep(2)
 
-        # handle_apology(mqtt_sender)
+        handle_apology(mqtt_sender)
         print('Apologize to audience')
         time.sleep(2)
-        # handle_exit_stage_button(mqtt_sender)
+        handle_exit_stage_button(mqtt_sender)
         print('Exit Stage')
 
         return anxiety_level
 
 
-
-
 def handle_enter_stage_button(mqtt_sender):
+    """ Handles enter stage function. When button pressed on gui,
+    called enter_stage method on robot delegate. Enter stage makes
+    robot drive until yellow -- a spotlight -- is reached """
     print('Enter Stage - go to the spotlight')
     yellow = 4
     mqtt_sender.send_message('enter_stage', [yellow])
 
 
 def handle_exit_stage_button(mqtt_sender):
+    """ Handles exit stage function. When button pressed on gui,
+    called exit_stage method on robot delegate. Makes robot drive
+    until intensity is low (offstage) """
     print('Exit Stage - back to the shadows')
     mqtt_sender.send_message('exit_stage')
     hostility[0] = 'False'
 
 
 def handle_apology(mqtt_sender):
+    """ Handles apology function. When prompted, robot addresses audience
+    (via speech) and clumsily creates an excuse to finish show early """
     print('Apologize to the audience')
     mqtt_sender.send_message('apology')
 
 
 def handle_introduction(mqtt_sender):
+    """ Handles introduction function. When button is pressed, robot addresses
+    audience (via speech) """
     print('Introductions')
     mqtt_sender.send_message('introduction')
 
 
 def handle_verse(mqtt_sender):
+    """ Handles verse function. When button is pressed, robot *sings*
+    verse of song """
     print('Verse')
     mqtt_sender.send_message('verse')
 
 
 def handle_chorus(mqtt_sender, window):
+    """ Handles song function. When button is pressed, robot *sings*
+    chorus of song. If anxiety is sufficiently low, robot will follow-up
+    with an encore """
     print('Chorus')
     mqtt_sender.send_message('chorus')
-    time.sleep(2)
+    time.sleep(33)
     if anxiety_level[0] == 0:
         encore_text(window)
         time.sleep(5)
@@ -250,11 +242,15 @@ def handle_chorus(mqtt_sender, window):
 
 
 def handle_encore(mqtt_sender):
+    """ Handles encore function. When prompted, robot delegate is prompted
+    to perform short encore """
     print('Encore')
     mqtt_sender.send_message('encore')
 
 
 def encore_text(frame):
+    """ Updates GUI with text notifying user that an
+    encore will be performed """
     label = ttk.Label(frame, text='Encore:')
     quote1 = ttk.Label(frame, text='Congratulations!')
     quote2 = ttk.Label(frame, text='The crowd loves you,')
@@ -268,10 +264,17 @@ def encore_text(frame):
     quote4.grid(row=9, column=0)
 
 
-def handle_get_distance_in_inches(window, mqtt_sender):
+def handle_get_distance_in_inches(mqtt_sender):
+    """ Handler for 'get_distance_in_inches' method. Sends message
+    to delegate on robot, which then calls 'get_distance_in_inches' method.
+    Amount is returned via robot sending message to pc delegate with updated
+    distance value """
     print('Get distance in inches')
     mqtt_sender.send_message('get_distance_in_inches')
 
+
+
+# -------- Sprints 1-2 ---------#
 
 def get_teleoperation_frame(window, mqtt_sender):
     """

@@ -190,9 +190,8 @@ class Delegate(object):
         """
         self.robot.drive_system.go_straight_until_color_is(int(color), 50)
         t = time.time()
-        self.robot.drive_system.left_motor.turn_on(-35)
         self.robot.drive_system.left_motor.turn_on(35)
-        while time.time() - t < 2.5:
+        while time.time() - t < 4:
             time.time()
         self.robot.drive_system.left_motor.turn_off()
         self.robot.drive_system.right_motor.turn_off()
@@ -206,10 +205,9 @@ class Delegate(object):
         poster)
         :return:
         """
-        self.robot.drive_system.left_motor.turn_on(-35)
-        self.robot.drive_system.right_motor.turn_on(35)
+        self.robot.drive_system.left_motor.turn_on(35)
         t = time.time()
-        while time.time() - t < 2.5:
+        while time.time() - t < 4:
             time.time()
         self.robot.drive_system.left_motor.turn_off()
         self.robot.drive_system.right_motor.turn_off()
@@ -237,48 +235,50 @@ class Delegate(object):
 
         phrase = 'Hi everyone, hope you all are doing well.'
         self.robot.sound_system.speech_maker.speak(phrase).wait()
-        time.sleep(1)
+        time.sleep(5)
         phrase2 = "I'd like to perform a song for you now. Hope you enjoy."
         self.robot.sound_system.speech_maker.speak(phrase2).wait()
-        time.sleep(1)
+        time.sleep(5)
 
     def verse(self):
 
         phrase1 = 'Some things in life are bad.'
         self.robot.sound_system.speech_maker.speak(phrase1).wait()
-        time.sleep(0.5)
+        time.sleep(1)
         phrase2 = 'They can really make you mad.'
         self.robot.sound_system.speech_maker.speak(phrase2).wait()
-        time.sleep(0.5)
+        time.sleep(1)
         phrase3 = 'Other things just make you swear and curse.'
         self.robot.sound_system.speech_maker.speak(phrase3).wait()
-        time.sleep(0.5)
+        time.sleep(1)
         phrase4 = "When you're chewing life's gristle."
         self.robot.sound_system.speech_maker.speak(phrase4).wait()
-        time.sleep(0.5)
+        time.sleep(1)
         phrase5 = "Don't grumble, give a whistle."
         self.robot.sound_system.speech_maker.speak(phrase5).wait()
-        time.sleep(0.5)
+        time.sleep(1)
         phrase6 = "And this'll help things turn out for the best"
         self.robot.sound_system.speech_maker.speak(phrase6).wait()
-        time.sleep(0.5)
+        time.sleep(1)
 
     def chorus(self):
         phrase1 = "Aaaaaaand."
         self.robot.sound_system.speech_maker.speak(phrase1).wait()
-        time.sleep(0.5)
+        time.sleep(1)
         phrase2 = 'Always, look on, the bright, side, of life'
         self.robot.sound_system.speech_maker.speak(phrase2).wait()
-        time.sleep(0.5)
+        time.sleep(2)
 
         whistle1 = [(784, 185, 2.5), (660, 185, 377.5), (494, 185, 2.5), (440, 185, 190), (494, 185, 2.5),
                     (523, 185, 190), (660, 185, 2.5), (587, 185, 190)]
+        time.sleep(1)
         self.robot.sound_system.tone_maker.play_tone_sequence(whistle1).wait()
 
         phrase3 = 'Always, look on, the light, side, of life'
         self.robot.sound_system.speech_maker.speak(phrase3).wait()
+        time.sleep(2)
         self.robot.sound_system.tone_maker.play_tone_sequence(whistle1).wait()
-        time.sleep(5)
+        time.sleep(4)
         phrase4 = "Thank you for listening to me perform. Good night!"
         self.robot.sound_system.speech_maker.speak(phrase4).wait()
 
@@ -287,15 +287,21 @@ class Delegate(object):
         self.robot.sound_system.speech_maker.speak(phrase1).wait()
         time.sleep(3)
 
-        notes = [(294, 120, 5), (294, 120, 5), (587, 120, 130), (440, 120, 255), (415, 120, 5), (392, 120, 5),
+        notes = [(294, 120, 5), (294, 120, 5), (587, 120, 130), (440, 120, 255), (415, 120, 130), (392, 120, 130),
+                 (349, 245, 5), (294, 120, 5), (349, 120, 5), (392, 120, 5), (294, 120, 5), (294, 120, 5),
+                 (587, 120, 130), (440, 120, 255), (415, 120, 130), (392, 120, 130), (349, 245, 5), (294, 120, 5),
+                 (349, 120, 5), (392, 120, 5), (294, 120, 5), (294, 120, 5), (587, 120, 130), (440, 120, 255),
+                 (415, 120, 130), (392, 120, 130), (349, 245, 5), (294, 120, 5), (349, 120, 5), (392, 120, 5),
+                 (294, 120, 5), (294, 120, 5), (587, 120, 130), (440, 120, 255), (415, 120, 130), (392, 120, 130),
                  (349, 245, 5), (294, 120, 5), (349, 120, 5), (392, 120, 5)]
 
-        for k in range(4):
-            self.robot.sound_system.tone_maker.play_tone_sequence(notes).wait()
+        self.robot.sound_system.tone_maker.play_tone_sequence(notes).wait()
+        time.sleep(4)
 
-    """ def check_anxiety(self, mqtt_sender, dis, window):
-        dis[0] = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
-        mqtt_sender.send_message('return anxiety', [dis, window]) """
+        phrase2 = "Thank you, goodnight!"
+        self.robot.sound_system.speech_maker.speak(phrase2).wait()
+        time.sleep(3)
+
 
     def get_distance_in_inches(self):
         self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
