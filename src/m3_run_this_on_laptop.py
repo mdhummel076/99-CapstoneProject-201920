@@ -10,6 +10,8 @@
 import mqtt_remote_method_calls as com
 import tkinter
 from tkinter import ttk
+import PIL
+from PIL import ImageTk
 import shared_gui
 
 
@@ -36,10 +38,8 @@ def main():
     # -------------------------------------------------------------------------
     # The main frame, upon which the other frames are placed.
     # -------------------------------------------------------------------------
-    main_frame = ttk.Frame(root,  padding = 10, borderwidth = 5, relief = "groove")
+    main_frame = ttk.LabelFrame(root,  padding = 10, borderwidth = 5, relief = "groove")
     main_frame.grid()
-
-
     # -------------------------------------------------------------------------
     # Sub-frames for the shared GUI that the team developed:
     # -------------------------------------------------------------------------
