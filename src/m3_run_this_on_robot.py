@@ -9,6 +9,7 @@ import rosebot
 import mqtt_remote_method_calls as com
 import time
 import shared_gui_delegate_on_robot
+import m1_run_this_on_robot
 
 
 def main():
@@ -33,6 +34,7 @@ def real_deal():
     receiver.connect_to_pc()
 def grab_yellow_object():
     robot = rosebot.RoseBot()
+    delegate = shared_gui_delegate_on_robot.Delegate(robot)
     robot.sensor_system.camera.set_signature("SIG1")
     b1 = robot.sensor_system.camera.get_biggest_blob()
     robot.drive_system.spin_counterclockwise_until_sees_object(50,100)
@@ -48,6 +50,7 @@ def grab_yellow_object():
                     robot.drive_system.go(-50,-50)
                     if robot.sensor_system.color_sensor.get_color() == 6:
                         robot.arm_and_claw.lower_arm()
+    m1_run_this_on_robot.Delegate.grabIt(delegate)
 def sprint_3():
     robot = rosebot.RoseBot()
 main()
