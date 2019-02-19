@@ -35,7 +35,7 @@ def grab_yellow_object():
     robot = rosebot.RoseBot()
     robot.sensor_system.camera.set_signature("SIG1")
     b1 = robot.sensor_system.camera.get_biggest_blob()
-    robot.drive_system.spin_counterclockwise_until_sees_object()
+    robot.drive_system.spin_counterclockwise_until_sees_object(50,100)
     while robot.drive_system.spin_counterclockwise_until_sees_object(50,100):
                 robot.drive_system.go_forward_until_distance_is_less_than(1,50)
                 if robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()<10:
