@@ -132,6 +132,7 @@ def handle_camera_proximity_led(mqtt_sender):
     mqtt_sender.send_message('camera_proximity_led')
 
 
+
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
 # -----------------------------------------------------------------------------
