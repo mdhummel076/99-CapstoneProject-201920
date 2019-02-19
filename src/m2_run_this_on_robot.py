@@ -33,12 +33,20 @@ def real_thing():
     mqtt_client.connect_to_pc()
 
     while True:
+
+        # If get_distance_in_inches method has been called, distance_counter = 1.
+        # If distance_counter = 1, robot tells computer to execute 'handle_change_anxiety'
+        # method via MQTT / delegate running on PC
         if robot.sensor_system.ir_proximity_sensor.distance_counter == 1:
             dis = robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
             mqtt_client.send_message('handle_change_anxiety', [dis])
             time.sleep(2)
             robot.sensor_system.ir_proximity_sensor.distance_counter = 0
 
+
+        # If is_pressed method has been called, touch_counter = 1.
+        # If touch_counter = 1, robot tells computer to execute 'handle_change_hostility'
+        # method via MQTT / delegate running on PC
         if robot.sensor_system.touch_sensor.touch_counter == 1:
             mqtt_client.send_message('handle_change_hostility')
             time.sleep(2)

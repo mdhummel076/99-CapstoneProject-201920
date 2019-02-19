@@ -11,8 +11,9 @@ import rosebot
 import time
 
 
-
 class Delegate(object):
+    """ Initializes robot delegate object for
+    computer to communicate with robot """
 
     def __init__(self, robot):
 
@@ -21,6 +22,164 @@ class Delegate(object):
 
     def print(self,message):
         print(message)
+
+# ---------- Sprint 3 ---------- #
+
+    def enter_stage(self, color):
+        """ Handles the enter stage function
+        Makes robot drive onto poster, then drive
+        until its color sensor reads yellow,
+        then turns 90 degrees left and faces
+        the "audience"
+        :param color:
+        :return:
+        """
+        self.robot.drive_system.go_straight_until_color_is(int(color), 50)
+        t = time.time()
+        self.robot.drive_system.left_motor.turn_on(35)
+        while time.time() - t < 4:
+            time.time()
+        self.robot.drive_system.left_motor.turn_off()
+        self.robot.drive_system.right_motor.turn_off()
+
+        return
+
+    def exit_stage(self):
+        """ Handles the exit stage feature
+        Makes robot turn 90 degrees left,
+        then drive off stage (until robot is off
+        poster)
+        :return:
+        """
+        self.robot.drive_system.left_motor.turn_on(35)
+        t = time.time()
+        while time.time() - t < 4:
+            time.time()
+        self.robot.drive_system.left_motor.turn_off()
+        self.robot.drive_system.right_motor.turn_off()
+
+        dark = 5
+        self.robot.drive_system.go_straight_until_intensity_is_less_than(dark, 50)
+        self.robot.drive_system.go(50, 50)
+        time.sleep(2)
+        self.robot.drive_system.stop()
+
+        return
+
+    def apology(self):
+        """ Handles apology to audience.
+        Robot uses speech maker to say a
+        predetermined set of phrases """
+
+        phrase = "Uhh, I think I left my stove running"
+        self.robot.sound_system.speech_maker.speak(phrase).wait()
+        time.sleep(1)
+        phrase1 = "My house has probably burned down by now"
+        self.robot.sound_system.speech_maker.speak(phrase1).wait()
+        time.sleep(1)
+        phrase2 = "I best move along, uhh bye"
+        self.robot.sound_system.speech_maker.speak(phrase2).wait()
+        time.sleep(1)
+
+    def introduction(self):
+        """ Handles introduction to audience.
+        Robot uses speech maker to say
+        predetermined set of phrases """
+
+        phrase = 'Hi everyone, hope you all are doing well.'
+        self.robot.sound_system.speech_maker.speak(phrase).wait()
+        time.sleep(5)
+        phrase2 = "I'd like to perform a song for you now. Hope you enjoy."
+        self.robot.sound_system.speech_maker.speak(phrase2).wait()
+        time.sleep(5)
+
+    def verse(self):
+        """ Handles verse. Robot uses speech maker
+        to *sing* lyrics to 'Always Look on the Bright
+        Side of Life' from Monty Python's Life of Brian."""
+
+        phrase1 = 'Some things in life are bad.'
+        self.robot.sound_system.speech_maker.speak(phrase1).wait()
+        time.sleep(1)
+        phrase2 = 'They can really make you mad.'
+        self.robot.sound_system.speech_maker.speak(phrase2).wait()
+        time.sleep(1)
+        phrase3 = 'Other things just make you swear and curse.'
+        self.robot.sound_system.speech_maker.speak(phrase3).wait()
+        time.sleep(1)
+        phrase4 = "When you're chewing life's gristle."
+        self.robot.sound_system.speech_maker.speak(phrase4).wait()
+        time.sleep(1)
+        phrase5 = "Don't grumble, give a whistle."
+        self.robot.sound_system.speech_maker.speak(phrase5).wait()
+        time.sleep(1)
+        phrase6 = "And this'll help things turn out for the best"
+        self.robot.sound_system.speech_maker.speak(phrase6).wait()
+        time.sleep(1)
+
+    def chorus(self):
+        """ Handles chorus. Robot uses speech maker
+        & tone generator to perform chorus of 'Always Look
+        on the Bright Side of Life', then bids goodnight
+        to audience """
+
+        phrase1 = "Aaaaaaand."
+        self.robot.sound_system.speech_maker.speak(phrase1).wait()
+        time.sleep(1)
+        phrase2 = 'Always, look on, the bright, side, of life'
+        self.robot.sound_system.speech_maker.speak(phrase2).wait()
+        time.sleep(2)
+
+        whistle1 = [(784, 185, 2.5), (660, 185, 377.5), (494, 185, 2.5), (440, 185, 190), (494, 185, 2.5),
+                    (523, 185, 190), (660, 185, 2.5), (587, 185, 190)]
+        time.sleep(1)
+        self.robot.sound_system.tone_maker.play_tone_sequence(whistle1).wait()
+
+        phrase3 = 'Always, look on, the light, side, of life'
+        self.robot.sound_system.speech_maker.speak(phrase3).wait()
+        time.sleep(2)
+        self.robot.sound_system.tone_maker.play_tone_sequence(whistle1).wait()
+        time.sleep(4)
+        phrase4 = "Thank you for listening to me perform. Good night!"
+        self.robot.sound_system.speech_maker.speak(phrase4).wait()
+
+    def encore(self):
+        """ Handles encore. Uses robot's speechmaker
+        and tone generator to address audience one last time
+        and to perform one final song """
+
+        phrase1 = "I have one more song for you all."
+        self.robot.sound_system.speech_maker.speak(phrase1).wait()
+        time.sleep(3)
+
+        notes = [(294, 120, 5), (294, 120, 5), (587, 120, 130), (440, 120, 255), (415, 120, 130), (392, 120, 130),
+                 (349, 245, 5), (294, 120, 5), (349, 120, 5), (392, 120, 5), (294, 120, 5), (294, 120, 5),
+                 (587, 120, 130), (440, 120, 255), (415, 120, 130), (392, 120, 130), (349, 245, 5), (294, 120, 5),
+                 (349, 120, 5), (392, 120, 5), (294, 120, 5), (294, 120, 5), (587, 120, 130), (440, 120, 255),
+                 (415, 120, 130), (392, 120, 130), (349, 245, 5), (294, 120, 5), (349, 120, 5), (392, 120, 5),
+                 (294, 120, 5), (294, 120, 5), (587, 120, 130), (440, 120, 255), (415, 120, 130), (392, 120, 130),
+                 (349, 245, 5), (294, 120, 5), (349, 120, 5), (392, 120, 5)]
+
+        self.robot.sound_system.tone_maker.play_tone_sequence(notes).wait()
+        time.sleep(4)
+
+        phrase2 = "Thank you, goodnight!"
+        self.robot.sound_system.speech_maker.speak(phrase2).wait()
+        time.sleep(3)
+
+    def get_distance_in_inches(self):
+        """ Calls get_distance_in_inches method on robot """
+        self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+
+    def get_touch_press(self):
+        """ Calls is_pressed method for touch sensor on robot"""
+        self.robot.sensor_system.touch_sensor.is_pressed()
+
+
+
+
+
+# ------- Sprints 1-2 -------- #
 
     def go(self,lval,rval):
         chassis = self.robot.drive_system
@@ -178,136 +337,6 @@ class Delegate(object):
             if (x > 115):
                 print('inside if')
                 self.robot_proximity_led(2,5)
-
-    def enter_stage(self, color):
-        """ Handles the enter stage function
-        Makes robot drive onto poster, then drive
-        until its color sensor reads yellow,
-        then turns 90 degrees left and faces
-        the "audience"
-        :param color:
-        :return:
-        """
-        self.robot.drive_system.go_straight_until_color_is(int(color), 50)
-        t = time.time()
-        self.robot.drive_system.left_motor.turn_on(35)
-        while time.time() - t < 4:
-            time.time()
-        self.robot.drive_system.left_motor.turn_off()
-        self.robot.drive_system.right_motor.turn_off()
-
-        return
-
-    def exit_stage(self):
-        """ Handles the exit stage feature
-        Makes robot turn 90 degrees left,
-        then drive off stage (until robot is off
-        poster)
-        :return:
-        """
-        self.robot.drive_system.left_motor.turn_on(35)
-        t = time.time()
-        while time.time() - t < 4:
-            time.time()
-        self.robot.drive_system.left_motor.turn_off()
-        self.robot.drive_system.right_motor.turn_off()
-
-        dark = 5
-        self.robot.drive_system.go_straight_until_intensity_is_less_than(dark, 50)
-        self.robot.drive_system.go(50, 50)
-        time.sleep(2)
-        self.robot.drive_system.stop()
-
-        return
-
-    def apology(self):
-        phrase = "Uhh, I think I left my stove running"
-        self.robot.sound_system.speech_maker.speak(phrase).wait()
-        time.sleep(1)
-        phrase1 = "My house has probably burned down by now"
-        self.robot.sound_system.speech_maker.speak(phrase1).wait()
-        time.sleep(1)
-        phrase2 = "I best move along, uhh bye"
-        self.robot.sound_system.speech_maker.speak(phrase2).wait()
-        time.sleep(1)
-
-    def introduction(self):
-
-        phrase = 'Hi everyone, hope you all are doing well.'
-        self.robot.sound_system.speech_maker.speak(phrase).wait()
-        time.sleep(5)
-        phrase2 = "I'd like to perform a song for you now. Hope you enjoy."
-        self.robot.sound_system.speech_maker.speak(phrase2).wait()
-        time.sleep(5)
-
-    def verse(self):
-
-        phrase1 = 'Some things in life are bad.'
-        self.robot.sound_system.speech_maker.speak(phrase1).wait()
-        time.sleep(1)
-        phrase2 = 'They can really make you mad.'
-        self.robot.sound_system.speech_maker.speak(phrase2).wait()
-        time.sleep(1)
-        phrase3 = 'Other things just make you swear and curse.'
-        self.robot.sound_system.speech_maker.speak(phrase3).wait()
-        time.sleep(1)
-        phrase4 = "When you're chewing life's gristle."
-        self.robot.sound_system.speech_maker.speak(phrase4).wait()
-        time.sleep(1)
-        phrase5 = "Don't grumble, give a whistle."
-        self.robot.sound_system.speech_maker.speak(phrase5).wait()
-        time.sleep(1)
-        phrase6 = "And this'll help things turn out for the best"
-        self.robot.sound_system.speech_maker.speak(phrase6).wait()
-        time.sleep(1)
-
-    def chorus(self):
-        phrase1 = "Aaaaaaand."
-        self.robot.sound_system.speech_maker.speak(phrase1).wait()
-        time.sleep(1)
-        phrase2 = 'Always, look on, the bright, side, of life'
-        self.robot.sound_system.speech_maker.speak(phrase2).wait()
-        time.sleep(2)
-
-        whistle1 = [(784, 185, 2.5), (660, 185, 377.5), (494, 185, 2.5), (440, 185, 190), (494, 185, 2.5),
-                    (523, 185, 190), (660, 185, 2.5), (587, 185, 190)]
-        time.sleep(1)
-        self.robot.sound_system.tone_maker.play_tone_sequence(whistle1).wait()
-
-        phrase3 = 'Always, look on, the light, side, of life'
-        self.robot.sound_system.speech_maker.speak(phrase3).wait()
-        time.sleep(2)
-        self.robot.sound_system.tone_maker.play_tone_sequence(whistle1).wait()
-        time.sleep(4)
-        phrase4 = "Thank you for listening to me perform. Good night!"
-        self.robot.sound_system.speech_maker.speak(phrase4).wait()
-
-    def encore(self):
-        phrase1 = "I have one more song for you all."
-        self.robot.sound_system.speech_maker.speak(phrase1).wait()
-        time.sleep(3)
-
-        notes = [(294, 120, 5), (294, 120, 5), (587, 120, 130), (440, 120, 255), (415, 120, 130), (392, 120, 130),
-                 (349, 245, 5), (294, 120, 5), (349, 120, 5), (392, 120, 5), (294, 120, 5), (294, 120, 5),
-                 (587, 120, 130), (440, 120, 255), (415, 120, 130), (392, 120, 130), (349, 245, 5), (294, 120, 5),
-                 (349, 120, 5), (392, 120, 5), (294, 120, 5), (294, 120, 5), (587, 120, 130), (440, 120, 255),
-                 (415, 120, 130), (392, 120, 130), (349, 245, 5), (294, 120, 5), (349, 120, 5), (392, 120, 5),
-                 (294, 120, 5), (294, 120, 5), (587, 120, 130), (440, 120, 255), (415, 120, 130), (392, 120, 130),
-                 (349, 245, 5), (294, 120, 5), (349, 120, 5), (392, 120, 5)]
-
-        self.robot.sound_system.tone_maker.play_tone_sequence(notes).wait()
-        time.sleep(4)
-
-        phrase2 = "Thank you, goodnight!"
-        self.robot.sound_system.speech_maker.speak(phrase2).wait()
-        time.sleep(3)
-
-
-    def get_distance_in_inches(self):
-        self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
-
-    def get_touch_press(self):
-        self.robot.sensor_system.touch_sensor.is_pressed()
 
 
 
