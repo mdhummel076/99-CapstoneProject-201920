@@ -21,7 +21,6 @@ import time
 import m2_shared_gui_delegate_on_robot
 import rosebot
 
-
 # Global variables used to update *hostility* & *anxiety*
 # readings from robot
 dis = [8]
@@ -273,7 +272,6 @@ def handle_get_distance_in_inches(mqtt_sender):
     mqtt_sender.send_message('get_distance_in_inches')
 
 
-
 # -------- Sprints 1-2 ---------#
 
 def get_teleoperation_frame(window, mqtt_sender):
@@ -402,7 +400,6 @@ def get_control_frame(window, mqtt_sender):
 
 
 def get_drivesystem_frame(window, mqtt_sender):
-
     frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
 
     frame_label = ttk.Label(frame, text="DriveSystem")
@@ -460,8 +457,8 @@ def get_drivesystem_frame(window, mqtt_sender):
 
     return frame
 
-def get_soundmaker_frame(window,mqtt_sender):
 
+def get_soundmaker_frame(window, mqtt_sender):
     Frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
 
     beepButton = ttk.Button(Frame, text='Beep')
@@ -469,32 +466,29 @@ def get_soundmaker_frame(window,mqtt_sender):
     beepBox.insert(0, '1')
     toneButton = ttk.Button(Frame, text='Tone')
     toneBox = ttk.Entry(Frame, width=8, justify=tkinter.RIGHT)
-    toneBox.insert(0,'440')
+    toneBox.insert(0, '440')
     durationBox = ttk.Entry(Frame, width=8, justify=tkinter.RIGHT)
-    durationBox.insert(0,'2000')
-    speakButton = ttk.Button(Frame,text='Speak')
+    durationBox.insert(0, '2000')
+    speakButton = ttk.Button(Frame, text='Speak')
     speakBox = ttk.Entry(Frame, width=8, justify=tkinter.RIGHT)
-    speakBox.insert(0,'Hello')
+    speakBox.insert(0, 'Hello')
 
-    beepButton.grid(row=0,column=0)
-    beepBox.grid(row=0,column=1)
-    toneButton.grid(row = 1,column=0)
-    toneBox.grid(row=1,column=1)
-    durationBox.grid(row=1,column=2)
-    speakButton.grid(row=2,column=0)
-    speakBox.grid(row=2,column=1)
+    beepButton.grid(row=0, column=0)
+    beepBox.grid(row=0, column=1)
+    toneButton.grid(row=1, column=0)
+    toneBox.grid(row=1, column=1)
+    durationBox.grid(row=1, column=2)
+    speakButton.grid(row=2, column=0)
+    speakBox.grid(row=2, column=1)
 
-    beepButton['command']=lambda: handle_beep(mqtt_sender,beepBox)
-    toneButton['command']=lambda : handle_tone(mqtt_sender,toneBox,durationBox)
-    speakButton['command']=lambda: handle_speak(mqtt_sender,speakBox)
+    beepButton['command'] = lambda: handle_beep(mqtt_sender, beepBox)
+    toneButton['command'] = lambda: handle_tone(mqtt_sender, toneBox, durationBox)
+    speakButton['command'] = lambda: handle_speak(mqtt_sender, speakBox)
 
     return Frame
 
 
-
-
 def get_ColorSensor_Frame(window, mqtt_sender):
-
     frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
 
     frame_label = ttk.Label(frame, text="Color Sensor Methods")
@@ -502,7 +496,6 @@ def get_ColorSensor_Frame(window, mqtt_sender):
     speed_entry = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
     intensity_label = ttk.Label(frame, text="Desired Intensity:")
     intensity_entry = ttk.Entry(frame, width=8, justify=tkinter.RIGHT)
-
 
     go_straight_intensity_less_than_button = ttk.Button(frame, text="Go Straight Until Intensity Is Less Than")
 
@@ -527,18 +520,19 @@ def get_ColorSensor_Frame(window, mqtt_sender):
     go_straight_until_color_is_button.grid(row=4, column=1)
     go_straight_until_color_is_not_button.grid(row=5, column=1)
 
-    go_straight_intensity_less_than_button['command']=lambda: handle_intensity_less_than(
+    go_straight_intensity_less_than_button['command'] = lambda: handle_intensity_less_than(
         speed_entry, intensity_entry, mqtt_sender)
-    go_straight_intensity_greater_than_button['command']=lambda: handle_intensity_greater_than(
+    go_straight_intensity_greater_than_button['command'] = lambda: handle_intensity_greater_than(
         speed_entry, intensity_entry, mqtt_sender)
-    go_straight_until_color_is_button['command']=lambda: handle_color_is(
+    go_straight_until_color_is_button['command'] = lambda: handle_color_is(
         color_entry, speed_entry, mqtt_sender)
-    go_straight_until_color_is_not_button['command']=lambda: handle_color_is_not(
+    go_straight_until_color_is_not_button['command'] = lambda: handle_color_is_not(
         color_entry, speed_entry, mqtt_sender)
 
     return frame
 
-def get_camera_frame(window,client):
+
+def get_camera_frame(window, client):
     # Construct the frame to return:
     frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
 
@@ -567,32 +561,35 @@ def get_camera_frame(window,client):
     ccwButton['command'] = lambda: lookCCW(client, speedBox, areaBox)
 
     return frame
-def get_IR_Sensor_Frame(window,mqtt_sender):
-    frame = ttk.Frame(window,padding =10, borderwidth=5, relief='ridge')
-    label = ttk.Label(frame, text='Infrared Sensor Methods')
-    label.grid(row=0,column=1)
-    speed = ttk.Label(frame, text="Please input speed here" )
-    speed.grid(row=1,column=0)
-    entry_speed=ttk.Entry(frame,width=8)
-    entry_speed.grid(row=2,column=0)
-    inches = ttk.Label(frame, text="Please input inches here")
-    inches.grid(row=1,column=1)
-    entry_inches=ttk.Entry(frame,width=8)
-    entry_inches.grid(row=2,column=1)
-    delta_inches= ttk.Label(frame,text="Please input delta inches here")
-    delta_inches.grid(row=1,column=2)
-    entry_delta_inches = ttk.Entry(frame,width=8)
-    entry_delta_inches.grid(row=2,column=2)
-    Lesser = ttk.Button(frame, text='Go forward until distance is less than')
-    Lesser.grid(row=3,column=0)
-    Greater = ttk.Button(frame, text = "Go backwards until distance is greater than")
-    Greater.grid(row=3,column=1)
-    Delta = ttk.Button(frame, text = "Go until distance is within")
-    Delta.grid(row=3,column=2)
 
-    Delta['command'] = lambda: handle_go_until_distance_is_within(entry_delta_inches,entry_speed,mqtt_sender)
-    Greater['command'] = lambda: handle_go_backward_until_distance_is_greater_than(entry_inches,entry_speed,mqtt_sender)
-    Lesser['command'] = lambda: handle_go_forward_until_distance_is_less_than(entry_inches,entry_speed,mqtt_sender)
+
+def get_IR_Sensor_Frame(window, mqtt_sender):
+    frame = ttk.Frame(window, padding=10, borderwidth=5, relief='ridge')
+    label = ttk.Label(frame, text='Infrared Sensor Methods')
+    label.grid(row=0, column=1)
+    speed = ttk.Label(frame, text="Please input speed here")
+    speed.grid(row=1, column=0)
+    entry_speed = ttk.Entry(frame, width=8)
+    entry_speed.grid(row=2, column=0)
+    inches = ttk.Label(frame, text="Please input inches here")
+    inches.grid(row=1, column=1)
+    entry_inches = ttk.Entry(frame, width=8)
+    entry_inches.grid(row=2, column=1)
+    delta_inches = ttk.Label(frame, text="Please input delta inches here")
+    delta_inches.grid(row=1, column=2)
+    entry_delta_inches = ttk.Entry(frame, width=8)
+    entry_delta_inches.grid(row=2, column=2)
+    Lesser = ttk.Button(frame, text='Go forward until distance is less than')
+    Lesser.grid(row=3, column=0)
+    Greater = ttk.Button(frame, text="Go backwards until distance is greater than")
+    Greater.grid(row=3, column=1)
+    Delta = ttk.Button(frame, text="Go until distance is within")
+    Delta.grid(row=3, column=2)
+
+    Delta['command'] = lambda: handle_go_until_distance_is_within(entry_delta_inches, entry_speed, mqtt_sender)
+    Greater['command'] = lambda: handle_go_backward_until_distance_is_greater_than(entry_inches, entry_speed,
+                                                                                   mqtt_sender)
+    Lesser['command'] = lambda: handle_go_forward_until_distance_is_less_than(entry_inches, entry_speed, mqtt_sender)
 
     return frame
 
@@ -616,7 +613,7 @@ def handle_forward(left_entry_box, right_entry_box, mqtt_sender):
       :type  mqtt_sender:      com.MqttClient
     """
     print('Drive forward')
-    mqtt_sender.send_message('go',[int(left_entry_box.get()),int(right_entry_box.get())])
+    mqtt_sender.send_message('go', [int(left_entry_box.get()), int(right_entry_box.get())])
 
 
 def handle_backward(left_entry_box, right_entry_box, mqtt_sender):
@@ -628,7 +625,7 @@ def handle_backward(left_entry_box, right_entry_box, mqtt_sender):
       :type  mqtt_sender:      com.MqttClient
     """
     print('Drive backward')
-    mqtt_sender.send_message('go',[-1*int(left_entry_box.get()),-1*int(right_entry_box.get())])
+    mqtt_sender.send_message('go', [-1 * int(left_entry_box.get()), -1 * int(right_entry_box.get())])
 
 
 def handle_left(left_entry_box, right_entry_box, mqtt_sender):
@@ -640,8 +637,7 @@ def handle_left(left_entry_box, right_entry_box, mqtt_sender):
       :type  mqtt_sender:      com.MqttClient
     """
     print('Move left')
-    mqtt_sender.send_message('go',[-1*int(left_entry_box.get()),int(right_entry_box.get())])
-
+    mqtt_sender.send_message('go', [-1 * int(left_entry_box.get()), int(right_entry_box.get())])
 
 
 def handle_right(left_entry_box, right_entry_box, mqtt_sender):
@@ -653,7 +649,7 @@ def handle_right(left_entry_box, right_entry_box, mqtt_sender):
       :type  mqtt_sender:      com.MqttClient
     """
     print('Move right')
-    mqtt_sender.send_message('go',[int(left_entry_box.get()),-1*int(right_entry_box.get())])
+    mqtt_sender.send_message('go', [int(left_entry_box.get()), -1 * int(right_entry_box.get())])
 
 
 def handle_stop(mqtt_sender):
@@ -664,17 +660,23 @@ def handle_stop(mqtt_sender):
     print('Stop')
     mqtt_sender.send_message('stop')
 
+
 def handle_go_straight_for_seconds(seconds_entry_box, speed_entry_box, mqtt_sender):
     print('Go straight for ', seconds_entry_box.get(), 'seconds')
     mqtt_sender.send_message('go_straight_for_seconds', [int(seconds_entry_box.get()), int(speed_entry_box.get())])
 
+
 def handle_go_straight_for_inches_using_time(inches_entry_box, speed_entry_box, mqtt_sender):
     print('Go straight for ', inches_entry_box.get(), 'inches')
-    mqtt_sender.send_message('go_straight_for_inches_using_time', [int(inches_entry_box.get()), int(speed_entry_box.get())])
+    mqtt_sender.send_message('go_straight_for_inches_using_time',
+                             [int(inches_entry_box.get()), int(speed_entry_box.get())])
+
 
 def handle_go_straight_for_inches_using_encoder(inches_entry_box, speed_entry_box, mqtt_sender):
     print('Go straight for ', inches_entry_box, 'inches (using encoder)')
-    mqtt_sender.send_message('go_straight_for_inches_using_encoder', [int(inches_entry_box.get()), int(speed_entry_box.get())])
+    mqtt_sender.send_message('go_straight_for_inches_using_encoder',
+                             [int(inches_entry_box.get()), int(speed_entry_box.get())])
+
 
 ###############################################################################
 # Handlers for Buttons in the ArmAndClaw frame.
@@ -716,7 +718,7 @@ def handle_move_arm_to_position(arm_position_entry, mqtt_sender):
       :type  mqtt_sender:        com.MqttClient
     """
     print('Move Arm to Position', arm_position_entry.get())
-    mqtt_sender.send_message('move_arm_to_position',[arm_position_entry.get()])
+    mqtt_sender.send_message('move_arm_to_position', [arm_position_entry.get()])
 
 
 ###############################################################################
@@ -744,19 +746,22 @@ def handle_exit(mqtt_sender):
     exit()
 
 
-#handlers for sounds
+# handlers for sounds
 
 def handle_beep(mqtt_sender, entryBox):
     print('I will beep ', entryBox.get(), 'times')
-    mqtt_sender.send_message('beep',[entryBox.get()])
+    mqtt_sender.send_message('beep', [entryBox.get()])
+
 
 def handle_tone(mqtt_sender, entryBox, entryBox2):
     print('I will play a tone at frequency ', entryBox.get(), 'for duration ', entryBox.get())
-    mqtt_sender.send_message('tone',[entryBox.get(),entryBox2.get()])
+    mqtt_sender.send_message('tone', [entryBox.get(), entryBox2.get()])
+
 
 def handle_speak(mqtt_sender, entryBox):
     print('I will speak phrase ', entryBox.get())
-    mqtt_sender.send_message('speak',[entryBox.get()])
+    mqtt_sender.send_message('speak', [entryBox.get()])
+
 
 # Handlers for Color Methods
 
@@ -764,39 +769,44 @@ def handle_intensity_less_than(speed_entry, intensity_entry, mqtt_sender):
     print('Go Straight at a speed of', speed_entry.get(), 'until intensity is less than', intensity_entry.get())
     mqtt_sender.send_message('go_straight_until_intensity_is_less_than', [intensity_entry.get(), speed_entry.get()])
 
+
 def handle_intensity_greater_than(speed_entry, intensity_entry, mqtt_sender):
     print('Go Straight at a speed of', speed_entry.get(), 'until intensity is greater than', intensity_entry.get())
     mqtt_sender.send_message('go_straight_until_intensity_is_greater_than', [intensity_entry.get(), speed_entry.get()])
+
 
 def handle_color_is(color_entry, speed_entry, mqtt_sender):
     print('Go straight at speed of', speed_entry.get(), 'until color is', color_entry.get())
     mqtt_sender.send_message('go_straight_until_color_is', [color_entry.get(), speed_entry.get()])
 
+
 def handle_color_is_not(color_entry, speed_entry, mqtt_sender):
     print('Go straight at speed of', speed_entry.get(), 'until color is not', color_entry.get())
     mqtt_sender.send_message('go_straight_until_color_is_not', [color_entry.get(), speed_entry.get()])
 
-def printData(client):
 
+def printData(client):
     client.send_message('printData')
 
-def lookCW(client,box1,box2):
 
-    client.send_message('CW',[box1.get(),box2.get()])
+def lookCW(client, box1, box2):
+    client.send_message('CW', [box1.get(), box2.get()])
 
-def lookCCW(client,box1,box2):
 
-    client.send_message('CCW',[box1.get(),box2.get()])
+def lookCCW(client, box1, box2):
+    client.send_message('CCW', [box1.get(), box2.get()])
 
-def handle_go_forward_until_distance_is_less_than(entry_inches,entry_speed,mqtt_sender):
-    print('Go at speed',entry_speed.get(),'for',entry_inches.get())
-    mqtt_sender.send_message('go_forward_until_distance_is_less_than',[entry_inches.get(), entry_speed.get()])
 
-def handle_go_backward_until_distance_is_greater_than(entry_inches,entry_speed,mqtt_sender):
-    print('Go backwards at speed',entry_speed.get(),'for',entry_inches.get())
-    mqtt_sender.send_message('go_backward_until_distance_is_greater_than',[entry_inches.get(), entry_speed.get()])
+def handle_go_forward_until_distance_is_less_than(entry_inches, entry_speed, mqtt_sender):
+    print('Go at speed', entry_speed.get(), 'for', entry_inches.get())
+    mqtt_sender.send_message('go_forward_until_distance_is_less_than', [entry_inches.get(), entry_speed.get()])
 
-def handle_go_until_distance_is_within(entry_delta_inches,entry_speed,mqtt_sender):
+
+def handle_go_backward_until_distance_is_greater_than(entry_inches, entry_speed, mqtt_sender):
+    print('Go backwards at speed', entry_speed.get(), 'for', entry_inches.get())
+    mqtt_sender.send_message('go_backward_until_distance_is_greater_than', [entry_inches.get(), entry_speed.get()])
+
+
+def handle_go_until_distance_is_within(entry_delta_inches, entry_speed, mqtt_sender):
     print("Go at speed", entry_speed.get(), "within a distance of", entry_delta_inches.get())
     mqtt_sender.send_message('go_until_distance_is_within', [entry_delta_inches.get(), entry_speed.get()])
-

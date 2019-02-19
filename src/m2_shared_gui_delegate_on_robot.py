@@ -20,10 +20,10 @@ class Delegate(object):
         self.robot = robot
         self.enabled = True
 
-    def print(self,message):
+    def print(self, message):
         print(message)
 
-# ---------- Sprint 3 ---------- #
+    # ---------- Sprint 3 ---------- #
 
     def enter_stage(self, color):
         """ Handles the enter stage function
@@ -175,15 +175,11 @@ class Delegate(object):
         """ Calls is_pressed method for touch sensor on robot"""
         self.robot.sensor_system.touch_sensor.is_pressed()
 
+    # ------- Sprints 1-2 -------- #
 
-
-
-
-# ------- Sprints 1-2 -------- #
-
-    def go(self,lval,rval):
+    def go(self, lval, rval):
         chassis = self.robot.drive_system
-        chassis.go(int(lval),int(rval))
+        chassis.go(int(lval), int(rval))
         print('going')
 
     def stop(self):
@@ -202,21 +198,21 @@ class Delegate(object):
         arm = self.robot.arm_and_claw
         arm.calibrate_arm()
 
-    def move_arm_to_position(self,position):
+    def move_arm_to_position(self, position):
         arm = self.robot.arm_and_claw
         arm.move_arm_to_position(int(position))
 
     def go_straight_for_seconds(self, seconds, speed):
         chassis = self.robot.drive_system
-        chassis.go_straight_for_seconds(int(seconds),int(speed))
+        chassis.go_straight_for_seconds(int(seconds), int(speed))
 
     def go_straight_for_inches_using_time(self, inches, speed):
         chassis = self.robot.drive_system
-        chassis.go_straight_for_inches_using_time(int(inches),int(speed))
+        chassis.go_straight_for_inches_using_time(int(inches), int(speed))
 
     def go_straight_for_inches_using_encoder(self, inches, speed):
         chassis = self.robot.drive_system
-        chassis.go_straight_for_inches_using_encoder(int(inches),int(speed))
+        chassis.go_straight_for_inches_using_encoder(int(inches), int(speed))
 
     def beep(self, n):
         for k in range(int(n)):
@@ -238,13 +234,13 @@ class Delegate(object):
 
         self.robot.drive_system.display_camera_data()
 
-    def CW(self,speed,area):
+    def CW(self, speed, area):
 
-        self.robot.drive_system.spin_clockwise_until_sees_object(int(speed),int(area))
+        self.robot.drive_system.spin_clockwise_until_sees_object(int(speed), int(area))
 
-    def CCW(self,speed,area):
+    def CCW(self, speed, area):
 
-        self.robot.drive_system.spin_counterclockwise_until_sees_object(int(speed),int(area))
+        self.robot.drive_system.spin_counterclockwise_until_sees_object(int(speed), int(area))
 
     def go_straight_until_intensity_is_less_than(self, intensity, speed):
 
@@ -270,7 +266,7 @@ class Delegate(object):
 
         while self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches() > 2:
             x = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
-            self.robot.sound_system.tone_maker.play_tone((x0 - x)*int(inc_frequency) + int(frequency), 500)
+            self.robot.sound_system.tone_maker.play_tone((x0 - x) * int(inc_frequency) + int(frequency), 500)
 
         self.robot.drive_system.stop()
         self.robot.arm_and_claw.calibrate_arm()
@@ -289,40 +285,40 @@ class Delegate(object):
             time.sleep(0.01)
 
     def go_forward_until_distance_is_less_than(self, inches, speed):
-        self.robot.drive_system.go_forward_until_distance_is_less_than(int(inches),int(speed))
+        self.robot.drive_system.go_forward_until_distance_is_less_than(int(inches), int(speed))
 
     def go_backward_until_distance_is_greater_than(self, inches, speed):
-        self.robot.drive_system.go_backward_until_distance_is_greater_than(int(inches),int(speed))
+        self.robot.drive_system.go_backward_until_distance_is_greater_than(int(inches), int(speed))
 
     def go_until_distance_is_within(self, delta_inches, speed):
-        self.robot.drive_system.go_until_distance_is_within(int(delta_inches),int(speed))
+        self.robot.drive_system.go_until_distance_is_within(int(delta_inches), int(speed))
 
     def robot_proximity_led(self, frequency, inc_frequency):
         x = 1
         self.robot.drive_system.left_motor.turn_on(50)
         self.robot.drive_system.right_motor.turn_on(50)
         y = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
-        while y>2:
+        while y > 2:
             if self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches() < 5:
-                x = x +inc_frequency
+                x = x + inc_frequency
             self.robot.led_system.left_led.turn_on()
             self.robot.led_system.right_led.turn_off()
-            time.sleep(1/(int(frequency)+int(x)))
+            time.sleep(1 / (int(frequency) + int(x)))
             if self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches() < 5:
                 x = x + inc_frequency
             self.robot.led_system.left_led.turn_off()
             self.robot.led_system.right_led.turn_on()
-            time.sleep(1/(int(frequency)+int(x)))
+            time.sleep(1 / (int(frequency) + int(x)))
             if self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches() < 5:
                 x = x + inc_frequency
             self.robot.led_system.left_led.turn_on()
             self.robot.led_system.right_led.turn_on()
-            time.sleep(1/(int(frequency)+int(x)))
+            time.sleep(1 / (int(frequency) + int(x)))
             if self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches() < 5:
                 x = x + inc_frequency
             self.robot.led_system.left_led.turn_off()
             self.robot.led_system.right_led.turn_off()
-            time.sleep(1/(int(frequency)+int(x)))
+            time.sleep(1 / (int(frequency) + int(x)))
             if self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches() < 5:
                 x = x + inc_frequency
             y = self.robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
@@ -336,7 +332,4 @@ class Delegate(object):
             print('Second if')
             if (x > 115):
                 print('inside if')
-                self.robot_proximity_led(2,5)
-
-
-
+                self.robot_proximity_led(2, 5)

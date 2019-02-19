@@ -43,7 +43,6 @@ def real_thing():
             time.sleep(2)
             robot.sensor_system.ir_proximity_sensor.distance_counter = 0
 
-
         # If is_pressed method has been called, touch_counter = 1.
         # If touch_counter = 1, robot tells computer to execute 'handle_change_hostility'
         # method via MQTT / delegate running on PC
@@ -54,7 +53,6 @@ def real_thing():
 
         if not delegate.enabled:
             time.sleep(0.01)
-
 
 
 # -----------------------------------------------------------------------------
