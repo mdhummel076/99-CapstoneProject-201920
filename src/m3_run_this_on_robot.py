@@ -47,13 +47,14 @@ def flight():
         if counter == 3:
             speech.speak("I can't take this! I'm going home!")
             robot.drive_system.go_straight_until_color_is(6, 50)
-            if robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()<3:
-                speech.speak("Why can't I go home? I wanna go home!")
-                robot.drive_system.go(50,-50)
-                time.sleep(5)
-                speech.speak("WARNING: STRESS SENSORS OVERLOADED. SHUTDOWN IMMINENT")
-                robot.drive_system.stop()
-                break
+            while robot.drive_system.go_straight_until_color_is(6, 50):
+                if robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()<3:
+                    speech.speak("Why can't I go home? I wanna go home!")
+                    robot.drive_system.go(50,-50)
+                    time.sleep(5)
+                    speech.speak("WARNING: STRESS SENSORS OVERLOADED. SHUTDOWN IMMINENT")
+                    robot.drive_system.stop()
+                    break
             speech.speak("I am home. I can now rest")
             break
         time.sleep(1)
