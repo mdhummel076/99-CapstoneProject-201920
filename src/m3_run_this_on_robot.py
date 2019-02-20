@@ -65,6 +65,15 @@ def flight():
             speech.speak("Stop touching me!")
         if counter == 3:
             speech.speak("I can't take this! I'm going home!")
+            robot.drive_system.go_straight_until_color_is(6, 50)
+            if robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()>3:
+                speech.speak("Why can't I go home? I wanna go home!")
+                robot.drive_system.go(50,-50)
+                time.sleep(5)
+                speech.speak("WARNING: STRESS SENSORS OVERLOADED. SHUTDOWN IMMINENT")
+                robot.drive_system.stop()
+                break
+            speech.speak("I am home. I can now rest")
             break
         time.sleep(1)
 def fight():
@@ -76,11 +85,16 @@ def fight():
         if button.is_pressed() == True:
             counter = counter +1
         if counter == 1:
-            speech.speak("Hey! Watch what you're doing, Jack!")
+            speech.speak("Hey! Watch what you're doing, twerp!")
         if counter == 2:
             speech.speak("You'll be gettin a knuckle sandwich, punk!")
         if counter == 3:
             speech.speak("Alright bub, you aksed for it!")
+            robot.drive_system.go(50,-50)
+            time.sleep(.5)
+            if robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()<10:
+                speech.speak("Come here, chicken!")
+            robot.drive_system.go_forward_until_distance_is_less_than()
             break
         time.sleep(1)
 
