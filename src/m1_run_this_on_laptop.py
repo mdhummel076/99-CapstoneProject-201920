@@ -12,6 +12,7 @@ import tkinter
 from tkinter import ttk
 import shared_gui
 import time
+import random
 
 
 def main():
@@ -23,8 +24,8 @@ def main():
     # -------------------------------------------------------------------------
     # Construct and connect the MQTT Client:
     # -------------------------------------------------------------------------
-
-    client = com.MqttClient()
+    delegate = laptopDelegate()
+    client = com.MqttClient(delegate)
     client.connect_to_ev3()
     time.sleep(1)
 
@@ -43,86 +44,25 @@ def main():
     mainFrame.grid()
 
     # -------------------------------------------------------------------------
-    # Sub-frames for the shared GUI that the team developed:
-    # -------------------------------------------------------------------------
-
-    teleopFrame, armFrame, controlFrame, driveSystemFrame, soundmakerFrame, colorFrame, cameraFrame = get_shared_frames(mainFrame,client)
-
-
-    # -------------------------------------------------------------------------
     # Frames that are particular to my individual contributions to the project.
     # -------------------------------------------------------------------------
 
-    beepdriveFrame = get_beepFrame(mainFrame,client)
-    simonFrame = getSimonFrame(mainFrame,client)
+    simonFrame, textBox = getSimonFrame(mainFrame,client)
 
     # -------------------------------------------------------------------------
     # Grid the frames.
     # -------------------------------------------------------------------------
 
-    teleopFrame.grid(row = 0, column = 0)
-    armFrame.grid(row = 1, column = 0)
-    controlFrame.grid(row = 2, column = 0)
-    driveSystemFrame.grid(row = 3,column = 0)
-    soundmakerFrame.grid(row = 4, column = 0)
-    colorFrame.grid(row=0,column=1)
-    cameraFrame.grid(row=1,column=1)
-    beepdriveFrame.grid(row=2,column=1)
-    simonFrame.grid(row=3,column=1)
-
+    simonFrame.grid(row=0,column=0)
 
     # -------------------------------------------------------------------------
     # The event loop:
     # -------------------------------------------------------------------------
 
+    delegate.gui = textBox
     root.mainloop()
 
-def get_shared_frames(main_frame, mqtt_sender):
-    teleopFrame = shared_gui.get_teleoperation_frame(main_frame,mqtt_sender)
-    armFrame = shared_gui.get_arm_frame(main_frame,mqtt_sender)
-    controlFrame = shared_gui.get_control_frame(main_frame,mqtt_sender)
-    driveSystemFrame = shared_gui.get_drivesystem_frame(main_frame,mqtt_sender)
-    soundmakerFrame = shared_gui.getSoundmakerFrame(main_frame,mqtt_sender)
-    colorFrame = shared_gui.get_ColorSensor_Frame(main_frame,mqtt_sender)
-    cameraFrame = shared_gui.get_camera_frame(main_frame,mqtt_sender)
-
-    return teleopFrame, armFrame, controlFrame, driveSystemFrame, soundmakerFrame, colorFrame, cameraFrame
-
-
-def grid_frames(teleop_frame, arm_frame, control_frame):
-    pass
-
-def get_beepFrame(window,client):
-    # Construct the frame to return:
-    frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
-    frame.grid()
-
-    # Construct the widgets on the frame:
-    frame_label = ttk.Label(frame, text="Sprint 2 things")
-
-    driveButton = ttk.Button(frame, text="Drive")
-    targetButton = ttk.Button(frame, text='Target')
-    grabButton = ttk.Button(frame,text='Grab it')
-    initBox = ttk.Entry(frame,width=8)
-    rateBox = ttk.Entry(frame,width=8)
-    initBox.insert(0,'1')
-    rateBox.insert(0,'1')
-
-    # Grid the widgets:
-    frame_label.grid(row=0, column=1)
-    driveButton.grid(row=2,column=0)
-    initBox.grid(row=2,column=1)
-    rateBox.grid(row=2,column=2)
-    targetButton.grid(row=3,column=0)
-    grabButton.grid(row=4,column=0)
-
-    # Set the button callbacks:
-    driveButton['command'] = lambda: handleBeepDrive(client,initBox,rateBox)
-    targetButton['command'] = lambda: handleTarget(client)
-    grabButton['command'] = lambda: handleGrabIt(client)
-
-    return frame
-
+    #Creates the frame with all the simon says functionality
 def getSimonFrame(window,client):
 
     Frame = ttk.Frame(window, padding=10, borderwidth=5, relief="ridge")
@@ -131,46 +71,225 @@ def getSimonFrame(window,client):
     frameLabel = ttk.Label(Frame,text='Simon Says')
     simonButton = ttk.Button(Frame,text='Simon Says...')
     moveButton = ttk.Button(Frame,text='Move')
-    moveBox = ttk.Entry(Frame,width=8)
-    moveBox.insert(0,'5')
-    moveText = ttk.Label(Frame,text='Inches:')
     danceButton = ttk.Button(Frame,text='Dance!')
     stretchButton = ttk.Button(Frame,text='Stretch')
-    liftButton = ttk.Button(Frame,text='Lift')
+    clapButton = ttk.Button(Frame,text='Clap')
+    colorButton = ttk.Button(Frame,text='Read Color')
     findButton = ttk.Button(Frame,text='Find Cube')
+    beepButton = ttk.Button(Frame,text='Beep')
+    singButton = ttk.Button(Frame,text='Sing')
     blankLabel= ttk.Label(Frame,text='')
     blankLabel2 = ttk.Label(Frame,text='')
     diffLabel = ttk.Label(Frame,text='Difficulty Bar')
     difficultBar = ttk.Progressbar(Frame,maximum=1000)
-    difficultBar.step(40)
+    difficultBar.start(200)
+    difficultBar.step(1)
+    textBox = ttk.Entry(Frame)
+    textBox.insert(0,'Ready to play!')
+    winBox = ttk.Entry(Frame)
 
     frameLabel.grid(row=0,column=1)
     blankLabel.grid(row=1,column=1)
     simonButton.grid(row=2,column=1)
     blankLabel2.grid(row=3,column=1)
     moveButton.grid(row=4,column=0)
-    moveText.grid(row=4,column=1)
-    moveBox.grid(row=4,column=2)
     danceButton.grid(row=5,column=0)
     stretchButton.grid(row=6,column=0)
-    liftButton.grid(row=7,column=0)
-    findButton.grid(row=8,column=0)
-    diffLabel.grid(row=9,column=1)
-    difficultBar.grid(row=10,column=1)
+    clapButton.grid(row=7,column=0)
+    colorButton.grid(row=4,column=2)
+    findButton.grid(row=5,column=2)
+    beepButton.grid(row=6,column=2)
+    singButton.grid(row=7,column=2)
+    diffLabel.grid(row=11,column=1)
+    difficultBar.grid(row=12,column=1)
+    textBox.grid(row=13,column=1)
+    winBox.grid(row=14,column=1)
 
-    return Frame
+    simonButton['command'] = lambda: handleSimon(client, difficultBar, textBox, winBox)
+    moveButton['command'] = lambda: handleMove(client, difficultBar, textBox, winBox)
+    danceButton['command'] = lambda: handleDance(client, difficultBar, textBox, winBox)
+    stretchButton['command'] = lambda: handleStretch(client, difficultBar, textBox, winBox)
+    clapButton['command'] = lambda: handleClap(client, difficultBar, textBox, winBox)
+    colorButton['command'] = lambda: handleColor(client, difficultBar, textBox, winBox)
+    findButton['command'] = lambda: handleFind(client, difficultBar, textBox, winBox)
+    beepButton['command'] = lambda: handleBeep(client, difficultBar, textBox, winBox)
+    singButton['command'] = lambda: handleSing(client, difficultBar, textBox, winBox)
 
-def handleBeepDrive(client,box1,box2):
 
-    client.send_message('m1BeepDrive',[box1.get(),box2.get()])
+    return Frame, textBox
 
-def handleTarget(client):
+    #Creates a function to handle each button press event and communicate the desired action to the robot's Delegate
+def handleSimon(client, difficultBar, textBox, winBox):
+    textBox.delete(0,100)
+    textBox.insert(0,'Simon Says...')
 
-    client.send_message('centerOnTarget')
+def handleMove(client, difficultBar, textBox, winBox):
 
-def handleGrabIt(client):
+    difficultBar.step(10)
+    if textBox.get() == 'Simon Says...':
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Moving')
+        client.send_message('Move')
+    elif doesFail(difficultBar):
+        textBox.delete(0,100)
+        textBox.insert(0, 'Whoops!')
+        client.send_message('Move')
+        winBox.delete(0, 100)
+        winBox.insert(0,'You Win!')
+        difficultBar.stop()
+    else:
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Waiting...')
 
-    client.send_message('grabIt')
+def handleDance(client, difficultBar, textBox, winBox):
+
+    difficultBar.step(10)
+    if textBox.get() == 'Simon Says...':
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Dancing')
+        client.send_message('Dance')
+    elif doesFail(difficultBar):
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Whoops!')
+        client.send_message('Dance')
+        winBox.delete(0, 100)
+        winBox.insert(0, 'You Win!')
+        difficultBar.stop()
+    else:
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Waiting...')
+
+def handleStretch(client, difficultBar, textBox, winBox):
+
+    difficultBar.step(10)
+    if textBox.get() == 'Simon Says...':
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Stretching')
+        client.send_message('Stretch')
+    elif doesFail(difficultBar):
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Whoops!')
+        client.send_message('Stretch')
+        winBox.delete(0, 100)
+        winBox.insert(0, 'You Win!')
+        difficultBar.stop()
+    else:
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Waiting...')
+
+def handleClap(client, difficultBar, textBox, winBox):
+
+    difficultBar.step(10)
+    if textBox.get() == 'Simon Says...':
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Clapping')
+        client.send_message('Clap')
+    elif doesFail(difficultBar):
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Whoops!')
+        client.send_message('Clap')
+        winBox.delete(0, 100)
+        winBox.insert(0, 'You Win!')
+        difficultBar.stop()
+    else:
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Waiting...')
+
+
+def handleColor(client, difficultBar, textBox, winBox):
+
+    difficultBar.step(10)
+    if textBox.get() == 'Simon Says...':
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Looking for Color')
+        client.send_message('Color')
+    elif doesFail(difficultBar):
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Whoops!')
+        client.send_message('Color')
+        winBox.delete(0, 100)
+        winBox.insert(0, 'You Win!')
+        difficultBar.stop()
+    else:
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Waiting...')
+
+def handleFind(client, difficultBar, textBox, winBox):
+
+    difficultBar.step(10)
+    if textBox.get() == 'Simon Says...':
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Finding')
+        client.send_message('Find')
+    elif doesFail(difficultBar):
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Whoops!')
+        client.send_message('Find')
+        winBox.delete(0, 100)
+        winBox.insert(0, 'You Win!')
+        difficultBar.stop()
+    else:
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Waiting...')
+
+def handleBeep(client, difficultBar, textBox, winBox):
+
+    difficultBar.step(10)
+    if textBox.get() == 'Simon Says...':
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Beeping')
+        client.send_message('Beep')
+    elif doesFail(difficultBar):
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Whoops!')
+        client.send_message('Beep')
+        winBox.delete(0, 100)
+        winBox.insert(0, 'You Win!')
+        difficultBar.stop()
+    else:
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Waiting...')
+
+def handleSing(client, difficultBar, textBox, winBox):
+
+    difficultBar.step(10)
+    if textBox.get() == 'Simon Says...':
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Singing')
+        client.send_message('Sing')
+    elif doesFail(difficultBar):
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Whoops!')
+        client.send_message('Sing')
+        winBox.delete(0, 100)
+        winBox.insert(0, 'You Win!')
+        difficultBar.stop()
+    else:
+        textBox.delete(0, 100)
+        textBox.insert(0, 'Waiting...')
+
+def doesFail(difficultBar):
+
+    difficultBar.step(5)
+    num = random.randrange(0,100)
+    diffCo = difficultBar['value']/1000 + 1
+
+    return num*diffCo>95
+
+    #Create the delegate to recieve robot data on the laptop. Basically just posts robot data to the GUI text box
+class laptopDelegate(object):
+
+    def __init__(self):
+
+        self.gui = None
+
+    def writeText(self,text):
+
+        self.gui.delete(0,100)
+        self.gui.insert(0,text)
+
+
+
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
 # -----------------------------------------------------------------------------
