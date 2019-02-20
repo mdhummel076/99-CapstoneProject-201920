@@ -9,7 +9,6 @@ import rosebot
 import mqtt_remote_method_calls as com
 import time
 import shared_gui_delegate_on_robot
-import m1_run_this_on_robot
 
 
 def main():
@@ -20,7 +19,7 @@ def main():
     """
     print('Text2')
     real_deal()
-    grab_yellow_object()
+    flight()
 
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
@@ -52,6 +51,21 @@ def grab_yellow_object():
     #                 if robot.sensor_system.color_sensor.get_color() == 6:
     #                     robot.arm_and_claw.lower_arm()
     print('Text')
+def flight():
+    robot = rosebot.RoseBot()
+    button = robot.sensor_system.touch_sensor
+    speech = robot.sound_system.speech_maker
+    counter = 0
+    while True:
+        if button.is_pressed() == True:
+            counter = counter +1
+        if counter == 1:
+            speech.speak("Hey! You poked me!")
+        if counter == 2:
+            speech.speak("Stop touching me!")
+        if counter == 3:
+            speech.speak("I can't take this! I'm going home!")
+
 
 def sprint_3():
     robot = rosebot.RoseBot()
