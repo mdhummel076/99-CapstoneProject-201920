@@ -19,7 +19,7 @@ def main():
     """
     print('Text2')
     real_deal()
-    flight()
+    fight()
 
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
@@ -65,6 +65,22 @@ def flight():
             speech.speak("Stop touching me!")
         if counter == 3:
             speech.speak("I can't take this! I'm going home!")
+            break
+        time.sleep(1)
+def fight():
+    robot = rosebot.RoseBot()
+    button = robot.sensor_system.touch_sensor
+    speech = robot.sound_system.speech_maker
+    counter = 0
+    while True:
+        if button.is_pressed() == True:
+            counter = counter +1
+        if counter == 1:
+            speech.speak("Hey! Watch what you're doing, Jack!")
+        if counter == 2:
+            speech.speak("You'll be gettin a knuckle sandwich, punk!")
+        if counter == 3:
+            speech.speak("Alright bub, you aksed for it!")
             break
         time.sleep(1)
 
