@@ -29,8 +29,7 @@ def real_thing():
     mqtt_receiver.connect_to_pc()
 
     # Connects ev3 to computer via delegate
-    mqtt_client = com.MqttClient(robot)
-    mqtt_client.connect_to_pc()
+    mqtt_client = mqtt_receiver
 
     while True:
 

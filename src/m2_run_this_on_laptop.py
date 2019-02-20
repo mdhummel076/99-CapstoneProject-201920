@@ -44,13 +44,12 @@ def main():
     # Construct and connect the MQTT Client:
     # -------------------------------------------------------------------------
     # Creates mqtt sender to call methods on robot
-    mqtt_sender = com.MqttClient()
+    pc_delegate = MyDelegate()
+    mqtt_sender = com.MqttClient(pc_delegate)
     mqtt_sender.connect_to_ev3()
 
     # Created pc delegate, then used it as object to receive messages from robot
-    pc_delegate = MyDelegate()
-    mqtt_receiver = com.MqttClient(pc_delegate)
-    mqtt_receiver.connect_to_ev3()
+    mqtt_receiver = mqtt_sender
 
     # -------------------------------------------------------------------------
     # The root TK object for the GUI:
