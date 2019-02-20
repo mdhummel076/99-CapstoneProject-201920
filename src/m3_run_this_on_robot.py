@@ -66,6 +66,7 @@ def flight():
         if counter == 3:
             speech.speak("I can't take this! I'm going home!")
             break
+        time.sleep(1)
 
 
 def sprint_3():
