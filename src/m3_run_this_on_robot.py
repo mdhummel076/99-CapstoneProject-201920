@@ -65,6 +65,7 @@ def flight():
             speech.speak("Stop touching me!")
         if counter == 3:
             speech.speak("I can't take this! I'm going home!")
+            break
 
 
 def sprint_3():
