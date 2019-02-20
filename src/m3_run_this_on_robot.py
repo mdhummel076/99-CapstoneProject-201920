@@ -75,7 +75,12 @@ def fight():
             time.sleep(.5)
             if robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()<10:
                 speech.speak("Come here, chicken!")
-            robot.drive_system.go_forward_until_distance_is_less_than(10,50)
+            robot.drive_system.go_forward_until_distance_is_less_than(1,50)
+            speech.speak("Take this, you cur!")
+            robot.arm_and_claw.raise_arm()
+            speech.speak("Get ready for the Grand Hand Slam!")
+            robot.arm_and_claw.lower_arm()
+            speech.speak("Serves you right!")
             break
         time.sleep(1)
 
