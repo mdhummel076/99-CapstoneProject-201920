@@ -89,7 +89,7 @@ def fight():
         if counter == 2:
             speech.speak("You'll be gettin a knuckle sandwich, punk!")
         if counter == 3:
-            speech.speak("Alright bub, you aksed for it!")
+            speech.speak("Alright bub, you asked for it!")
             robot.drive_system.go(50,-50)
             time.sleep(.5)
             if robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()<10:
