@@ -41,11 +41,11 @@ def flight():
         if button.is_pressed() == True:
             counter = counter +1
         if counter == 1:
-            speech.speak("Hey! You poked me!").wait()
+            speech.speak("Hey! You poked me!")
         if counter == 2:
-            speech.speak("Stop touching me!").wait()
+            speech.speak("Stop touching me!")
         if counter == 3:
-            speech.speak("I can't take this! I'm going home!").wait()
+            speech.speak("I can't take this! I'm going home!")
             break
         time.sleep(1)
     robot.drive_system.go(50,50)
