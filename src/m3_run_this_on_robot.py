@@ -100,17 +100,18 @@ def fight():
             counter_3 = counter_3 + 1
             if counter_3 == 1:
                 speech.speak("Alright bub, you asked for it!")
-                robot.drive_system.go(50,-50)
-                time.sleep(2.8)
-                robot.drive_system.go_forward_until_distance_is_less_than(2,50)
-                speech.speak("Take this, you cur!")
-                robot.arm_and_claw.raise_arm()
-                time.sleep(1)
-                speech.speak("Get ready for the Grand Hand Slam!")
-                time.sleep(3)
-                robot.arm_and_claw.lower_arm()
-                speech.speak("Serves you right, you jerk!")
                 break
+    robot.drive_system.go(50,-50)
+    time.sleep(2.8)
+    robot.drive_system.go_forward_until_distance_is_less_than(2,50)
+    speech.speak("Take this, you cur!")
+    robot.arm_and_claw.raise_arm()
+    time.sleep(1)
+    speech.speak("Get ready for the Grand Hand Slam!")
+    time.sleep(3)
+    robot.arm_and_claw.lower_arm()
+    speech.speak("Serves you right, you jerk!")
+    break
 
 
 
