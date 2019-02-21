@@ -41,12 +41,13 @@ def flight():
         if button.is_pressed() == True:
             counter = counter +1
         if counter == 1:
-            speech.speak("Hey! You poked me!")
+            speech.speak("Hey! You poked me!").wait()
         if counter == 2:
-            speech.speak("Stop touching me!")
+            speech.speak("Stop touching me!").wait()
         if counter == 3:
-            speech.speak("I can't take this! I'm going home!")
+            speech.speak("I can't take this! I'm going home!").wait()
             break
+        time.sleep(1)
     robot.drive_system.go(50,50)
     while True:
         x = robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
@@ -60,6 +61,7 @@ def flight():
             break
         y = robot.sensor_system.color_sensor.get_color()
         if y == 6:
+            robot.drive_system.stop()
             print("I made it home")
             speech.speak("I am finally home. I can now rest")
             break
