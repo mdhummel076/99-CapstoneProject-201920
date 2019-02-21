@@ -18,6 +18,7 @@ def main():
     """
     print('Text2')
     real_deal()
+    flight()
 
 # -----------------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
