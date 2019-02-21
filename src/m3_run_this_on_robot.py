@@ -111,7 +111,7 @@ def fight():
     time.sleep(3)
     robot.arm_and_claw.lower_arm()
     speech.speak("Serves you right, you jerk!")
-    break
+
 
 
 
