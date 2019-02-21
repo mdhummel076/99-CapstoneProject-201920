@@ -32,6 +32,9 @@ def real_deal():
     receiver = com.MqttClient(delegate)
     receiver.connect_to_pc()
 def flight():
+    #What I had done here was make a robot, that, when provoked, would go and run from the person who had touched the button.
+    #However, if teh robot had gone and saw that there was an object in its way, it would go and have a "breakdown" where it spins
+    #rapidly, but would shut down due to too much stress.
     robot = rosebot.RoseBot()
     button = robot.sensor_system.touch_sensor
     speech = robot.sound_system.speech_maker
@@ -78,6 +81,9 @@ def flight():
 
         time.sleep(1)
 def fight():
+    #The function here is similar to teh flight response where it requires you to touch the sensor for it to begin, but
+    #instead of running away from yu it would actually go and try to "attack" you. For this to occur, you need to press the touch sensor
+    #three times.
     robot = rosebot.RoseBot()
     button = robot.sensor_system.touch_sensor
     speech = robot.sound_system.speech_maker
