@@ -46,21 +46,24 @@ def flight():
             speech.speak("Stop touching me!")
         if counter == 3:
             speech.speak("I can't take this! I'm going home!")
-            print("I'm going home now")
-            robot.drive_system.go_straight_until_color_is(6, 50)
-            while True:
-                x = robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
-                print(x)
-                if x<3:
-                    speech.speak("Why can't I go home? I wanna go home!").wait()
-                    robot.drive_system.go(100,-100)
-                    time.sleep(5)
-                    speech.speak("WARNING: STRESS SENSORS OVERLOADED. SHUTDOWN IMMINENT")
-                    robot.drive_system.stop()
-                    break
+            break
+    robot.drive_system.go(50,50)
+    while True:
+        x = robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
+        print(x)
+        if x<3:
+            speech.speak("Why can't I go home? I wanna go home!").wait()
+            robot.drive_system.go(100,-100)
+            time.sleep(5)
+            speech.speak("WARNING: STRESS SENSORS OVERLOADED. SHUTDOWN IMMINENT")
+            robot.drive_system.stop()
+            break
+        y = robot.sensor_system.color_sensor.get_color()
+        if y == 6:
             print("I made it home")
             speech.speak("I am finally home. I can now rest")
             break
+
         time.sleep(1)
 def fight():
     robot = rosebot.RoseBot()
