@@ -53,7 +53,7 @@ def flight():
                 print(x)
                 if x<3:
                     speech.speak("Why can't I go home? I wanna go home!").wait()
-                    robot.drive_system.go(50,-50)
+                    robot.drive_system.go(100,-100)
                     time.sleep(5)
                     speech.speak("WARNING: STRESS SENSORS OVERLOADED. SHUTDOWN IMMINENT")
                     robot.drive_system.stop()
