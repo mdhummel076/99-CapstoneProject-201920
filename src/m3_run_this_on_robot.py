@@ -37,15 +37,24 @@ def flight():
     button = robot.sensor_system.touch_sensor
     speech = robot.sound_system.speech_maker
     counter = 0
+    counter_1 = 0
+    counter_2 = 0
+    counter_3 = 0
     while True:
         if button.is_pressed() == True:
             counter = counter +1
         if counter == 1:
-            speech.speak("Hey! You poked me!")
+            counter_1=counter_1+1
+            if counter_1 == 1:
+                speech.speak("Hey! You poked me!")
         if counter == 2:
-            speech.speak("Stop touching me!")
+            counter_2 = counter_2 + 1
+            if counter_2 == 1:
+                speech.speak("Stop touching me!")
         if counter == 3:
-            speech.speak("I can't take this! I'm going home!")
+            counter_3 = counter_3 + 1
+            if counter_3 == 1:
+                speech.speak("I can't take this! I'm going home!")
             break
         time.sleep(1)
     robot.drive_system.go(50,50)
@@ -66,6 +75,7 @@ def flight():
             print("I made it home")
             speech.speak("I am finally home. I can now rest")
             break
+        time.sleep(.1)
 
         time.sleep(1)
 def fight():
