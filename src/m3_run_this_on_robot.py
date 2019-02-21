@@ -102,7 +102,7 @@ def fight():
                 speech.speak("Alright bub, you asked for it!")
                 robot.drive_system.go(50,-50)
                 time.sleep(2.8)
-            break
+                break
     robot.drive_system.go(50,50)
     while True:
         if robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()<10:
