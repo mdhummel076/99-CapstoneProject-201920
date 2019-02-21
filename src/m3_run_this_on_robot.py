@@ -82,19 +82,31 @@ def fight():
     button = robot.sensor_system.touch_sensor
     speech = robot.sound_system.speech_maker
     counter = 0
+    counter_1 = 0
+    counter_2 = 0
+    counter_3 = 0
     while True:
         if button.is_pressed() == True:
             counter = counter +1
         if counter == 1:
-            speech.speak("Hey! Watch what you're doing, twerp!")
+            counter_1 = counter_1 + 1
+            if counter_1 == 1:
+                speech.speak("Hey! Watch what you're doing, twerp!")
         if counter == 2:
-            speech.speak("You'll be gettin a knuckle sandwich, punk!")
+            counter_2 = counter_2 + 1
+            if counter_2 == 1:
+                speech.speak("You'll be gettin a knuckle sandwich, punk!")
         if counter == 3:
-            speech.speak("Alright bub, you asked for it!")
-            robot.drive_system.go(50,-50)
-            time.sleep(2.9)
-            if robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()<10:
-                speech.speak("Come here, chicken!")
+            counter_2 = counter_2 + 1
+            if counter_2 == 1:
+                speech.speak("Alright bub, you asked for it!")
+                robot.drive_system.go(50,-50)
+                time.sleep(2.8)
+            break
+    robot.drive_system.go(50,50)
+    while True:
+        if robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()<10:
+            speech.speak("Come here, chicken!")
             robot.drive_system.go_forward_until_distance_is_less_than(2,50)
             speech.speak("Take this, you cur!")
             robot.arm_and_claw.raise_arm()
@@ -104,7 +116,7 @@ def fight():
             robot.arm_and_claw.lower_arm()
             speech.speak("Serves you right, you jerk!")
             break
-        time.sleep(1)
+
 
 
 def sprint_3():

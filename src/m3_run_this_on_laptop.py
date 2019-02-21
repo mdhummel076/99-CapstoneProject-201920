@@ -38,7 +38,7 @@ def main():
     # -------------------------------------------------------------------------
     # The main frame, upon which the other frames are placed.
     # -------------------------------------------------------------------------
-    main_frame = ttk.LabelFrame(root,  padding = 10, borderwidth = 5, relief = "groove")
+    main_frame = ttk.LabelFrame(padding = 10, borderwidth=5, relief = 'groove')
     main_frame.grid()
     # -------------------------------------------------------------------------
     # Sub-frames for the shared GUI that the team developed:
