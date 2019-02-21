@@ -97,8 +97,8 @@ def fight():
             if counter_2 == 1:
                 speech.speak("You'll be gettin a knuckle sandwich, punk!")
         if counter == 3:
-            counter_2 = counter_2 + 1
-            if counter_2 == 1:
+            counter_3 = counter_3 + 1
+            if counter_3 == 1:
                 speech.speak("Alright bub, you asked for it!")
                 robot.drive_system.go(50,-50)
                 time.sleep(2.8)
