@@ -52,7 +52,8 @@ def flight():
     while True:
         x = robot.sensor_system.ir_proximity_sensor.get_distance_in_inches()
         print(x)
-        if x<3:
+        if x<5:
+            robot.drive_system.stop()
             speech.speak("Why can't I go home? I wanna go home!").wait()
             robot.drive_system.go(100,-100)
             time.sleep(5)
