@@ -153,3 +153,7 @@ class Delegate(object):
     def m3_flight(self):
         print("got flight")
         m3_extra.flight(self.robot)
+
+    def m3_fight(self):
+        print('got fight')
+        m3_extra.fight(self.robot)
