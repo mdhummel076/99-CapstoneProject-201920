@@ -35,6 +35,7 @@ def flight():
     #What I had done here was make a robot, that, when provoked, would go and run from the person who had touched the button.
     #However, if teh robot had gone and saw that there was an object in its way, it would go and have a "breakdown" where it spins
     #rapidly, but would shut down due to too much stress.
+    Mqtt=com.MqttClient()
     robot = rosebot.RoseBot()
     button = robot.sensor_system.touch_sensor
     speech = robot.sound_system.speech_maker
@@ -80,10 +81,12 @@ def flight():
         time.sleep(.1)
 
         time.sleep(1)
+    Mqtt.send_message("flight")
 def fight():
     #The function here is similar to teh flight response where it requires you to touch the sensor for it to begin, but
     #instead of running away from yu it would actually go and try to "attack" you. For this to occur, you need to press the touch sensor
     #three times.
+    Mqtt = com.MqttClient()
     robot = rosebot.RoseBot()
     button = robot.sensor_system.touch_sensor
     speech = robot.sound_system.speech_maker
@@ -117,6 +120,7 @@ def fight():
     time.sleep(3)
     robot.arm_and_claw.lower_arm()
     speech.speak("Serves you right, you jerk!")
+    Mqtt.send_message("fight")
 
 
 
