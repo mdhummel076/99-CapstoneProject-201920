@@ -30,6 +30,10 @@ def real_deal():
     delegate = shared_gui_delegate_on_robot.Delegate(robot)
     receiver = com.MqttClient(delegate)
     receiver.connect_to_pc()
+    while True:
+        time.sleep(0.01)
+        if delegate.enabled == False:
+            break
 def flight():
     #What I had done here was make a robot, that, when provoked, would go and run from the person who had touched the button.
     #However, if teh robot had gone and saw that there was an object in its way, it would go and have a "breakdown" where it spins
