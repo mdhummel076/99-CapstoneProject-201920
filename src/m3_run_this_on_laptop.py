@@ -142,10 +142,10 @@ def sprint_3_frames(window,mqtt_sender):
 
 def handle_flight(mqtt_sender):
     print("SENSORS DETECT HIGH PRESSURE")
-    mqtt_sender.send_message('flight')
+    mqtt_sender.send_message('m3_flight')
 def handle_fight(mqtt_sender):
     print("I'm getting mad!")
-    mqtt_sender.send_message('fight')
+    mqtt_sender.send_message('m3_fight')
 
 
 
